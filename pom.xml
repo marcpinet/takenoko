@@ -1,21 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>TeamName</groupId> <!-- CHANGE ME -->
-    <artifactId>JarName</artifactId> <!-- CHANGE ME -->
-    <version>1.0-SNAPSHOT</version> <!-- CHANGE ME -->
+    <groupId>A-4Empereurs</groupId>
+    <artifactId>TakenokoA</artifactId>
+    <version>0.1.0</version>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8
-        </project.build.sourceEncoding> <!-- CHANGE ME IF NEEDED, other : ISO-8859-1 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <junit.bom.version>5.9.1</junit.bom.version>
     </properties>
 
-    <dependencyManagement> <!-- helps maven to resolve conflicting transitive dependencies -->
+    <dependencyManagement>
+        <!-- helps maven to resolve conflicting transitive dependencies -->
         <dependencies>
             <dependency>
                 <groupId>org.junit</groupId>
@@ -52,6 +52,9 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
+                <configuration>
+                    <mainClass>takenoko.Main</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -59,22 +62,122 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>fr.cotedazur.univ.polytech.startingpoint.Main</mainClass> <!-- CHANGE ME -->
-                    <!--          <arguments>
-                                <argument>argument1</argument>
-                              </arguments>
-                              <systemProperties>
-                                <systemProperty>
-                                  <key>myproperty</key>
-                                  <value>myvalue</value>
-                                </systemProperty>
-                              </systemProperties>
-                    -->
-                </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.27.2</version>
+                <configuration>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>**/*.java</include>
+                                <include>**/*.md</include>
+                                <include>pom.xml</include>
+                                <include>.gitignore</include>
+                            </includes>
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <spaces>true</spaces>
+                            </indent>
+                        </format>
+                    </formats>
+                    <java>
+                        <googleJavaFormat>
+                            <style>AOSP</style>
+                            <version>1.15.0</version>
+                            <reflowLongStrings>true</reflowLongStrings>
+                        </googleJavaFormat>
+                    </java>
+                    <markdown>
+                        <includes>
+                            <include>**/*.md</include>
+                        </includes>
+                        <flexmark/>
+                    </markdown>
+                    <pom>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+
+                        <sortPom>
+                            <expandEmptyElements>false</expandEmptyElements>
+                            <nrOfIndentSpace>4</nrOfIndentSpace>
+                        </sortPom>
+                    </pom>
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.8.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>0.15</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>pit-report</id>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                        <phase>test</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.rudikershaw.gitbuildhook</groupId>
+                <artifactId>git-build-hook-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <gitConfig>
+                        <!-- The location of the directory you are using to store the Git hooks in your project. -->
+                        <core.hooksPath>git-hooks/</core.hooksPath>
+                    </gitConfig>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- Sets git config specified under configuration > gitConfig. -->
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.8.0</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>

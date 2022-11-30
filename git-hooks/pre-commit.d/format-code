@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+echo "[hook] Checking formatting"
+mvn -q spotless:check
