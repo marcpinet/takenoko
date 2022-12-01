@@ -25,4 +25,10 @@ public class CoordTest {
         assertNotEquals(1, coordx1y2.y());
         assertNotEquals(-2, coordx1y2.z());
     }
+
+    @Test
+    void equalsTest() {
+        assertEquals(new Coord(1, 2), coordx1y2);
+        assertNotEquals(new Coord(2, 1), coordx1y2);
+    }
 }
