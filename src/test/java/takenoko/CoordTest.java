@@ -8,10 +8,14 @@ import org.junit.jupiter.api.Test;
 public class CoordTest {
 
     Coord coordx1y2;
+    Coord coordx2y2;
+    Coord coordx3y2;
 
     @BeforeEach
     void setUp() {
         coordx1y2 = new Coord(1, 2);
+        coordx2y2 = new Coord(2, 2);
+        coordx3y2 = new Coord(3, 2);
     }
 
     @Test
@@ -28,7 +32,7 @@ public class CoordTest {
     @Test
     void equalsTest() {
         assertEquals(new Coord(1, 2), coordx1y2);
-        assertNotEquals(new Coord(2, 2), coordx1y2);
+        assertNotEquals(coordx2y2, coordx1y2);
     }
 
     @Test
@@ -45,7 +49,7 @@ public class CoordTest {
 
     @Test
     void isAdjacentToTest() {
-        assertTrue(coordx1y2.isAdjacentTo(new Coord(1, 3)));
-        assertFalse(coordx1y2.isAdjacentTo(new Coord(2, 5)));
+        assertTrue(coordx1y2.isAdjacentTo(coordx2y2));
+        assertFalse(coordx1y2.isAdjacentTo(coordx3y2));
     }
 }
