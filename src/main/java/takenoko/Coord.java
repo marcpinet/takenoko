@@ -1,5 +1,7 @@
 package takenoko;
 
+import java.util.Arrays;
+
 public record Coord(int x, int y) {
 
     public int z() {
@@ -25,7 +27,6 @@ public record Coord(int x, int y) {
     }
 
     public boolean isAdjacentTo(Coord c) {
-        for (Coord adjacentCoord : adjacentCoords()) if (adjacentCoord.equals(c)) return true;
-        return false;
+        return Arrays.asList(adjacentCoords()).contains(c);
     }
 }
