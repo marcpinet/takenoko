@@ -23,4 +23,9 @@ public record Coord(int x, int y) {
         adjacentCoords[5] = new Coord(x - 1, y + 1);
         return adjacentCoords;
     }
+
+    public boolean isAdjacentTo(Coord c) {
+        for (Coord adjacentCoord : adjacentCoords()) if (adjacentCoord.equals(c)) return true;
+        return false;
+    }
 }

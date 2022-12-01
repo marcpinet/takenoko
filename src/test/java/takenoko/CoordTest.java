@@ -1,7 +1,6 @@
 package takenoko;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ public class CoordTest {
     @Test
     void equalsTest() {
         assertEquals(new Coord(1, 2), coordx1y2);
-        assertNotEquals(new Coord(2, 1), coordx1y2);
+        assertNotEquals(new Coord(2, 2), coordx1y2);
     }
 
     @Test
@@ -42,5 +41,11 @@ public class CoordTest {
         assertEquals(new Coord(1, 1), adjacentCoords[3]);
         assertEquals(new Coord(0, 2), adjacentCoords[4]);
         assertEquals(new Coord(0, 3), adjacentCoords[5]);
+    }
+
+    @Test
+    void isAdjacentToTest() {
+        assertTrue(coordx1y2.isAdjacentTo(new Coord(1, 3)));
+        assertFalse(coordx1y2.isAdjacentTo(new Coord(2, 5)));
     }
 }
