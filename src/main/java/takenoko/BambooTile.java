@@ -1,13 +1,9 @@
 package takenoko;
 
-public class BambooTile {
-    private boolean isCultivable;
+public class BambooTile implements Tile {
 
-    public BambooTile() {
-        this.isCultivable = true;
-    }
-
+    @Override
     public boolean isCultivable() {
-        return this.isCultivable;
+        return true;
     }
 }
