@@ -15,6 +15,6 @@ public class BambooTileTest {
 
     @Test
     void isCultivableTest() {
-        assertTrue(bambooTile.isCultivable);
+        assertTrue(bambooTile.isCultivable());
     }
 }
