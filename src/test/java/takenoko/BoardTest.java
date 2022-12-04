@@ -19,8 +19,6 @@ public class BoardTest {
         Coord c = new Coord(1, 2);
         Tile t = new BambooTile();
         tileboard.placeTile(c, t);
-        assertTrue(tileboard.getTiles().containsKey(c));
-        assertTrue(tileboard.getTiles().containsValue(t));
         assertTrue(tileboard.getTile(c).equals(t));
     }
 }
