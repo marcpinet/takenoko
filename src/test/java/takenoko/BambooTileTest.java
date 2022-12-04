@@ -1,6 +1,5 @@
 package takenoko;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,15 +16,5 @@ public class BambooTileTest {
     @Test
     void isCultivableTest() {
         assertTrue(bambooTile.isCultivable);
-    }
-
-    @Test
-    void irrigatedSidesTest() {
-        assertFalse(bambooTile.irrigatedSides[0]);
-        assertFalse(bambooTile.irrigatedSides[1]);
-        assertFalse(bambooTile.irrigatedSides[2]);
-        assertFalse(bambooTile.irrigatedSides[3]);
-        assertFalse(bambooTile.irrigatedSides[4]);
-        assertFalse(bambooTile.irrigatedSides[5]);
     }
 }
