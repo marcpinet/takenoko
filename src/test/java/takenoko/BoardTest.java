@@ -16,11 +16,11 @@ public class BoardTest {
     }
 
     @Test
-    void placeTileTest() throws Exception {
+    void placeTileTest() throws BoardException {
         Coord c = new Coord(1, 2);
         Coord c2 = new Coord(0, 1);
         Tile t = new BambooTile();
-        assertThrows(Exception.class, () -> tileboard.placeTile(c, t));
+        assertThrows(BoardException.class, () -> tileboard.placeTile(c, t));
         tileboard.placeTile(c2, t);
         assertTrue(tileboard.getTile(c2).equals(t));
     }
