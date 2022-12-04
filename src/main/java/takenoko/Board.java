@@ -3,10 +3,10 @@ package takenoko;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileBoard {
+public class Board {
     private Map<Coord, Tile> tiles;
 
-    public TileBoard() {
+    public Board() {
         tiles = new HashMap<>();
         tiles.put(new Coord(0, 0), new PondTile());
     }

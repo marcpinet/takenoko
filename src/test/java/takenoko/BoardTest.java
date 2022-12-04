@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TileBoardTest {
+public class BoardTest {
 
-    TileBoard tileboard;
+    Board tileboard;
 
     @BeforeEach
     void setUp() {
-        tileboard = new TileBoard();
+        tileboard = new Board();
     }
 
     @Test
