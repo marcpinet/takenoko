@@ -21,6 +21,6 @@ public class BoardTest {
         tileboard.placeTile(c, t);
         assertTrue(tileboard.getTiles().containsKey(c));
         assertTrue(tileboard.getTiles().containsValue(t));
-        assertTrue(tileboard.getTiles().get(c).equals(t));
+        assertTrue(tileboard.getTile(c).equals(t));
     }
 }

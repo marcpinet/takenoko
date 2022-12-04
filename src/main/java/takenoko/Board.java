@@ -15,7 +15,11 @@ public class Board {
         tiles.put(c, t);
     }
 
-    public Map<Coord, Tile> getTiles() {
+    Map<Coord, Tile> getTiles() {
         return tiles;
+    }
+
+    public Tile getTile(Coord c) {
+        return tiles.get(c);
     }
 }
