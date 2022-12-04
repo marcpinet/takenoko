@@ -1,5 +1,6 @@
 package takenoko;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +16,11 @@ public class BoardTest {
     }
 
     @Test
-    void placeTileTest() {
+    void placeTileTest() throws Exception {
         Coord c = new Coord(1, 2);
         Coord c2 = new Coord(0, 1);
         Tile t = new BambooTile();
-        tileboard.placeTile(c, t);
-        assert (tileboard.getTile(c) == null);
+        assertThrows(Exception.class, () -> tileboard.placeTile(c, t));
         tileboard.placeTile(c2, t);
         assertTrue(tileboard.getTile(c2).equals(t));
     }
