@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Board {
+    public static final Coord POND_COORD = new Coord(0, 0);
     private Map<Coord, Tile> tiles;
 
     public Board() {
         tiles = new HashMap<>();
-        tiles.put(new Coord(0, 0), new PondTile());
+        tiles.put(POND_COORD, new PondTile());
     }
 
     public void placeTile(Coord c, Tile t) throws BoardException {
-
-        if (!c.isAdjacentTo(new Coord(0, 0))) {
+        if (!c.isAdjacentTo(POND_COORD)) {
             throw new BoardException("Erreur : tuile non-adjacente.");
         }
         if (tiles.containsKey(c)) {
