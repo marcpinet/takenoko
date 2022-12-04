@@ -16,8 +16,8 @@ public class Board {
         if (!c.isAdjacentTo(new Coord(0, 0))) {
             throw new Exception("Erreur : tuile non-adjacente.");
         }
-        if (tiles.containsValue(t)) {
-            throw new Exception("Erreur : La tuile t est déjà présente sur le plateau.");
+        if (tiles.containsKey(c)) {
+            throw new Exception("Erreur : Il y a déjà une tuile présente aux coordonnées c.");
         }
         tiles.put(c, t);
     }
