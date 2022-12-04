@@ -12,7 +12,11 @@ public class Board {
     }
 
     public void placeTile(Coord c, Tile t) {
-        tiles.put(c, t);
+        if (c.isAdjacentTo(new Coord(0, 0))) {
+            if (!tiles.containsValue(t)) {
+                tiles.put(c, t);
+            }
+        }
     }
 
     public Tile getTile(Coord c) {
