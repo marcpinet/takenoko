@@ -1,16 +1,17 @@
 package takenoko;
 
-import java.io.PrintStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Game {
     private final Board board;
     private final List<Player> players;
 
-    private final PrintStream out;
+    private final Logger out;
 
-    public Game(List<Player> players, PrintStream out) {
+    public Game(List<Player> players, Logger out) {
         board = new Board();
         this.players = players;
         this.out = out;
@@ -20,7 +21,7 @@ public class Game {
         while (true) {
             var winner = playTurn();
             if (winner.isPresent()) {
-                this.out.println("Someone won!");
+                this.out.log(Level.INFO, "Someone won!");
                 return winner.get();
             }
         }

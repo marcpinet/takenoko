@@ -3,6 +3,7 @@ package takenoko;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ public class GameTest {
     @BeforeEach
     public void setUp() {
         players = List.of(new DefaultBot(), new DefaultBot());
-        game = new Game(players, System.out);
+        game = new Game(players, Logger.getGlobal());
     }
 
     @Test
