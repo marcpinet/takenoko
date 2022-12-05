@@ -1,15 +1,14 @@
 package takenoko.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PairTest {
     private static final String FIRST = "first";
     private static final Integer SECOND = 2;
-    Pair<String , Integer> pair;
+    Pair<String, Integer> pair;
 
     @BeforeEach
     void setUp() {
