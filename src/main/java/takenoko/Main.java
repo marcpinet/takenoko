@@ -1,12 +1,12 @@
 package takenoko;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 public class Main {
-
-    public static String hello() {
-        return "Hello World!";
-    }
-
     public static void main(String... args) {
-        System.out.println(hello());
+        List<Player> players = List.of(new DefaultBot(), new DefaultBot());
+        var game = new Game(players, Logger.getGlobal());
+        game.play();
     }
 }
