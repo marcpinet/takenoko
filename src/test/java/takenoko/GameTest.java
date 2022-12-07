@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import takenoko.bot.DefaultBot;
 
 public class GameTest {
     Game game;

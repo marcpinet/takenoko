@@ -1,5 +1,5 @@
 package takenoko;
 
 public interface Tile {
-    public boolean isCultivable();
+    boolean isCultivable();
 }
