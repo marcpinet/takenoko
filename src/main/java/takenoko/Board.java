@@ -1,7 +1,10 @@
 package takenoko;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
@@ -28,5 +31,12 @@ public class Board {
                     "Erreur : la tuile avec les coord c n'est pas présente sur le plateau.");
         }
         return tiles.get(c);
+    }
+
+    public Set<Coord> getAvailableCoords() {
+        return tiles.keySet().stream()
+                .flatMap(c -> Stream.of(c.adjacentCoords()))
+                .filter(c -> !tiles.containsKey(c))
+                .collect(HashSet::new, HashSet::add, HashSet::addAll);
     }
 }
