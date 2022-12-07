@@ -29,9 +29,9 @@ public class Game {
 
     private Optional<Player> playTurn() {
         for (Player player : players) {
-            Action action1 = player.chooseActions(board);
+            Action action1 = player.chooseAction(board);
             playAction(action1);
-            Action action2 = player.chooseActions(board);
+            Action action2 = player.chooseAction(board);
             playAction(action2);
         }
         return Optional.of(players.get(0)); // TODO: determine winning condition
