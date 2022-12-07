@@ -1,14 +1,14 @@
 package takenoko;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
-    private Map<Coord, Tile> tiles;
+    private final Map<Coord, Tile> tiles;
 
     public Board() {
         tiles = new HashMap<>();
@@ -37,6 +37,6 @@ public class Board {
         return tiles.keySet().stream()
                 .flatMap(c -> Stream.of(c.adjacentCoords()))
                 .filter(c -> !tiles.containsKey(c))
-                .collect(HashSet::new, HashSet::add, HashSet::addAll);
+                .collect(Collectors.toSet());
     }
 }

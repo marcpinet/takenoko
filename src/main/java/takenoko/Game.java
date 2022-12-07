@@ -29,9 +29,10 @@ public class Game {
 
     private Optional<Player> playTurn() {
         for (Player player : players) {
-            var actions = player.chooseActions(board);
-            playAction(actions.first());
-            playAction(actions.second());
+            Action action1 = player.chooseActions(board);
+            playAction(action1);
+            Action action2 = player.chooseActions(board);
+            playAction(action2);
         }
         return Optional.of(players.get(0)); // TODO: determine winning condition
     }
