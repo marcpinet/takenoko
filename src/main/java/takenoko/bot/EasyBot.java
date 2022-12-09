@@ -1,11 +1,16 @@
 package takenoko.bot;
 
+import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 import takenoko.*;
 
 /** A bot that chooses actions randomly. */
 public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBaseInterface {
+    private final Random randomSource;
+
+    public EasyBot(Random randomSource) {
+        this.randomSource = randomSource;
+    }
 
     public Action chooseActionImpl(Board board) {
         Set<Coord> availableCoords = board.getAvailableCoords();
@@ -21,7 +26,7 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
     }
 
     private Coord chooseRandom(Set<Coord> coords) {
-        int randomIndex = ThreadLocalRandom.current().nextInt(0, coords.size());
+        int randomIndex = randomSource.nextInt(0, coords.size());
         return coords.toArray(new Coord[0])[randomIndex];
     }
 }
