@@ -13,6 +13,7 @@ class EasyBotTest {
         Board board = new Board();
         EasyBot bot = new EasyBot();
 
+        bot.beginTurn(1);
         Action action = bot.chooseAction(board);
 
         assertTrue(action instanceof Action.PlaceTile);

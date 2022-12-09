@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Game {
+    private static final int DEFAULT_ACTION_CREDIT = 2;
     private final Board board;
     private final List<Player> players;
 
@@ -29,10 +30,11 @@ public class Game {
 
     private Optional<Player> playTurn() {
         for (Player player : players) {
-            Action action1 = player.chooseAction(board);
-            playAction(action1);
-            Action action2 = player.chooseAction(board);
-            playAction(action2);
+            player.beginTurn(DEFAULT_ACTION_CREDIT);
+            while (!player.wantsToEndTurn()) {
+                var action = player.chooseAction(board);
+                playAction(action);
+            }
         }
         return Optional.of(players.get(0)); // TODO: determine winning condition
     }
