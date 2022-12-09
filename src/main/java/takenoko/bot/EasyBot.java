@@ -5,10 +5,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import takenoko.*;
 
 /** A bot that chooses actions randomly. */
-public class EasyBot implements Player {
+public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBaseInterface {
 
-    @Override
-    public Action chooseAction(Board board) {
+    public Action chooseActionImpl(Board board) {
         Set<Coord> availableCoords = board.getAvailableCoords();
 
         BambooTile bambooTile =

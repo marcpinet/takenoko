@@ -2,11 +2,15 @@ package takenoko.bot;
 
 import takenoko.Action;
 import takenoko.Board;
-import takenoko.Player;
+import takenoko.PlayerBase;
 
-public class DefaultBot implements Player {
-    @Override
-    public Action chooseAction(Board board) {
+public class DefaultBot extends PlayerBase<DefaultBot> implements PlayerBase.PlayerBaseInterface {
+    public Action chooseActionImpl(Board board) {
         return Action.NONE;
+    }
+
+    @Override
+    public boolean wantsToEndTurn() {
+        return true;
     }
 }
