@@ -1,6 +1,6 @@
 name: autotest
 
-on: [push]
+on: [ review_requested, pull_request_review ]
 
 jobs:
   build:
