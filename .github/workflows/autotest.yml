@@ -1,6 +1,8 @@
 name: autotest
 
-on: [ review_requested, pull_request_review ]
+on:
+  pull_request:
+    types: [review_requested]
 
 jobs:
   build:
