@@ -11,6 +11,7 @@ public class Game {
     private final List<Player> players;
 
     private final Logger out;
+    private int numTurn = 1;
 
     public Game(List<Player> players, Logger out) {
         board = new Board();
@@ -19,22 +20,35 @@ public class Game {
     }
 
     public Player play() {
+        this.out.log(Level.INFO, "Beginning of the game!");
         while (true) {
+            this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!");
             var winner = playTurn();
+            numTurn++;
             if (winner.isPresent()) {
                 this.out.log(Level.INFO, "Someone won!");
+                this.out.log(Level.INFO, "End of the game.");
                 return winner.get();
             }
         }
     }
 
     private Optional<Player> playTurn() {
+        int numPlayer = 1;
+        int numAction = 1;
         for (Player player : players) {
+            this.out.log(Level.INFO, "Turn of player number " + numPlayer + " to play!");
             player.beginTurn(DEFAULT_ACTION_CREDIT);
             while (!player.wantsToEndTurn()) {
+                this.out.log(
+                        Level.INFO,
+                        "Player number " + numPlayer + " do his action number " + numAction + ":");
                 var action = player.chooseAction(board);
                 playAction(action);
+                numAction++;
             }
+            numPlayer++;
+            numAction = 1;
         }
         return Optional.of(players.get(0)); // TODO: determine winning condition
     }
