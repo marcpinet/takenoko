@@ -17,10 +17,11 @@ public class Board {
 
     public void placeTile(Coord c, Tile t) throws BoardException {
         if (!c.isAdjacentTo(POND_COORD)) {
-            throw new BoardException("Erreur : tuile non-adjacente.");
+            throw new BoardException("Error: non-adjacent tile.");
         }
         if (tiles.containsKey(c)) {
-            throw new BoardException("Erreur : Il y a déjà une tuile présente aux coordonnées c.");
+            throw new BoardException(
+                    "Error: There is already a tile present at theses coordinates.");
         }
         tiles.put(c, t);
     }
@@ -28,7 +29,7 @@ public class Board {
     public Tile getTile(Coord c) throws BoardException {
         if (!tiles.containsKey(c)) {
             throw new BoardException(
-                    "Erreur : la tuile avec les coord c n'est pas présente sur le plateau.");
+                    "Error: the tile with these coordinates is not present on the board.");
         }
         return tiles.get(c);
     }
