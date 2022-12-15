@@ -21,4 +21,12 @@ public class BoardTest {
         tileboard.placeTile(c2, t);
         assertEquals(tileboard.getTile(c2), t);
     }
+
+    @Test
+    void contains() throws BoardException {
+        Coord c = new Coord(0, 1);
+        assertFalse(tileboard.contains(c));
+        tileboard.placeTile(c, new BambooTile());
+        assertTrue(tileboard.contains(c));
+    }
 }

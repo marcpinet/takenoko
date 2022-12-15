@@ -60,8 +60,7 @@ public class Game {
                     if (tile instanceof BambooTile bambooTile && bambooTile.isCultivable()) {
                         try {
                             bambooTile.growBamboo();
-                        }
-                        catch(BambooSizeException ignored) {
+                        } catch (BambooSizeException ignored) {
                             this.out.log(Level.WARNING, "Bamboo size exception ignored");
                         }
                     }
