@@ -17,9 +17,6 @@ public class Board {
     }
 
     public void placeTile(Coord c, Tile t) throws BoardException {
-        if (!c.isAdjacentTo(POND_COORD)) {
-            throw new BoardException("Error: non-adjacent tile.");
-        }
         if (tiles.containsKey(c)) {
             throw new BoardException(
                     "Error: There is already a tile present at theses coordinates.");

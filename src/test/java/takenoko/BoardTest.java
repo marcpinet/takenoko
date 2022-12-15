@@ -16,10 +16,8 @@ public class BoardTest {
 
     @Test
     void placeTileTest() throws BoardException {
-        Coord c = new Coord(1, 2);
         Coord c2 = new Coord(0, 1);
         Tile t = new BambooTile();
-        assertThrows(BoardException.class, () -> tileboard.placeTile(c, t));
         tileboard.placeTile(c2, t);
         assertEquals(tileboard.getTile(c2), t);
     }
