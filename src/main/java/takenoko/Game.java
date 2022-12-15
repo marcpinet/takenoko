@@ -57,11 +57,12 @@ public class Game {
     private void growBamboosOnBambooTiles() {
         board.applyOnEachTile(
                 tile -> {
-                    if (tile instanceof BambooTile bambooTile) {
+                    if (tile instanceof BambooTile bambooTile && bambooTile.isCultivable()) {
                         try {
                             bambooTile.growBamboo();
-                        } catch (BambooSizeException e) {
-                            throw new RuntimeException(e);
+                        }
+                        catch(BambooSizeException ignored) {
+                            this.out.log(Level.WARNING, "Bamboo size exception ignored");
                         }
                     }
                     return null;
