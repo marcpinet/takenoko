@@ -102,6 +102,11 @@ public class TilePatternObjective implements Objective {
         return achieved;
     }
 
+    @Override
+    public boolean wasAchievedAfterLastCheck() {
+        return achieved;
+    }
+
     private boolean isPatternAt(Board board, Coord coord, List<Coord> pattern) {
         return pattern.stream().map(c -> c.add(coord)).allMatch(board::contains);
     }

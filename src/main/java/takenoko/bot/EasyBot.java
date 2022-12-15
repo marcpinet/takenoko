@@ -15,6 +15,9 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
     public Action chooseActionImpl(Board board) {
         Set<Coord> availableCoords = board.getAvailableCoords();
 
+        for (var obj : getObjectives())
+            if (obj.wasAchievedAfterLastCheck()) return new Action.UnveilObjective(obj);
+
         BambooTile bambooTile =
                 new BambooTile(); // Milestone 1... While we do not have a stack of tiles
         // Note for me later: once the stack is implemented, handle the case where it can be empty
