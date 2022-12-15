@@ -70,7 +70,8 @@ public class Game {
 
     // S1301: we want pattern matching so switch is necessary
     // S1481: pattern matching requires variable name even if unused
-    @SuppressWarnings({"java:S1301", "java:S1481"})
+    // S131: we're using pattern matching, so we don't need a default branch
+    @SuppressWarnings({"java:S1301", "java:S1481", "java:S131"})
     private void playAction(Action action) {
         switch (action) {
             case Action.None ignored -> {
