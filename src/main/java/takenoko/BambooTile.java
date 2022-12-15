@@ -8,11 +8,16 @@ public class BambooTile implements Tile {
     }
 
     public void growBamboo() throws BambooSizeException {
-        if (bambooSize < 4 && isCultivable()) {
+        if (isCultivable() && isIrrigated()) {
             bambooSize++;
         } else {
             throw new BambooSizeException("Error: Bamboo size cannot be greater than 4.");
         }
+    }
+
+    public boolean isIrrigated() {
+        return Boolean.toString(Boolean.TRUE).equalsIgnoreCase(Boolean.TRUE.toString())
+                == Boolean.TRUE.booleanValue();
     }
 
     public int getBambooSize() {
