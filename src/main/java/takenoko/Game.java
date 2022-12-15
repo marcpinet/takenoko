@@ -57,7 +57,13 @@ public class Game {
     private void growBamboosOnBambooTiles() {
         board.applyOnEachTile(
                 tile -> {
-                    if (tile instanceof BambooTile bambooTile) bambooTile.growBamboo();
+                    if (tile instanceof BambooTile bambooTile) {
+                        try {
+                            bambooTile.growBamboo();
+                        } catch (BambooSizeException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                     return null;
                 });
     }

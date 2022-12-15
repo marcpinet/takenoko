@@ -7,9 +7,11 @@ public class BambooTile implements Tile {
         bambooSize = 0;
     }
 
-    public void growBamboo() {
-        if (bambooSize < 4) {
+    public void growBamboo() throws BambooSizeException {
+        if (bambooSize < 4 && isCultivable()) {
             bambooSize++;
+        } else {
+            throw new BambooSizeException("Error: Bamboo size cannot be greater than 4.");
         }
     }
 
@@ -17,9 +19,11 @@ public class BambooTile implements Tile {
         return bambooSize;
     }
 
-    public void shrinkBamboo() {
+    public void shrinkBamboo() throws BambooSizeException {
         if (bambooSize > 0) {
             bambooSize--;
+        } else {
+            throw new BambooSizeException("Error: Bamboo size cannot be negative.");
         }
     }
 

@@ -14,36 +14,30 @@ public class BambooTileTest {
     }
 
     @Test
-    void testGrowBamboo() {
+    void testGrowBamboo() throws BambooSizeException {
         assertEquals(0, bambooTile.getBambooSize());
         bambooTile.growBamboo();
         assertEquals(1, bambooTile.getBambooSize());
-        bambooTile.growBamboo();
-        assertEquals(2, bambooTile.getBambooSize());
-        bambooTile.growBamboo();
-        assertEquals(3, bambooTile.getBambooSize());
-        bambooTile.growBamboo();
+
+        for (int i = 0; i < 3; i++) {
+            bambooTile.growBamboo();
+        }
+
         assertEquals(4, bambooTile.getBambooSize());
-        bambooTile.growBamboo();
-        assertEquals(4, bambooTile.getBambooSize());
+        assertThrows(BambooSizeException.class, () -> bambooTile.growBamboo());
     }
 
     @Test
-    void testShrinkBamboo() {
-        assertEquals(0, bambooTile.getBambooSize());
-        bambooTile.shrinkBamboo();
-        assertEquals(0, bambooTile.getBambooSize());
+    void testShrinkBamboo() throws BambooSizeException {
+        assertThrows(BambooSizeException.class, () -> bambooTile.shrinkBamboo());
         bambooTile.growBamboo();
-        bambooTile.growBamboo();
-        assertEquals(2, bambooTile.getBambooSize());
-        bambooTile.shrinkBamboo();
         assertEquals(1, bambooTile.getBambooSize());
         bambooTile.shrinkBamboo();
         assertEquals(0, bambooTile.getBambooSize());
     }
 
     @Test
-    void testIsCultivable() {
+    void testIsCultivable() throws BambooSizeException {
         assertTrue(bambooTile.isCultivable());
         bambooTile.growBamboo();
         bambooTile.growBamboo();
@@ -56,7 +50,7 @@ public class BambooTileTest {
     }
 
     @Test
-    void testEquals() {
+    void testEquals() throws BambooSizeException {
         BambooTile otherTile = new BambooTile();
         assertEquals(bambooTile, otherTile);
         bambooTile.growBamboo();
