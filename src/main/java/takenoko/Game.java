@@ -47,10 +47,19 @@ public class Game {
                 playAction(action);
                 numAction++;
             }
+            growBamboosOnBambooTiles();
             numPlayer++;
             numAction = 1;
         }
         return Optional.of(players.get(0)); // TODO: determine winning condition
+    }
+
+    private void growBamboosOnBambooTiles() {
+        board.applyOnEachTile(
+                tile -> {
+                    if (tile instanceof BambooTile bambooTile) bambooTile.growBamboo();
+                    return null;
+                });
     }
 
     // S1301: we want pattern matching so switch is necessary
