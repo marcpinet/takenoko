@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class CoordTest {
+    Coord center;
 
     Coord coordx1y2;
     Coord coordx2y2;
@@ -13,6 +14,7 @@ public class CoordTest {
 
     @BeforeEach
     void setUp() {
+        center = new Coord(0, 0);
         coordx1y2 = new Coord(1, 2);
         coordx2y2 = new Coord(2, 2);
         coordx3y2 = new Coord(3, 2);
@@ -51,5 +53,12 @@ public class CoordTest {
     void isAdjacentToTest() {
         assertTrue(coordx1y2.isAdjacentTo(coordx2y2));
         assertFalse(coordx1y2.isAdjacentTo(coordx3y2));
+    }
+
+    @Test
+    void rotate() {
+        assertEquals(new Coord(3, -1), coordx1y2.rotate(center));
+        assertEquals(new Coord(4, -2), coordx2y2.rotate(center));
+        assertEquals(new Coord(5, -3), coordx3y2.rotate(center));
     }
 }
