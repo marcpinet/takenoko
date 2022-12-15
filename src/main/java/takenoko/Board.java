@@ -3,6 +3,7 @@ package takenoko;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,5 +40,11 @@ public class Board {
                 .flatMap(c -> Stream.of(c.adjacentCoords()))
                 .filter(c -> !tiles.containsKey(c))
                 .collect(Collectors.toSet());
+    }
+
+    public void applyOnEachTile(Function<Tile, Void> f) {
+        for (Map.Entry<Coord, Tile> entry : tiles.entrySet()) {
+            f.apply(entry.getValue());
+        }
     }
 }

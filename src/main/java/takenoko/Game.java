@@ -47,10 +47,26 @@ public class Game {
                 playAction(action);
                 numAction++;
             }
+            growBamboosOnBambooTiles();
             numPlayer++;
             numAction = 1;
         }
         return Optional.of(players.get(0)); // TODO: determine winning condition
+    }
+
+    private void growBamboosOnBambooTiles() {
+        board.applyOnEachTile(
+                tile -> {
+                    if (tile instanceof BambooTile bambooTile && bambooTile.isCultivable()) {
+                        try {
+                            bambooTile.growBamboo();
+                        }
+                        catch(BambooSizeException ignored) {
+                            this.out.log(Level.WARNING, "Bamboo size exception ignored");
+                        }
+                    }
+                    return null;
+                });
     }
 
     // S1301: we want pattern matching so switch is necessary
