@@ -12,8 +12,8 @@ public class Main {
         List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
         List<Objective> objectives =
                 List.of(
-                        new TilePatternObjective(TilePatternObjective.TRIANGLE_2x2),
-                        new TilePatternObjective(TilePatternObjective.SQUARE_2x2),
+                        new TilePatternObjective(TilePatternObjective.TRIANGLE_3),
+                        new TilePatternObjective(TilePatternObjective.DIAMOND_4),
                         new TilePatternObjective(TilePatternObjective.LINE_3),
                         new TilePatternObjective(TilePatternObjective.LINE_2));
         var game = new Game(players, objectives, Logger.getGlobal());

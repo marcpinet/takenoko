@@ -16,12 +16,12 @@ import takenoko.Coord;
 /// This way, we can check if a pattern is achieved by only checking starting from the last tile
 // placed.
 public class TilePatternObjective implements Objective {
-    public static final List<Coord> SQUARE_2x2 =
+    public static final List<Coord> DIAMOND_4 =
             Arrays.asList(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0), new Coord(1, 1));
     public static final List<Coord> LINE_2 = Arrays.asList(new Coord(0, 0), new Coord(0, 1));
     public static final List<Coord> LINE_3 =
             Arrays.asList(new Coord(0, 0), new Coord(0, 1), new Coord(0, 2));
-    public static final List<Coord> TRIANGLE_2x2 =
+    public static final List<Coord> TRIANGLE_3 =
             Arrays.asList(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0));
 
     private final Set<List<Coord>> patternRotations;

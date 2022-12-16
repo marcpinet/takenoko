@@ -50,6 +50,7 @@ public class Game {
                         Level.INFO,
                         "Player number " + numPlayer + " do his action number " + numAction + ":");
                 var action = player.chooseAction(board);
+                this.out.log(Level.INFO, "Action: " + action);
                 if (playAction(action)) return Optional.of(player);
                 checkObjectives(action);
                 numAction++;

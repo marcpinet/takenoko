@@ -54,7 +54,7 @@ class TilePatternObjectiveTest {
 
     @Test
     void testSquareOfTwo() {
-        var objective = new TilePatternObjective(TilePatternObjective.SQUARE_2x2);
+        var objective = new TilePatternObjective(TilePatternObjective.DIAMOND_4);
 
         var board = new Board();
         assertFalse(objective.isAchieved(board, INITIAL_ACTION));
@@ -72,7 +72,7 @@ class TilePatternObjectiveTest {
 
     @Test
     void testTriangleOfTwo() {
-        var objective = new TilePatternObjective(TilePatternObjective.TRIANGLE_2x2);
+        var objective = new TilePatternObjective(TilePatternObjective.TRIANGLE_3);
 
         var board = new Board();
         assertFalse(objective.isAchieved(board, INITIAL_ACTION));

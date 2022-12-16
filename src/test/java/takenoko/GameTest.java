@@ -21,8 +21,8 @@ public class GameTest {
         players = List.of(new EasyBot(new Random(0)), new EasyBot(new Random(0)));
         objectives =
                 List.of(
-                        new TilePatternObjective(TilePatternObjective.TRIANGLE_2x2),
-                        new TilePatternObjective(TilePatternObjective.SQUARE_2x2),
+                        new TilePatternObjective(TilePatternObjective.TRIANGLE_3),
+                        new TilePatternObjective(TilePatternObjective.DIAMOND_4),
                         new TilePatternObjective(TilePatternObjective.LINE_3),
                         new TilePatternObjective(TilePatternObjective.LINE_2));
         game = new Game(players, objectives, Logger.getGlobal());
