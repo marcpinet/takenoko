@@ -34,6 +34,24 @@ class TilePatternObjectiveTest {
     }
 
     @Test
+    void testLineOfThree() {
+        var objective = new TilePatternObjective(TilePatternObjective.LINE_3);
+
+        var board = new Board();
+        assertFalse(objective.isAchieved(board, INITIAL_ACTION));
+
+        // place the second tile
+        var secondAction = placeBambooTile(board, new Coord(0, 1));
+        assertFalse(objective.isAchieved(board, secondAction));
+
+        // place the third tile
+        var thirdAction = placeBambooTile(board, new Coord(0, 2));
+
+        // Now objective is achieved
+        assertTrue(objective.isAchieved(board, thirdAction));
+    }
+
+    @Test
     void testSquareOfTwo() {
         var objective = new TilePatternObjective(TilePatternObjective.SQUARE_2x2);
 
@@ -49,5 +67,21 @@ class TilePatternObjectiveTest {
         assertFalse(objective.isAchieved(board, thirdAction));
         var fourthAction = placeBambooTile(board, new Coord(-1, +1));
         assertTrue(objective.isAchieved(board, fourthAction));
+    }
+
+    @Test
+    void testTriangleOfTwo() {
+        var objective = new TilePatternObjective(TilePatternObjective.TRIANGLE_2x2);
+
+        var board = new Board();
+        assertFalse(objective.isAchieved(board, INITIAL_ACTION));
+
+        // Place the other tiles
+        var secondAction = placeBambooTile(board, new Coord(0, 1));
+        assertFalse(objective.isAchieved(board, secondAction));
+        var thirdAction = placeBambooTile(board, new Coord(1, 0));
+
+        // Now objective is achieved
+        assertTrue(objective.isAchieved(board, thirdAction));
     }
 }
