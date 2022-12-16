@@ -2,6 +2,7 @@ package takenoko.objective;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import takenoko.*;
 
@@ -83,5 +84,16 @@ class TilePatternObjectiveTest {
 
         // Now objective is achieved
         assertTrue(objective.isAchieved(board, thirdAction));
+    }
+
+    @Test
+    void patternScanOnlyTriggeredByPlaceTileAction() {
+        // always true
+        var objective = new TilePatternObjective(List.of(new Coord(0, 0)));
+        var board = new Board();
+        assertFalse(objective.isAchieved(board, Action.NONE));
+        assertTrue(objective.isAchieved(board, INITIAL_ACTION));
+        // but once the objective is achieved, it stays achieved
+        assertTrue(objective.isAchieved(board, Action.NONE));
     }
 }
