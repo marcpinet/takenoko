@@ -82,6 +82,7 @@ public class TilePatternObjective implements Objective {
             revertedPattern.add(c.reversed());
         }
         reversed.add(revertedPattern);
+        reversed.add(pattern);
         return reversed;
     }
 
