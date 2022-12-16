@@ -2,6 +2,7 @@ package takenoko;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -43,5 +44,38 @@ public class Board {
         for (Map.Entry<Coord, Tile> entry : tiles.entrySet()) {
             f.apply(entry.getValue());
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = -2; i < 3; i++) {
+            for (int j = -2; j < 3; j++) {
+                var tile = getTileAtDisplayPosition(i, j);
+                if (tile.isPresent()) {
+                    sb.append("(").append(i).append(",").append(j).append(") ");
+                } else {
+                    sb.append("----- ");
+                }
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    private Optional<Tile> getTileAtDisplayPosition(int i, int j) {
+        for (var keyval : tiles.entrySet()) {
+            Coord c = keyval.getKey();
+            var row = c.x();
+            var col = c.y() + (c.x() + (c.x() & 1)) / 2;
+            if (row == i && col == j) {
+                return Optional.of(keyval.getValue());
+            }
+        }
+        return Optional.empty();
+    }
+
+    public boolean contains(Coord coord) {
+        return tiles.containsKey(coord);
     }
 }

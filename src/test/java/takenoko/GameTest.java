@@ -3,19 +3,29 @@ package takenoko;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import takenoko.bot.DefaultBot;
+import takenoko.bot.EasyBot;
+import takenoko.objective.Objective;
+import takenoko.objective.TilePatternObjective;
 
 public class GameTest {
     Game game;
     List<Player> players;
+    List<Objective> objectives;
 
     @BeforeEach
     public void setUp() {
-        players = List.of(new DefaultBot(), new DefaultBot());
-        game = new Game(players, Logger.getGlobal());
+        players = List.of(new EasyBot(new Random(0)), new EasyBot(new Random(0)));
+        objectives =
+                List.of(
+                        new TilePatternObjective(TilePatternObjective.TRIANGLE_3),
+                        new TilePatternObjective(TilePatternObjective.DIAMOND_4),
+                        new TilePatternObjective(TilePatternObjective.LINE_3),
+                        new TilePatternObjective(TilePatternObjective.LINE_2));
+        game = new Game(players, objectives, Logger.getGlobal());
     }
 
     @Test

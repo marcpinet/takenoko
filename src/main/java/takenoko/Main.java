@@ -4,11 +4,19 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 import takenoko.bot.EasyBot;
+import takenoko.objective.Objective;
+import takenoko.objective.TilePatternObjective;
 
 public class Main {
     public static void main(String... args) {
         List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
-        var game = new Game(players, Logger.getGlobal());
+        List<Objective> objectives =
+                List.of(
+                        new TilePatternObjective(TilePatternObjective.TRIANGLE_3),
+                        new TilePatternObjective(TilePatternObjective.DIAMOND_4),
+                        new TilePatternObjective(TilePatternObjective.LINE_3),
+                        new TilePatternObjective(TilePatternObjective.LINE_2));
+        var game = new Game(players, objectives, Logger.getGlobal());
         game.play();
     }
 }

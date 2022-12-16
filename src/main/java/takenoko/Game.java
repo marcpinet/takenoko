@@ -4,19 +4,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import takenoko.objective.Objective;
 
 public class Game {
     private static final int DEFAULT_ACTION_CREDIT = 2;
     private final Board board;
     private final List<Player> players;
-
     private final Logger out;
+    private final List<Objective> objectives;
     private int numTurn = 1;
 
-    public Game(List<Player> players, Logger out) {
+    public Game(List<Player> players, List<Objective> objectives, Logger out) {
         board = new Board();
         this.players = players;
+        this.objectives = objectives;
         this.out = out;
+        for (var player : players) {
+            // TODO: change how objectives are assigned
+            player.addObjective(objectives.get(0));
+        }
     }
 
     public Player play() {
@@ -44,14 +50,16 @@ public class Game {
                         Level.INFO,
                         "Player number " + numPlayer + " do his action number " + numAction + ":");
                 var action = player.chooseAction(board);
-                playAction(action);
+                this.out.log(Level.INFO, "Action: " + action);
+                if (playAction(action)) return Optional.of(player);
+                checkObjectives(action);
                 numAction++;
             }
             growBamboosOnBambooTiles();
             numPlayer++;
             numAction = 1;
         }
-        return Optional.of(players.get(0)); // TODO: determine winning condition
+        return Optional.empty();
     }
 
     private void growBamboosOnBambooTiles() {
@@ -60,8 +68,7 @@ public class Game {
                     if (tile instanceof BambooTile bambooTile && bambooTile.isCultivable()) {
                         try {
                             bambooTile.growBamboo();
-                        }
-                        catch(BambooSizeException ignored) {
+                        } catch (BambooSizeException ignored) {
                             this.out.log(Level.WARNING, "Bamboo size exception ignored");
                         }
                     }
@@ -71,8 +78,9 @@ public class Game {
 
     // S1301: we want pattern matching so switch is necessary
     // S1481: pattern matching requires variable name even if unused
-    @SuppressWarnings({"java:S1301", "java:S1481"})
-    private void playAction(Action action) {
+    // S131: we're using pattern matching, so we don't need a default branch
+    @SuppressWarnings({"java:S1301", "java:S1481", "java:S131"})
+    private boolean playAction(Action action) {
         switch (action) {
             case Action.None ignored -> {
                 // do nothing
@@ -84,7 +92,16 @@ public class Game {
                     System.out.println(e.getMessage());
                 }
             }
-            default -> throw new IllegalStateException("Unexpected value: " + action);
+            case Action.UnveilObjective ignored -> {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void checkObjectives(Action lastAction) {
+        for (Objective objective : objectives) {
+            objective.isAchieved(board, lastAction);
         }
     }
 }
