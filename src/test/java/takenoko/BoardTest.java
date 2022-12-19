@@ -15,7 +15,7 @@ public class BoardTest {
     }
 
     @Test
-    void placeTileTest() throws BoardException {
+    void placeTileTest() throws Exception {
         Coord c2 = new Coord(0, 1);
         Tile t = new BambooTile();
         tileboard.placeTile(c2, t);
@@ -23,7 +23,7 @@ public class BoardTest {
     }
 
     @Test
-    void contains() throws BoardException {
+    void contains() throws Exception {
         Coord c = new Coord(0, 1);
         assertFalse(tileboard.contains(c));
         tileboard.placeTile(c, new BambooTile());

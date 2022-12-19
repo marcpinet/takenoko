@@ -13,7 +13,7 @@ public class Game {
     private final Logger out;
     private final List<Objective> objectives;
     private int numTurn = 1;
-    private int irrigationSticksLeft = 20;
+    private int irrigationStickLeft = 20;
 
     public Game(List<Player> players, List<Objective> objectives, Logger out) {
         board = new Board();
@@ -52,7 +52,7 @@ public class Game {
                         "Player number " + numPlayer + " do his action number " + numAction + ":");
                 var action = player.chooseAction(board);
                 this.out.log(Level.INFO, "Action: " + action);
-                if (playAction(action)) return Optional.of(player);
+                if (playAction(action, player)) return Optional.of(player);
                 checkObjectives(action);
                 numAction++;
             }
@@ -81,7 +81,7 @@ public class Game {
     // S1481: pattern matching requires variable name even if unused
     // S131: we're using pattern matching, so we don't need a default branch
     @SuppressWarnings({"java:S1301", "java:S1481", "java:S131"})
-    private boolean playAction(Action action) {
+    private boolean playAction(Action action, Player player) {
         switch (action) {
             case Action.None ignored -> {
                 // do nothing
@@ -96,8 +96,42 @@ public class Game {
             case Action.UnveilObjective ignored -> {
                 return true;
             }
+            case Action.TakeIrrigationStick takeIrrigationStick -> {
+                try {
+                    takeIrrigationStick(player);
+                } catch (Exception e) {
+                    this.out.log(Level.INFO, e.getMessage());
+                }
+            }
+            case Action.PlaceIrrigationStick placeIrrigationStick -> {
+                try {
+                    board.placeIrrigation(
+                            placeIrrigationStick.coord(), placeIrrigationStick.side());
+
+                } catch (Exception e) {
+                    this.out.log(Level.INFO, e.getMessage());
+                }
+            }
         }
         return false;
+    }
+
+    // take an irrigation stick from the stack and put it in the player's inventory
+    private void takeIrrigationStick(Player player) throws BoardException {
+        if (irrigationStickLeft == 0) {
+            throw new BoardException("No more irrigation stick left");
+        }
+        player.takeIrrigationStick();
+        irrigationStickLeft--;
+    }
+
+    private void placeIrrigationStick(Player player, Coord coord, TileSide side)
+            throws PlayerException, IrrigationException {
+        if (player.getInventory() <= 0) {
+            throw new PlayerException("No more irrigation stick left in player's inventory");
+        }
+        board.placeIrrigation(coord, side);
+        player.placeIrrigationStick();
     }
 
     private void checkObjectives(Action lastAction) {

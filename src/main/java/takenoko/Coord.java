@@ -62,4 +62,8 @@ public record Coord(int x, int y) {
 
         return new Coord(rotatedQ + center.x, rotatedR + center.y);
     }
+
+    public Coord adjacentCoordSide(TileSide side) {
+        return adjacentCoords()[side.ordinal()];
+    }
 }
