@@ -75,9 +75,13 @@ public class BambooTileTest {
     @Test
     void powerUpFertilizerTest() throws Exception {
         bambooTile.irrigateSide(TileSide.UP);
+        bambooTile.growBamboo();
         bambooTile.setPowerUp(PowerUp.FERTILIZER);
         bambooTile.growBamboo();
-        assertEquals(2, bambooTile.getBambooSize());
+        assertEquals(3, bambooTile.getBambooSize());
+
+        bambooTile.growBamboo();
+        assertEquals(4, bambooTile.getBambooSize());
     }
 
     @Test
