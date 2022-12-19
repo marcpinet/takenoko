@@ -33,8 +33,8 @@ public class BambooTile implements Tile {
     }
 
     public boolean isIrrigated() {
-        return (irrigatedSides.values().stream().anyMatch(Boolean::booleanValue)
-                || powerUp == PowerUp.WATERSHED);
+        return irrigatedSides.values().stream().anyMatch(Boolean::booleanValue)
+                || powerUp == PowerUp.WATERSHED;
     }
 
     public boolean isSideIrrigable(TileSide side) {
