@@ -71,4 +71,18 @@ public class BambooTileTest {
         bambooTile.irrigateSide(TileSide.UP);
         assertTrue(bambooTile.isSideIrrigated(TileSide.UP));
     }
+
+    @Test
+    void powerUpFertilizerTest() throws Exception {
+        bambooTile.irrigateSide(TileSide.UP);
+        bambooTile.setPowerUp(PowerUp.FERTILIZER);
+        bambooTile.growBamboo();
+        assertEquals(2, bambooTile.getBambooSize());
+    }
+
+    @Test
+    void powerUpWatershedTest() throws PowerUpException {
+        bambooTile.setPowerUp(PowerUp.WATERSHED);
+        assertDoesNotThrow(() -> bambooTile.growBamboo());
+    }
 }
