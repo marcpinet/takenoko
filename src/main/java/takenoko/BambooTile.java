@@ -6,7 +6,7 @@ import java.util.Map;
 public class BambooTile implements Tile {
     private int bambooSize;
 
-    private Map<TileSide, Boolean> irrigatedSides;
+    private final Map<TileSide, Boolean> irrigatedSides;
 
     public BambooTile() {
         bambooSize = 0;
@@ -38,7 +38,7 @@ public class BambooTile implements Tile {
 
     public void growBamboo() throws BambooSizeException {
         if (!isCultivable()) {
-            throw new BambooSizeException("Cannot grow bamboo on a pond");
+            throw new BambooSizeException("Max bamboo size reached.");
         }
         if (!isIrrigated()) {
             throw new BambooSizeException("Cannot grow bamboo on an unirrigated tile");
