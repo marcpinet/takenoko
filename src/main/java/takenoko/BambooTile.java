@@ -20,12 +20,8 @@ public class BambooTile implements Tile {
     }
 
     public BambooTile(PowerUp powerUp) {
-        bambooSize = 0;
+        this();
         this.powerUp = powerUp;
-        irrigatedSides = new HashMap<>();
-        for (TileSide side : TileSide.values()) {
-            irrigatedSides.put(side, false);
-        }
     }
 
     public void irrigateSide(TileSide side) {
