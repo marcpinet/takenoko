@@ -13,6 +13,7 @@ public class Game {
     private final Logger out;
     private final List<Objective> objectives;
     private int numTurn = 1;
+    private int irrigationSticksLeft = 20;
 
     public Game(List<Player> players, List<Objective> objectives, Logger out) {
         board = new Board();

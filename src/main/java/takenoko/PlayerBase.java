@@ -11,11 +11,15 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     private final List<Objective> objectives;
     private int actionCredits = 0;
 
+    // TODO : Inventory should become a class with irrigations, power-ups, and objectives
+    private int inventory;
+
     @SuppressWarnings("unchecked")
     public PlayerBase() {
         // SAFETY: This is safe because we're an abstract class using CRTP
         self = (SELF) this;
         objectives = new ArrayList<>();
+        inventory = 0;
     }
 
     @Override
@@ -26,6 +30,21 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     @Override
     public List<Objective> getObjectives() {
         return objectives;
+    }
+
+    @Override
+    public int getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public void takeIrrigationStick() {
+        inventory++;
+    }
+
+    @Override
+    public void placeIrrigationStick() {
+        inventory--;
     }
 
     public void beginTurn(int actionCredits) {
