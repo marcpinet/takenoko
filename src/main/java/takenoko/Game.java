@@ -105,8 +105,8 @@ public class Game {
             }
             case Action.PlaceIrrigationStick placeIrrigationStick -> {
                 try {
-                    board.placeIrrigation(
-                            placeIrrigationStick.coord(), placeIrrigationStick.side());
+                    placeIrrigationStick(
+                            player, placeIrrigationStick.coord(), placeIrrigationStick.side());
 
                 } catch (Exception e) {
                     this.out.log(Level.INFO, e.getMessage());

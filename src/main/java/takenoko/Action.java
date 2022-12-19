@@ -87,7 +87,7 @@ public sealed interface Action
         }
     }
 
-    record PlaceIrrigationStick(Coord coord, TileSide side, Player player) implements Action {
+    record PlaceIrrigationStick(Coord coord, TileSide side) implements Action {
         @Override
         public int cost() {
             return 0;
@@ -96,16 +96,14 @@ public sealed interface Action
         @Override
         public boolean equals(Object o) {
             if (o instanceof PlaceIrrigationStick other) {
-                return coord.equals(other.coord)
-                        && side.equals(other.side)
-                        && player.equals(other.player);
+                return coord.equals(other.coord) && side.equals(other.side);
             }
             return false;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(coord, side, player);
+            return Objects.hash(coord, side);
         }
     }
 }
