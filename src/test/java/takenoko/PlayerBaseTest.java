@@ -35,6 +35,13 @@ class PlayerBaseTest {
         assertThrows(IllegalStateException.class, () -> player.chooseAction(board));
     }
 
+    @Test
+    void testTakeIrrigationSticks() {
+        player.beginTurn(3);
+        player.takeIrrigationStick();
+        assertEquals(1, player.getInventory());
+    }
+
     private static class TestPlayer extends PlayerBase<TestPlayer>
             implements PlayerBase.PlayerBaseInterface {
         @Override

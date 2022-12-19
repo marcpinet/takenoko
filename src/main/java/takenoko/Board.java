@@ -17,12 +17,31 @@ public class Board {
         tiles.put(POND_COORD, new PondTile());
     }
 
-    public void placeTile(Coord c, Tile t) throws BoardException {
+    public void placeTile(Coord c, Tile t) throws BoardException, IrrigationException {
         if (tiles.containsKey(c)) {
             throw new BoardException(
                     "Error: There is already a tile present at theses coordinates.");
         }
         tiles.put(c, t);
+
+        for (TileSide side : TileSide.values()) {
+            Coord adjacentCoord = c.adjacentCoordSide(side);
+            if (tiles.containsKey(adjacentCoord)) {
+                if (tiles.get(adjacentCoord).isSideIrrigated(side.oppositeSide())) {
+                    t.irrigateSide(side);
+                }
+            }
+        }
+    }
+
+    public void placeIrrigation(Coord coord, TileSide side) throws IrrigationException {
+        var c = tiles.get(coord);
+        if (c == null)
+            throw new IrrigationException("Error: There is no tile at these coordinates.");
+        c.irrigateSide(side);
+
+        var c2 = tiles.get(coord.adjacentCoordSide(side));
+        if (c2 != null) c2.irrigateSide(side.oppositeSide());
     }
 
     public Tile getTile(Coord c) throws BoardException {

@@ -14,7 +14,7 @@ class TilePatternObjectiveTest {
     Action.PlaceTile placeBambooTile(Board board, Coord c) {
         try {
             board.placeTile(c, new BambooTile());
-        } catch (BoardException e) {
+        } catch (Exception e) {
             fail(e);
         }
         return new Action.PlaceTile(c, new BambooTile());

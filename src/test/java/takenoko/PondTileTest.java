@@ -1,6 +1,6 @@
 package takenoko;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,5 +10,17 @@ public class PondTileTest {
     void isCultivableTest() {
         PondTile pondTile = new PondTile();
         assertFalse(pondTile.isCultivable());
+    }
+
+    @Test
+    void isSideIrrigatedTest() {
+        PondTile pondTile = new PondTile();
+        assertTrue(pondTile.isSideIrrigated(TileSide.UP));
+    }
+
+    @Test
+    void irrigateSideTest() {
+        PondTile pondTile = new PondTile();
+        assertThrows(Exception.class, () -> pondTile.irrigateSide(TileSide.UP));
     }
 }

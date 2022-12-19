@@ -15,4 +15,10 @@ public interface Player {
     Action chooseAction(Board board);
 
     boolean wantsToEndTurn();
+
+    int getInventory();
+
+    void takeIrrigationStick();
+
+    void placeIrrigationStick();
 }

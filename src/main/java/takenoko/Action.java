@@ -3,7 +3,12 @@ package takenoko;
 import java.util.Objects;
 import takenoko.objective.Objective;
 
-public sealed interface Action permits Action.None, Action.PlaceTile, Action.UnveilObjective {
+public sealed interface Action
+        permits Action.None,
+                Action.PlaceIrrigationStick,
+                Action.PlaceTile,
+                Action.TakeIrrigationStick,
+                Action.UnveilObjective {
     Action NONE = new Action.None();
 
     int cost();
@@ -12,6 +17,16 @@ public sealed interface Action permits Action.None, Action.PlaceTile, Action.Unv
         @Override
         public int cost() {
             return 1;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof None;
+        }
+
+        @Override
+        public int hashCode() {
+            return 0;
         }
     }
 
@@ -52,6 +67,43 @@ public sealed interface Action permits Action.None, Action.PlaceTile, Action.Unv
         @Override
         public int hashCode() {
             return Objects.hash(objective);
+        }
+    }
+
+    record TakeIrrigationStick() implements Action {
+        @Override
+        public int cost() {
+            return 1;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof TakeIrrigationStick;
+        }
+
+        @Override
+        public int hashCode() {
+            return 0;
+        }
+    }
+
+    record PlaceIrrigationStick(Coord coord, TileSide side) implements Action {
+        @Override
+        public int cost() {
+            return 0;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof PlaceIrrigationStick other) {
+                return coord.equals(other.coord) && side.equals(other.side);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(coord, side);
         }
     }
 }
