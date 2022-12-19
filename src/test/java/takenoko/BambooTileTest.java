@@ -65,4 +65,10 @@ public class BambooTileTest {
         otherTile.growBamboo();
         assertNotEquals(bambooTile, otherTile);
     }
+
+    @Test
+    void irrigateSideTest() {
+        bambooTile.irrigateSide(TileSide.UP);
+        assertTrue(bambooTile.isSideIrrigated(TileSide.UP));
+    }
 }

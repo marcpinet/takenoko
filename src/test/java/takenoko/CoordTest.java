@@ -61,4 +61,9 @@ public class CoordTest {
         assertEquals(new Coord(4, -2), coordx2y2.rotate(center));
         assertEquals(new Coord(5, -3), coordx3y2.rotate(center));
     }
+
+    @Test
+    void adjacentCoordSideTest() {
+        assertEquals(coordx2y2, coordx1y2.adjacentCoordSide(TileSide.DOWN_RIGHT));
+    }
 }
