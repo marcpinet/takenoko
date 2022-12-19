@@ -35,12 +35,13 @@ public class Board {
     }
 
     public void placeIrrigation(Coord coord, TileSide side) throws IrrigationException {
-        try {
-            tiles.get(coord).irrigateSide(side);
-            tiles.get(coord.adjacentCoordSide(side)).irrigateSide(side.oppositeSide());
-        } catch (IrrigationException e) {
-            e.printStackTrace();
-        }
+        var c = tiles.get(coord);
+        if (c == null)
+            throw new IrrigationException("Error: There is no tile at these coordinates.");
+        c.irrigateSide(side);
+
+        var c2 = tiles.get(coord.adjacentCoordSide(side));
+        if (c2 != null) c2.irrigateSide(side.oppositeSide());
     }
 
     public Tile getTile(Coord c) throws BoardException {
