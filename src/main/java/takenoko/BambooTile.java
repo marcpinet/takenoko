@@ -8,12 +8,20 @@ public class BambooTile implements Tile {
 
     private final Map<TileSide, Boolean> irrigatedSides;
 
+    private PowerUp powerUp;
+
     public BambooTile() {
         bambooSize = 0;
+        this.powerUp = PowerUp.NONE;
         irrigatedSides = new HashMap<>();
         for (TileSide side : TileSide.values()) {
             irrigatedSides.put(side, false);
         }
+    }
+
+    public BambooTile(PowerUp powerUp) {
+        this();
+        this.powerUp = powerUp;
     }
 
     public void irrigateSide(TileSide side) {
@@ -21,7 +29,8 @@ public class BambooTile implements Tile {
     }
 
     public boolean isIrrigated() {
-        return irrigatedSides.values().stream().anyMatch(Boolean::booleanValue);
+        return irrigatedSides.values().stream().anyMatch(Boolean::booleanValue)
+                || powerUp == PowerUp.WATERSHED;
     }
 
     public boolean isSideIrrigable(TileSide side) {
@@ -44,6 +53,10 @@ public class BambooTile implements Tile {
             throw new BambooSizeException("Cannot grow bamboo on an unirrigated tile");
         }
         bambooSize++;
+
+        if (powerUp == PowerUp.FERTILIZER && isCultivable()) {
+            bambooSize++;
+        }
     }
 
     public int getBambooSize() {
@@ -61,6 +74,17 @@ public class BambooTile implements Tile {
     @Override
     public boolean isCultivable() {
         return bambooSize < 4;
+    }
+
+    public PowerUp getPowerUp() {
+        return powerUp;
+    }
+
+    public void setPowerUp(PowerUp powerUp) throws PowerUpException {
+        if (this.powerUp != PowerUp.NONE) {
+            throw new PowerUpException("Error: Tile already has a power up.");
+        }
+        this.powerUp = powerUp;
     }
 
     @Override
