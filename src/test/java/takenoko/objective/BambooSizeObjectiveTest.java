@@ -49,7 +49,7 @@ public class BambooSizeObjectiveTest {
     }
 
     @Test
-    void testIsAchieved() {
+    void testIsAchieved() throws BambooSizeException {
         // Initial verification
         assertFalse(b1.isAchieved(board, INITIAL_ACTION));
         assertFalse(b3.isAchieved(board, INITIAL_ACTION));
@@ -64,37 +64,33 @@ public class BambooSizeObjectiveTest {
             throw new RuntimeException(e);
         }
 
-        if (bt1 instanceof BambooTile) {
-            try {
-                // First bamboo grow
-                ((BambooTile) bt1).growBamboo();
-                // Now b1 is achieved
-                assertTrue(b1.isAchieved(board, secondAction));
-                assertTrue(b1.wasAchievedAfterLastCheck());
+        assertTrue(bt1 instanceof BambooTile);
+        BambooTile bt2 = (BambooTile) bt1;
 
-                // Second bamboo grow
-                ((BambooTile) bt1).growBamboo();
-                // b1 is no longer achieved
-                assertFalse(b1.isAchieved(board, secondAction));
-                assertFalse(b1.wasAchievedAfterLastCheck());
+        // First bamboo grow
+        bt2.growBamboo();
+        // Now b1 is achieved
+        assertTrue(b1.isAchieved(board, secondAction));
+        assertTrue(b1.wasAchievedAfterLastCheck());
 
-                // Third bamboo grow
-                ((BambooTile) bt1).growBamboo();
-                // b3 is achieved
-                assertTrue(b3.isAchieved(board, secondAction));
-                assertTrue(b3.wasAchievedAfterLastCheck());
+        // Second bamboo grow
+        bt2.growBamboo();
+        // b1 is no longer achieved
+        assertFalse(b1.isAchieved(board, secondAction));
+        assertFalse(b1.wasAchievedAfterLastCheck());
 
-                // Fourth bamboo grow
-                ((BambooTile) bt1).growBamboo();
-                // b3 is no longer achieved, but b4 is
-                assertFalse(b3.isAchieved(board, secondAction));
-                assertTrue(b4.isAchieved(board, secondAction));
-                assertFalse(b3.wasAchievedAfterLastCheck());
-                assertTrue(b4.wasAchievedAfterLastCheck());
+        // Third bamboo grow
+        bt2.growBamboo();
+        // b3 is achieved
+        assertTrue(b3.isAchieved(board, secondAction));
+        assertTrue(b3.wasAchievedAfterLastCheck());
 
-            } catch (BambooSizeException e) {
-                fail(e);
-            }
-        }
+        // Fourth bamboo grow
+        bt2.growBamboo();
+        // b3 is no longer achieved, but b4 is
+        assertFalse(b3.isAchieved(board, secondAction));
+        assertTrue(b4.isAchieved(board, secondAction));
+        assertFalse(b3.wasAchievedAfterLastCheck());
+        assertTrue(b4.wasAchievedAfterLastCheck());
     }
 }
