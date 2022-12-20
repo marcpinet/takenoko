@@ -18,7 +18,7 @@
 <br />
 <div align="center">
 <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a">
-<img src="./readme-data/takenoko.png" alt="Logo" width="100" height="10-->
+<img src="./readme-data/takenoko.png" alt="Logo" width="100" height="100"-->
 
 </a>
 
