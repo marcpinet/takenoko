@@ -18,7 +18,7 @@
 <br />
 <div align="center">
 <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a">
-<img src="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/tree/main/readme-data/takenoko.png" alt="Logo" width="100" height="10-->
+<img src="./readme-data/takenoko.png" alt="Logo" width="100" height="10-->
 
 </a>
 
@@ -78,7 +78,7 @@ Here are the basic rules for playing Takenoko:
 - If a player unveils one of his achieved objective cards, he get the points indicated on the card.
 - The game ends when a player has revealed 7 objective cards, the player with the most points wins.
 
-<a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/tree/main/readme-data/takenoko.pdf">Entire rules</a>
+<a href="./readme-data/takenoko.pdf">Entire rules</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
