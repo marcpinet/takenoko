@@ -50,6 +50,7 @@ public class BambooSizeObjectiveTest {
 
     @Test
     void testIsAchieved() {
+        // Initial verification
         assertFalse(b1.isAchieved(board, INITIAL_ACTION));
         assertFalse(b3.isAchieved(board, INITIAL_ACTION));
         assertFalse(b4.isAchieved(board, INITIAL_ACTION));
@@ -74,7 +75,7 @@ public class BambooSizeObjectiveTest {
 
             // Now b1 is achieved
             assertTrue(b1.isAchieved(board, secondAction));
-            assertFalse(b3.isAchieved(board, secondAction));
+            assertTrue(b1.wasAchievedAfterLastCheck());
 
             // Second bamboo grow
             try {
@@ -85,6 +86,7 @@ public class BambooSizeObjectiveTest {
 
             // b1 is no longer achieved
             assertFalse(b1.isAchieved(board, secondAction));
+            assertFalse(b1.wasAchievedAfterLastCheck());
 
             // Third bamboo grow
             try {
@@ -95,6 +97,7 @@ public class BambooSizeObjectiveTest {
 
             // b3 is achieved
             assertTrue(b3.isAchieved(board, secondAction));
+            assertTrue(b3.wasAchievedAfterLastCheck());
 
             // Fourth bamboo grow
             try {
@@ -106,6 +109,8 @@ public class BambooSizeObjectiveTest {
             // b3 is no longer achieved, but b4 is
             assertFalse(b3.isAchieved(board, secondAction));
             assertTrue(b4.isAchieved(board, secondAction));
+            assertFalse(b3.wasAchievedAfterLastCheck());
+            assertTrue(b4.wasAchievedAfterLastCheck());
         }
     }
 }

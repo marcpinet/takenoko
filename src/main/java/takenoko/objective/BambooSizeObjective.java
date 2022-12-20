@@ -37,6 +37,6 @@ public class BambooSizeObjective implements Objective {
 
     @Override
     public boolean wasAchievedAfterLastCheck() {
-        return false;
+        return achieved;
     }
 }
