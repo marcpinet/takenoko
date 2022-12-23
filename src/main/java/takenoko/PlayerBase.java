@@ -56,7 +56,7 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     @Override
-    public Action chooseAction(Board board) {
+    public Action chooseAction(Board board) throws PlayerException {
         var action = self.chooseActionImpl(board);
         actionCredits -= action.cost();
         if (actionCredits < 0) {
@@ -70,6 +70,6 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     public interface PlayerBaseInterface {
-        Action chooseActionImpl(Board board);
+        Action chooseActionImpl(Board board) throws PlayerException;
     }
 }

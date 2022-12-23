@@ -53,10 +53,14 @@ public class Game {
                 this.out.log(
                         Level.INFO,
                         "Player number " + numPlayer + " do his action number " + numAction + ":");
-                var action = player.chooseAction(board);
-                this.out.log(Level.INFO, "Action: " + action);
-                if (playAction(action, player)) return Optional.of(player);
-                checkObjectives(action);
+                try {
+                    var action = player.chooseAction(board);
+                    this.out.log(Level.INFO, "Action: " + action);
+                    if (playAction(action, player)) return Optional.of(player);
+                    checkObjectives(action);
+                } catch (PlayerException e) {
+                    this.out.log(Level.SEVERE, "Player exception occurred: " + e.getMessage());
+                }
                 numAction++;
             }
             growBamboosOnBambooTiles();

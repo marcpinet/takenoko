@@ -12,7 +12,7 @@ public interface Player {
 
     int availableActionCredits();
 
-    Action chooseAction(Board board);
+    Action chooseAction(Board board) throws PlayerException;
 
     boolean wantsToEndTurn();
 

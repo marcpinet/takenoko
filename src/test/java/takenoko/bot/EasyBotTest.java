@@ -18,7 +18,7 @@ class EasyBotTest {
     }
 
     @Test
-    void testChooseActions() {
+    void testChooseActions() throws PlayerException {
         Board board = new Board();
         EasyBot bot = new EasyBot(randomSource);
 
@@ -27,7 +27,7 @@ class EasyBotTest {
 
         assertTrue(action instanceof Action.PlaceTile);
 
-        var expectedAction = new Action.PlaceTile(new Coord(0, -1), new BambooTile());
+        var expectedAction = new Action.PlaceTile(new Coord(-1, 0), new BambooTile());
         assertEquals(expectedAction, action);
     }
 }
