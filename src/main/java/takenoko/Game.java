@@ -66,7 +66,9 @@ public class Game {
     private void growBamboosOnBambooTiles() {
         board.applyOnEachTile(
                 tile -> {
-                    if (tile instanceof BambooTile bambooTile && bambooTile.isCultivable()) {
+                    if (tile instanceof BambooTile bambooTile
+                            && bambooTile.isCultivable()
+                            && bambooTile.isIrrigated()) {
                         try {
                             bambooTile.growBamboo();
                         } catch (BambooSizeException ignored) {
