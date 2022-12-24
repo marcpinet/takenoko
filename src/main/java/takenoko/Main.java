@@ -8,7 +8,7 @@ import takenoko.objective.Objective;
 import takenoko.objective.TilePatternObjective;
 
 public class Main {
-    public static void main(String... args) {
+    public static void main(String... args) throws TooManyTurnsException {
         List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
         List<Objective> objectives =
                 List.of(
