@@ -1,3 +1,17 @@
 #!/usr/bin/env bash
+# From gist at https://gist.github.com/chadmaughan/5889802
 echo "[hook] Checking formatting"
+# stash any unstaged changes
+git stash -q --keep-index
+
+# run the check
 mvn -q spotless:check
+
+# store the last exit code in a variable
+RESULT=$?
+
+# unstash the unstaged changes
+git stash pop -q
+
+# return the exit code
+exit $RESULT
