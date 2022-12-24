@@ -26,9 +26,12 @@ public class Game {
         }
     }
 
-    public Player play() {
+    public Player play() throws TooManyTurnsException {
         this.out.log(Level.INFO, "Beginning of the game!");
         while (true) {
+            if (numTurn > 100) {
+                throw new TooManyTurnsException("ERROR : too many turns. Game end.");
+            }
             this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!");
             var winner = playTurn();
             numTurn++;
