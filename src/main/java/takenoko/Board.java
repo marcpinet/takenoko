@@ -59,6 +59,10 @@ public class Board {
                 .collect(Collectors.toSet());
     }
 
+    public Set<Coord> getPlacedCoords() {
+        return tiles.keySet();
+    }
+
     public void applyOnEachTile(Function<Tile, Void> f) {
         for (Map.Entry<Coord, Tile> entry : tiles.entrySet()) {
             f.apply(entry.getValue());

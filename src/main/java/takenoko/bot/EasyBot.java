@@ -20,7 +20,8 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
         for (var obj : getObjectives())
             if (obj.wasAchievedAfterLastCheck()) return new Action.UnveilObjective(obj);
 
-        final List<Function<Board, Optional<Action>>> availableActions = List.of(this::placeTile);
+        final List<Function<Board, Optional<Action>>> availableActions =
+                List.of(this::placeTile, this::takeIrrigation, this::placeIrrigation);
 
         // Try at most MAX_TRIES before giving up
         final int MAX_TRIES = 100;
@@ -42,8 +43,33 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
         return Optional.of(new Action.PlaceTile(coord, bambooTile));
     }
 
+    private Optional<Action> placeIrrigation(Board board) {
+        var availableCoords = board.getPlacedCoords();
+
+        Coord coord = chooseRandom(availableCoords);
+        try {
+            Tile tile = board.getTile(coord);
+            var side = randomSide();
+
+            if (tile.isSideIrrigated(side)) return Optional.empty();
+
+            return Optional.of(new Action.PlaceIrrigationStick(coord, side));
+
+        } catch (BoardException e) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Action> takeIrrigation(Board ignored) {
+        return Optional.of(new Action.TakeIrrigationStick());
+    }
+
     private Coord chooseRandom(Set<Coord> coords) {
         int randomIndex = randomSource.nextInt(0, coords.size());
         return coords.toArray(new Coord[0])[randomIndex];
+    }
+
+    private TileSide randomSide() {
+        return TileSide.values()[randomSource.nextInt(TileSide.values().length)];
     }
 }

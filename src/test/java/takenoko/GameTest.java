@@ -1,6 +1,7 @@
 package takenoko;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -32,8 +33,7 @@ public class GameTest {
     }
 
     @Test
-    void testGame() {
-
+    void testGame() throws PlayerException {
         // For the moment, we verify only one completed objective, because the game stop as soon as
         // an objective is complete.
 
