@@ -139,6 +139,12 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>1.8.0</version>
+                <configuration>
+                    <jvmArgs>
+                        <!-- For pattern matching -->
+                        --enable-preview
+                    </jvmArgs>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.pitest</groupId>
