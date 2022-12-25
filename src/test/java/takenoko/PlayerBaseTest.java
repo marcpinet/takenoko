@@ -22,17 +22,23 @@ class PlayerBaseTest {
         player.beginTurn(3);
         assertEquals(3, player.availableActionCredits());
 
-        player.chooseAction(board);
+        var validator = new ActionValidator(board, 20);
+
+        var action = player.chooseAction(board, validator);
+        player.commitAction(action);
         assertEquals(2, player.availableActionCredits());
 
-        player.chooseAction(board);
+        action = player.chooseAction(board, validator);
+        player.commitAction(action);
         assertEquals(1, player.availableActionCredits());
 
-        player.chooseAction(board);
+        action = player.chooseAction(board, validator);
+        player.commitAction(action);
         assertEquals(0, player.availableActionCredits());
 
         // No more credits
-        assertThrows(IllegalStateException.class, () -> player.chooseAction(board));
+        var finalAction = player.chooseAction(board, validator);
+        assertThrows(IllegalStateException.class, () -> player.commitAction(finalAction));
     }
 
     @Test
@@ -45,7 +51,7 @@ class PlayerBaseTest {
     private static class TestPlayer extends PlayerBase<TestPlayer>
             implements PlayerBase.PlayerBaseInterface {
         @Override
-        public Action chooseActionImpl(Board board) {
+        public Action chooseActionImpl(Board board, ActionValidator validator) {
             return Action.NONE;
         }
     }

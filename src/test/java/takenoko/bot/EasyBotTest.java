@@ -25,8 +25,10 @@ class EasyBotTest {
         Board board = new Board();
         EasyBot bot = new EasyBot(randomSource);
 
+        var validator = new ActionValidator(board, 20);
+
         bot.beginTurn(1);
-        Action action = bot.chooseAction(board);
+        Action action = bot.chooseAction(board, validator);
 
         assertTrue(action instanceof Action.PlaceTile);
 
@@ -44,8 +46,10 @@ class EasyBotTest {
 
         bot.addObjective(objMock);
 
+        var validator = new ActionValidator(board, 20);
+
         bot.beginTurn(1);
-        Action action = bot.chooseAction(board);
+        Action action = bot.chooseAction(board, validator);
 
         assertEquals(new Action.UnveilObjective(objMock), action);
     }

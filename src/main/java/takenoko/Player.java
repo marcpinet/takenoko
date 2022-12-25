@@ -12,7 +12,7 @@ public interface Player {
 
     int availableActionCredits();
 
-    Action chooseAction(Board board) throws PlayerException;
+    Action chooseAction(Board board, ActionValidator actionValidator) throws PlayerException;
 
     boolean wantsToEndTurn();
 
@@ -21,4 +21,6 @@ public interface Player {
     void takeIrrigationStick();
 
     void placeIrrigationStick();
+
+    void commitAction(Action action);
 }

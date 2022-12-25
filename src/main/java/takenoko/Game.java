@@ -54,7 +54,9 @@ public class Game {
                         Level.INFO,
                         "Player number " + numPlayer + " do his action number " + numAction + ":");
                 try {
-                    var action = player.chooseAction(board);
+                    var validator = new ActionValidator(board, irrigationStickLeft);
+                    var action = player.chooseAction(board, validator);
+                    if (!validator.isValid(action)) continue;
                     this.out.log(Level.INFO, "Action: " + action);
                     if (playAction(action, player)) return Optional.of(player);
                     checkObjectives(action);
@@ -98,16 +100,19 @@ public class Game {
             case Action.PlaceTile placeTile -> {
                 try {
                     board.placeTile(placeTile.coord(), placeTile.tile());
+                    player.commitAction(action);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
             case Action.UnveilObjective ignored -> {
+                player.commitAction(action);
                 return true;
             }
             case Action.TakeIrrigationStick takeIrrigationStick -> {
                 try {
                     takeIrrigationStick(player);
+                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.INFO, e.getMessage());
                 }
@@ -116,7 +121,7 @@ public class Game {
                 try {
                     placeIrrigationStick(
                             player, placeIrrigationStick.coord(), placeIrrigationStick.side());
-
+                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.INFO, e.getMessage());
                 }

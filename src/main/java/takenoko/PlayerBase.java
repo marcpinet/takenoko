@@ -56,13 +56,16 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     @Override
-    public Action chooseAction(Board board) throws PlayerException {
-        var action = self.chooseActionImpl(board);
+    public Action chooseAction(Board board, ActionValidator actionValidator)
+            throws PlayerException {
+        return self.chooseActionImpl(board, actionValidator);
+    }
+
+    public void commitAction(Action action) {
         actionCredits -= action.cost();
         if (actionCredits < 0) {
             throw new IllegalStateException("Not enough action credits");
         }
-        return action;
     }
 
     public boolean wantsToEndTurn() {
@@ -70,6 +73,6 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     public interface PlayerBaseInterface {
-        Action chooseActionImpl(Board board) throws PlayerException;
+        Action chooseActionImpl(Board board, ActionValidator validator) throws PlayerException;
     }
 }
