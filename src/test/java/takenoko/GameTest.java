@@ -1,6 +1,7 @@
 package takenoko;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -32,8 +33,7 @@ public class GameTest {
     }
 
     @Test
-    void testGame() {
-
+    void testGame() throws PlayerException {
         // For the moment, we verify only one completed objective, because the game stop as soon as
         // an objective is complete.
 
@@ -43,16 +43,17 @@ public class GameTest {
         Action.PlaceTile fourthTile = new Action.PlaceTile(new Coord(-1, +1), new BambooTile());
 
         // Don't forget that unveil an objective is an action, just like place a tile!!!
-        when(p1.chooseAction(any()))
+        when(p1.chooseAction(any(), any()))
                 .thenReturn(firstTile, secondTile, new Action.UnveilObjective(line2));
         // If we don't put the last "false", we will be trapped in an infinite loop because players
         // will immediately end the turn before playing it.
         when(p1.wantsToEndTurn()).thenReturn(false, false, true, false);
-        when(p2.chooseAction(any())).thenReturn(thirdTile, fourthTile);
+        when(p2.chooseAction(any(), any())).thenReturn(thirdTile, fourthTile);
         when(p2.wantsToEndTurn()).thenReturn(false, false, true, false);
         // line2 objective is achieved after firstTile action is done.
         when(line2.isAchieved(any(), eq(firstTile))).thenReturn(false);
         when(line2.isAchieved(any(), eq(secondTile))).thenReturn(true);
+        when(line2.wasAchievedAfterLastCheck()).thenReturn(true);
         try {
             assertEquals(players.get(0), game.play());
 
