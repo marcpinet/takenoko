@@ -82,6 +82,8 @@ public class Game {
                             bambooTile.growBamboo();
                         } catch (BambooSizeException ignored) {
                             this.out.log(Level.WARNING, "Bamboo size exception ignored");
+                        } catch (BambooIrrigationException ignored) {
+                            this.out.log(Level.WARNING, "Bamboo irrigation exception ignored");
                         }
                     }
                     return null;
@@ -121,6 +123,15 @@ public class Game {
                 try {
                     placeIrrigationStick(
                             player, placeIrrigationStick.coord(), placeIrrigationStick.side());
+                    player.commitAction(action);
+                } catch (Exception e) {
+                    this.out.log(Level.INFO, e.getMessage());
+                }
+            }
+
+            case Action.MoveGardener moveGardener -> {
+                try {
+                    this.board.move(MovablePiece.GARDENER, moveGardener.coord());
                     player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.INFO, e.getMessage());

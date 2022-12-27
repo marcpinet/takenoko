@@ -7,10 +7,12 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import utils.Pair;
 
 public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
     private final Map<Coord, Tile> tiles;
+    private Pair<MovablePiece, Coord> gardener = Pair.of(MovablePiece.GARDENER, POND_COORD);
 
     public Board() {
         tiles = new HashMap<>();
@@ -100,5 +102,28 @@ public class Board {
 
     public boolean contains(Coord coord) {
         return tiles.containsKey(coord);
+    }
+
+    public void move(MovablePiece pieceType, Coord coord)
+            throws BoardException, BambooSizeException, BambooIrrigationException {
+        if (!tiles.containsKey(coord)) {
+            throw new BoardException(
+                    "Error: the tile with these coordinates is not present on the board.");
+        }
+
+        // Checking if coords are in a straight line
+        Coord pieceCoord = gardener.second(); // For now, until we implement the panda
+        if (!pieceCoord.isAlignedWith(coord)) {
+            throw new BoardException("Error: this piece can only move in a straight line.");
+        }
+
+        // Updating piece position
+        if (pieceType == MovablePiece.GARDENER) {
+            gardener = Pair.of(pieceType, coord);
+            // Making bamboo on the tile grow
+            Tile tile = tiles.get(coord);
+            if (tile instanceof BambooTile bambooTile) bambooTile.growBamboo();
+        }
+        // TODO: implement panda
     }
 }
