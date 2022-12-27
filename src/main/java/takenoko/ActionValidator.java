@@ -2,10 +2,12 @@ package takenoko;
 
 public class ActionValidator {
     private final Board board;
+    private final TileDeck deck;
     private final int irrigationStickCount;
 
-    public ActionValidator(Board board, int irrigationStickCount) {
+    public ActionValidator(Board board, TileDeck deck, int irrigationStickCount) {
         this.board = board;
+        this.deck = deck;
         this.irrigationStickCount = irrigationStickCount;
     }
 
@@ -34,7 +36,7 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PlaceTile action) {
-        return board.getAvailableCoords().contains(action.coord());
+        return deck.size() > 0 && board.getAvailableCoords().contains(action.coord());
     }
 
     private boolean isValid(Action.TakeIrrigationStick action) {

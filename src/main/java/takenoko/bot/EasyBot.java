@@ -38,11 +38,9 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
     private Action placeTile(Board board) {
         Set<Coord> availableCoords = board.getAvailableCoords();
 
-        // We do not have a stack of tiles. TODO: handle it later
-        BambooTile bambooTile = new BambooTile();
         Coord coord = chooseRandom(availableCoords);
 
-        return new Action.PlaceTile(coord, bambooTile);
+        return new Action.PlaceTile(coord, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
     }
 
     private Action placeIrrigation(Board board) {

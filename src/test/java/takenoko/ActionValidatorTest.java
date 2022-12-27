@@ -20,7 +20,7 @@ class ActionValidatorTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        validator = new ActionValidator(board, STICK_COUNT);
+        validator = new ActionValidator(board, new TileDeck(), STICK_COUNT);
     }
 
     @Test
@@ -31,7 +31,7 @@ class ActionValidatorTest {
     @ParameterizedTest
     @MethodSource("placeTileProvider")
     void testPlaceTile(Coord coord, BambooTile tile, boolean expectedResult) {
-        var action = new Action.PlaceTile(coord, tile);
+        var action = new Action.PlaceTile(coord, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
         assertEquals(expectedResult, validator.isValid(action));
     }
 
@@ -66,7 +66,7 @@ class ActionValidatorTest {
 
     @Test
     void testTakeIrrigationWhenNotEnough() {
-        var validator = new ActionValidator(board, 0);
+        var validator = new ActionValidator(board, new TileDeck(), 0);
         var action = new Action.TakeIrrigationStick();
         assertFalse(validator.isValid(action));
     }
