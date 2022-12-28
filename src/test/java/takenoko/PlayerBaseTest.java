@@ -16,7 +16,7 @@ class PlayerBaseTest {
     void setUp() {
         player = new TestPlayer();
         board = new Board();
-        deck = new TileDeck(new TileFactory(), 10);
+        deck = new TileDeck();
     }
 
     @Test

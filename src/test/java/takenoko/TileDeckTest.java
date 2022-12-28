@@ -2,6 +2,8 @@ package takenoko;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayDeque;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,18 +13,21 @@ class TileDeckTest {
 
     @BeforeEach
     void setUp() {
-        // mock the tile factory to always return the same tiles
-        var factory =
-                new TileFactory() {
-                    int c = 0;
+        var tiles = new ArrayDeque<Tile>();
+        for (int i = 0; i < DECK_SIZE; i++) {
+            if (i % 2 != 0) {
+                tiles.add(new PondTile());
+            } else {
+                tiles.add(new BambooTile());
+            }
+        }
+        deck = new TileDeck(tiles);
+    }
 
-                    @Override
-                    public Tile randomTile() {
-                        return c++ % 2 == 0 ? new BambooTile() : new PondTile();
-                    }
-                };
-
-        deck = new TileDeck(factory, DECK_SIZE);
+    @Test
+    void defaultConstructor() {
+        var deck = new TileDeck();
+        assertEquals(TileDeck.DEFAULT_SIZE, deck.size());
     }
 
     @Test
@@ -47,13 +52,14 @@ class TileDeckTest {
     }
 
     @Test
-    void lessThanThreeTiles() {
-        deck = new TileDeck(new TileFactory(), 2);
+    void lessThanThreeTiles() throws EmptyTileDeckException {
+        deck = new TileDeck(new ArrayDeque<>(List.of(new BambooTile(), new PondTile())));
         TileDeck.DrawTilePredicate predicate =
                 tiles -> {
                     assertEquals(2, tiles.size());
                     return 0;
                 };
+        deck.draw(predicate);
     }
 
     @Test

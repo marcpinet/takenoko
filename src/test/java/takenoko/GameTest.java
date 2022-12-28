@@ -29,7 +29,7 @@ public class GameTest {
     public void setUp() {
         players = List.of(p1, p2);
         objectives = List.of(line2);
-        tileDeck = new TileDeck(new TileFactory(), 10);
+        tileDeck = new TileDeck();
 
         game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
     }

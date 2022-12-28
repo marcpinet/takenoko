@@ -17,15 +17,16 @@ public class TileDeck {
     // default game content
     public static final int DEFAULT_SIZE = 27;
 
-    public TileDeck(TileFactory tileFactory, int numTiles) {
-        tiles = new ArrayDeque<>(numTiles);
-        for (int i = 0; i < numTiles; ++i) {
-            tiles.add(tileFactory.randomTile());
+    public TileDeck() {
+        var queue = new ArrayDeque<Tile>();
+        for (int i = 0; i < DEFAULT_SIZE; i++) {
+            queue.add(new BambooTile());
         }
+        tiles = queue;
     }
 
-    public TileDeck(TileFactory tileFactory) {
-        this(tileFactory, DEFAULT_SIZE);
+    public TileDeck(Queue<Tile> tiles) {
+        this.tiles = tiles;
     }
 
     public Tile draw(DrawTilePredicate predicate) throws EmptyTileDeckException {
