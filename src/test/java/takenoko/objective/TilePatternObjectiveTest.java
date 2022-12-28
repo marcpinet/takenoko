@@ -9,7 +9,7 @@ import takenoko.*;
 class TilePatternObjectiveTest {
     // The board always apply this action first
     static final Action.PlaceTile INITIAL_ACTION =
-            new Action.PlaceTile(new Coord(0, 0), new PondTile());
+            new Action.PlaceTile(new Coord(0, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
 
     Action.PlaceTile placeBambooTile(Board board, Coord c) {
         try {
@@ -17,7 +17,7 @@ class TilePatternObjectiveTest {
         } catch (Exception e) {
             fail(e);
         }
-        return new Action.PlaceTile(c, new BambooTile());
+        return new Action.PlaceTile(c, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
     }
 
     @Test

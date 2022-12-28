@@ -16,7 +16,8 @@ public class Main {
                         new TilePatternObjective(TilePatternObjective.DIAMOND_4),
                         new TilePatternObjective(TilePatternObjective.LINE_3),
                         new TilePatternObjective(TilePatternObjective.LINE_2));
-        var game = new Game(players, objectives, Logger.getGlobal());
+        var tileDeck = new TileDeck();
+        var game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
         game.play();
     }
 }

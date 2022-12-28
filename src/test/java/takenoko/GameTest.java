@@ -23,13 +23,15 @@ public class GameTest {
     @Mock EasyBot p1 = mock(EasyBot.class);
     @Mock EasyBot p2 = mock(EasyBot.class);
     @Mock TilePatternObjective line2 = mock(TilePatternObjective.class);
+    TileDeck tileDeck;
 
     @BeforeEach
     public void setUp() {
         players = List.of(p1, p2);
         objectives = List.of(line2);
+        tileDeck = new TileDeck();
 
-        game = new Game(players, objectives, Logger.getGlobal());
+        game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
     }
 
     @Test
@@ -37,10 +39,14 @@ public class GameTest {
         // For the moment, we verify only one completed objective, because the game stop as soon as
         // an objective is complete.
 
-        Action.PlaceTile firstTile = new Action.PlaceTile(new Coord(0, 1), new BambooTile());
-        Action.PlaceTile secondTile = new Action.PlaceTile(new Coord(0, 2), new BambooTile());
-        Action.PlaceTile thirdTile = new Action.PlaceTile(new Coord(1, 0), new BambooTile());
-        Action.PlaceTile fourthTile = new Action.PlaceTile(new Coord(-1, +1), new BambooTile());
+        Action.PlaceTile firstTile =
+                new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        Action.PlaceTile secondTile =
+                new Action.PlaceTile(new Coord(0, 2), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        Action.PlaceTile thirdTile =
+                new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        Action.PlaceTile fourthTile =
+                new Action.PlaceTile(new Coord(-1, +1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
 
         // Don't forget that unveil an objective is an action, just like place a tile!!!
         when(p1.chooseAction(any(), any()))

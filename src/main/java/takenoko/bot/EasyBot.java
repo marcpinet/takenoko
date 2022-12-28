@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 import takenoko.*;
+import takenoko.utils.Utils;
 
 /** A bot that chooses actions randomly. */
 public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBaseInterface {
@@ -37,11 +38,9 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
     private Action placeTile(Board board) {
         Set<Coord> availableCoords = board.getAvailableCoords();
 
-        // We do not have a stack of tiles. TODO: handle it later
-        BambooTile bambooTile = new BambooTile();
         Coord coord = chooseRandom(availableCoords);
 
-        return new Action.PlaceTile(coord, bambooTile);
+        return new Action.PlaceTile(coord, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
     }
 
     private Action placeIrrigation(Board board) {
@@ -58,8 +57,7 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
     }
 
     private Coord chooseRandom(Set<Coord> coords) {
-        int randomIndex = randomSource.nextInt(0, coords.size());
-        return coords.toArray(new Coord[0])[randomIndex];
+        return Utils.randomPick(coords, randomSource).orElseThrow();
     }
 
     private TileSide randomSide() {
