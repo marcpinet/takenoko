@@ -45,12 +45,12 @@ public class BambooTile implements Tile {
         return irrigatedSides.get(side);
     }
 
-    public void growBamboo() throws BambooSizeException {
+    public void growBamboo() throws BambooSizeException, BambooIrrigationException {
         if (!isCultivable()) {
             throw new BambooSizeException("Max bamboo size reached.");
         }
         if (!isIrrigated()) {
-            throw new BambooSizeException("Cannot grow bamboo on an unirrigated tile");
+            throw new BambooIrrigationException("Cannot grow bamboo on an unirrigated tile");
         }
         bambooSize++;
 

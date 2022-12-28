@@ -14,7 +14,7 @@ public class BambooTileTest {
     }
 
     @Test
-    void testGrowBamboo() throws BambooSizeException {
+    void testGrowBamboo() throws BambooSizeException, BambooIrrigationException {
         assertEquals(0, bambooTile.getBambooSize());
         bambooTile.irrigateSide(TileSide.UP);
         bambooTile.growBamboo();
@@ -29,7 +29,7 @@ public class BambooTileTest {
     }
 
     @Test
-    void testShrinkBamboo() throws BambooSizeException {
+    void testShrinkBamboo() throws BambooSizeException, BambooIrrigationException {
         assertThrows(BambooSizeException.class, () -> bambooTile.shrinkBamboo());
         bambooTile.irrigateSide(TileSide.UP);
         bambooTile.growBamboo();
@@ -39,7 +39,7 @@ public class BambooTileTest {
     }
 
     @Test
-    void testIsCultivable() throws BambooSizeException {
+    void testIsCultivable() throws BambooSizeException, BambooIrrigationException {
         assertTrue(bambooTile.isCultivable());
         bambooTile.irrigateSide(TileSide.UP);
         bambooTile.growBamboo();
@@ -53,7 +53,7 @@ public class BambooTileTest {
     }
 
     @Test
-    void testEquals() throws BambooSizeException {
+    void testEquals() throws BambooSizeException, BambooIrrigationException {
         BambooTile otherTile = new BambooTile();
         assertEquals(bambooTile, otherTile);
         bambooTile.irrigateSide(TileSide.UP);

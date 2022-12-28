@@ -4,7 +4,8 @@ import java.util.Objects;
 import takenoko.objective.Objective;
 
 public sealed interface Action
-        permits Action.None,
+        permits Action.MoveGardener,
+                Action.None,
                 Action.PlaceIrrigationStick,
                 Action.PlaceTile,
                 Action.TakeIrrigationStick,
@@ -104,6 +105,26 @@ public sealed interface Action
         @Override
         public int hashCode() {
             return Objects.hash(coord, side);
+        }
+    }
+
+    record MoveGardener(Coord coord) implements Action {
+        @Override
+        public int cost() {
+            return 1;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof MoveGardener other) {
+                return coord.equals(other.coord);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(coord);
         }
     }
 }

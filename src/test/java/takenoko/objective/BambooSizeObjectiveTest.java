@@ -49,7 +49,7 @@ public class BambooSizeObjectiveTest {
     }
 
     @Test
-    void testIsAchieved() throws BambooSizeException {
+    void testIsAchieved() throws BambooSizeException, BambooIrrigationException {
         // Initial verification
         assertFalse(b1.isAchieved(board, INITIAL_ACTION));
         assertFalse(b3.isAchieved(board, INITIAL_ACTION));

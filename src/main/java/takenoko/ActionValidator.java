@@ -16,6 +16,7 @@ public class ActionValidator {
             case Action.PlaceTile a -> isValid(a);
             case Action.TakeIrrigationStick a -> isValid(a);
             case Action.UnveilObjective a -> isValid(a);
+            case Action.MoveGardener a -> isValid(a);
         };
     }
 
@@ -41,5 +42,10 @@ public class ActionValidator {
 
     private boolean isValid(Action.UnveilObjective action) {
         return action.objective().wasAchievedAfterLastCheck();
+    }
+
+    private boolean isValid(Action.MoveGardener action) {
+        return board.getPlacedCoords().contains(action.coord())
+                && board.getGardenerCoord().isAlignedWith(action.coord());
     }
 }

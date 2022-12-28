@@ -66,4 +66,8 @@ public record Coord(int x, int y) {
     public Coord adjacentCoordSide(TileSide side) {
         return adjacentCoords()[side.ordinal()];
     }
+
+    public boolean isAlignedWith(Coord c) {
+        return x == c.x || y == c.y || z() == c.z();
+    }
 }
