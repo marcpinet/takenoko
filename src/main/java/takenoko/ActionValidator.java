@@ -17,6 +17,7 @@ public class ActionValidator {
             case Action.TakeIrrigationStick a -> isValid(a);
             case Action.UnveilObjective a -> isValid(a);
             case Action.MoveGardener a -> isValid(a);
+            case Action.MovePanda a -> isValid(a);
         };
     }
 
@@ -47,5 +48,10 @@ public class ActionValidator {
     private boolean isValid(Action.MoveGardener action) {
         return board.getPlacedCoords().contains(action.coord())
                 && board.getGardenerCoord().isAlignedWith(action.coord());
+    }
+
+    private boolean isValid(Action.MovePanda action) {
+        return board.getPlacedCoords().contains(action.coord())
+                && board.getPandaCoord().isAlignedWith(action.coord());
     }
 }

@@ -13,6 +13,7 @@ public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
     private final Map<Coord, Tile> tiles;
     private Pair<MovablePiece, Coord> gardener = Pair.of(MovablePiece.GARDENER, POND_COORD);
+    private Pair<MovablePiece, Coord> panda = Pair.of(MovablePiece.PANDA, POND_COORD);
 
     public Board() {
         tiles = new HashMap<>();
@@ -124,11 +125,21 @@ public class Board {
                 bambooTile.growBamboo();
                 // TODO : add adjacent bamboo tiles of the same color to grow
             }
+        } else if (pieceType == MovablePiece.PANDA) {
+            panda = Pair.of(pieceType, coord);
+            // Making bamboo on the tile grow
+            Tile tile = tiles.get(coord);
+            if (tile instanceof BambooTile bambooTile) {
+                bambooTile.shrinkBamboo();
+            }
         }
-        // TODO: implement panda
     }
 
     public Coord getGardenerCoord() {
         return gardener.second();
+    }
+
+    public Coord getPandaCoord() {
+        return panda.second();
     }
 }
