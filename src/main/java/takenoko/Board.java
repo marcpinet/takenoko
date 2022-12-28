@@ -120,7 +120,10 @@ public class Board {
             gardener = Pair.of(pieceType, coord);
             // Making bamboo on the tile grow
             Tile tile = tiles.get(coord);
-            if (tile instanceof BambooTile bambooTile) bambooTile.growBamboo();
+            if (tile instanceof BambooTile bambooTile) {
+                bambooTile.growBamboo();
+                // TODO : add adjacent bamboo tiles of the same color to grow
+            }
         }
         // TODO: implement panda
     }
