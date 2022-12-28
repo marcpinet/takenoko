@@ -53,6 +53,7 @@ public class BoardTest {
         Coord c2 = new Coord(0, 2);
         Tile t1 = new BambooTile();
         tileboard.placeTile(c1, t1);
+        // Gardener
         tileboard.move(MovablePiece.GARDENER, c1);
         assertEquals(tileboard.getGardenerCoord(), c1);
         assertThrows(BoardException.class, () -> tileboard.move(MovablePiece.GARDENER, c2));
@@ -63,5 +64,13 @@ public class BoardTest {
                 BambooIrrigationException.class, () -> tileboard.move(MovablePiece.GARDENER, c3));
         tileboard.placeIrrigation(c3, TileSide.UP_LEFT);
         assertDoesNotThrow(() -> tileboard.move(MovablePiece.GARDENER, c3));
+        // Panda
+        assertDoesNotThrow(() -> tileboard.move(MovablePiece.PANDA, c1));
+        assertEquals(tileboard.getPandaCoord(), c1);
+        assertThrows(BoardException.class, () -> tileboard.move(MovablePiece.PANDA, c2));
+        Coord c4 = new Coord(1, 2);
+        Tile t3 = new BambooTile();
+        tileboard.placeTile(c4, t3);
+        assertThrows(BambooSizeException.class, () -> tileboard.move(MovablePiece.PANDA, c4));
     }
 }

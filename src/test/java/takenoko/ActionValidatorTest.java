@@ -102,4 +102,22 @@ class ActionValidatorTest {
         var action = new Action.MoveGardener(coord);
         assertEquals(expectedResult, validator.isValid(action));
     }
+
+    private static Stream<Arguments> movePandaProvider() {
+        return Stream.of(
+                Arguments.of(new Coord(0, 1), true),
+                Arguments.of(new Coord(0, 0), true),
+                Arguments.of(new Coord(2, 2), false),
+                Arguments.of(new Coord(99, 99), false));
+    }
+
+    @ParameterizedTest
+    @MethodSource("movePandaProvider")
+    void testMovePanda(Coord coord, boolean expectedResult)
+            throws IrrigationException, BoardException {
+        board.placeTile(new Coord(0, 1), new BambooTile());
+        board.placeTile(new Coord(2, 2), new BambooTile());
+        var action = new Action.MovePanda(coord);
+        assertEquals(expectedResult, validator.isValid(action));
+    }
 }
