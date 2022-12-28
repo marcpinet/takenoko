@@ -137,6 +137,15 @@ public class Game {
                     this.out.log(Level.INFO, e.getMessage());
                 }
             }
+
+            case Action.MovePanda movePanda -> {
+                try {
+                    this.board.move(MovablePiece.PANDA, movePanda.coord());
+                    player.commitAction(action);
+                } catch (Exception e) {
+                    this.out.log(Level.INFO, e.getMessage());
+                }
+            }
         }
         return false;
     }
