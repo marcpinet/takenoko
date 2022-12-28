@@ -46,4 +46,22 @@ public class BoardTest {
         Coord c = new Coord(1, 2);
         assertThrows(IrrigationException.class, () -> tileboard.placeIrrigation(c, TileSide.UP));
     }
+
+    @Test
+    void moveTest() throws Exception {
+        Coord c1 = new Coord(0, 1);
+        Coord c2 = new Coord(0, 2);
+        Tile t1 = new BambooTile();
+        tileboard.placeTile(c1, t1);
+        tileboard.move(MovablePiece.GARDENER, c1);
+        assertEquals(tileboard.getGardenerCoord(), c1);
+        assertThrows(BoardException.class, () -> tileboard.move(MovablePiece.GARDENER, c2));
+        Coord c3 = new Coord(1, 1);
+        Tile t2 = new BambooTile();
+        tileboard.placeTile(c3, t2);
+        assertThrows(
+                BambooIrrigationException.class, () -> tileboard.move(MovablePiece.GARDENER, c3));
+        tileboard.placeIrrigation(c3, TileSide.UP_LEFT);
+        assertDoesNotThrow(() -> tileboard.move(MovablePiece.GARDENER, c3));
+    }
 }

@@ -105,7 +105,15 @@ public class Board {
     }
 
     public void move(MovablePiece pieceType, Coord coord)
-            throws BambooSizeException, BambooIrrigationException {
+            throws BambooSizeException, BambooIrrigationException, BoardException {
+        if (!tiles.containsKey(coord)) {
+            throw new BoardException(
+                    "Error: the tile with these coordinates is not present on the board.");
+        }
+
+        if (!coord.isAlignedWith(gardener.second())) {
+            throw new BoardException("Error: the gardener can only move on an a straight line.");
+        }
 
         // Updating piece position
         if (pieceType == MovablePiece.GARDENER) {
