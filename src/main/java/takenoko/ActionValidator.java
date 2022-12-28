@@ -45,6 +45,7 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.MoveGardener action) {
-        return board.getAvailableCoords().contains(action.coord());
+        return board.getPlacedCoords().contains(action.coord())
+                && board.getGardenerCoord().isAlignedWith(action.coord());
     }
 }

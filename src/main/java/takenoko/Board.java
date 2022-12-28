@@ -105,17 +105,7 @@ public class Board {
     }
 
     public void move(MovablePiece pieceType, Coord coord)
-            throws BoardException, BambooSizeException, BambooIrrigationException {
-        if (!tiles.containsKey(coord)) {
-            throw new BoardException(
-                    "Error: the tile with these coordinates is not present on the board.");
-        }
-
-        // Checking if coords are in a straight line
-        Coord pieceCoord = gardener.second(); // For now, until we implement the panda
-        if (!pieceCoord.isAlignedWith(coord)) {
-            throw new BoardException("Error: this piece can only move in a straight line.");
-        }
+            throws BambooSizeException, BambooIrrigationException {
 
         // Updating piece position
         if (pieceType == MovablePiece.GARDENER) {
@@ -125,5 +115,9 @@ public class Board {
             if (tile instanceof BambooTile bambooTile) bambooTile.growBamboo();
         }
         // TODO: implement panda
+    }
+
+    public Coord getGardenerCoord() {
+        return gardener.second();
     }
 }
