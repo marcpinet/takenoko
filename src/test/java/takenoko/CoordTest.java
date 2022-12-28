@@ -66,4 +66,25 @@ public class CoordTest {
     void adjacentCoordSideTest() {
         assertEquals(coordx2y2, coordx1y2.adjacentCoordSide(TileSide.DOWN_RIGHT));
     }
+
+    @Test
+    void isAlignedWithTest() {
+        Coord coordx0y0 = new Coord(0, 0);
+        Coord coordx3y0 = new Coord(3, 0);
+
+        assertTrue(coordx0y0.isAlignedWith(coordx3y0));
+
+        Coord coordx0y1 = new Coord(0, 1);
+        Coord coordx3y1 = new Coord(3, 1);
+
+        assertTrue(coordx0y1.isAlignedWith(coordx3y1));
+
+        Coord coordx0y2 = new Coord(0, 2);
+
+        assertFalse(coordx0y2.isAlignedWith(coordx3y1));
+
+        Coord coordx1y1 = new Coord(1, 1);
+
+        assertFalse(coordx0y0.isAlignedWith(coordx1y1));
+    }
 }
