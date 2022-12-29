@@ -4,7 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import takenoko.*;
+import takenoko.action.Action;
+import takenoko.game.board.Board;
+import takenoko.game.objective.TilePatternObjective;
+import takenoko.game.tile.BambooTile;
+import takenoko.game.tile.TileDeck;
+import takenoko.utils.Coord;
 
 class TilePatternObjectiveTest {
     // The board always apply this action first

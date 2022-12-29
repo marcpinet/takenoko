@@ -4,7 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import takenoko.*;
+import takenoko.action.Action;
+import takenoko.game.board.Board;
+import takenoko.game.board.BoardException;
+import takenoko.game.objective.BambooSizeObjective;
+import takenoko.game.tile.*;
+import takenoko.utils.Coord;
 
 public class BambooSizeObjectiveTest {
 
