@@ -55,7 +55,7 @@ public class BoardTest {
         Coord c2 = new Coord(0, 2);
         Tile t1 = new BambooTile(Color.GREEN);
         tileboard.placeTile(c1, t1);
-        tileboard.placeTile(new Coord(1, 0), new BambooTile());
+        tileboard.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
         // Gardener
         tileboard.move(MovablePiece.GARDENER, c1);
         assertEquals(tileboard.getGardenerCoord(), c1);
@@ -72,7 +72,7 @@ public class BoardTest {
         assertEquals(tileboard.getPandaCoord(), c1);
         assertThrows(BoardException.class, () -> tileboard.move(MovablePiece.PANDA, c2));
         Coord c4 = new Coord(1, 2);
-        Tile t3 = new BambooTile();
+        Tile t3 = new BambooTile(Color.GREEN);
         tileboard.placeTile(c2, new BambooTile(Color.GREEN));
         tileboard.placeTile(c4, t3);
         assertThrows(BambooSizeException.class, () -> tileboard.move(MovablePiece.PANDA, c4));
