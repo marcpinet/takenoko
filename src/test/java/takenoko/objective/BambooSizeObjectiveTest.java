@@ -22,7 +22,7 @@ public class BambooSizeObjectiveTest {
 
     Action.PlaceTile placeBambooTile(Board board, Coord c) {
         try {
-            board.placeTile(c, new BambooTile());
+            board.placeTile(c, new BambooTile(Color.GREEN));
         } catch (BoardException e) {
             fail(e);
         } catch (IrrigationException e) {

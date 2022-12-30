@@ -7,6 +7,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import takenoko.action.Action;
 import takenoko.game.board.Board;
+import takenoko.game.board.BoardException;
+import takenoko.game.tile.BambooTile;
+import takenoko.game.tile.Color;
+import takenoko.game.tile.Tile;
 import takenoko.utils.Coord;
 
 /// This class works by storing a list of deltas from one edge of the pattern.
@@ -26,10 +30,12 @@ public class TilePatternObjective implements Objective {
 
     private final Set<List<Coord>> patternRotations;
     private boolean achieved = false;
+    private final Color color;
 
     /// pattern is an array of deltas from one edge of the pattern to the next, expected to start
     // with (0, 0)
-    public TilePatternObjective(List<Coord> pattern) {
+    public TilePatternObjective(Color color, List<Coord> pattern) {
+        this.color = color;
         // initial pattern without rotation
         patternRotations =
                 generateShifts(pattern).stream()
@@ -109,6 +115,21 @@ public class TilePatternObjective implements Objective {
     }
 
     private boolean isPatternAt(Board board, Coord coord, List<Coord> pattern) {
-        return pattern.stream().map(c -> c.add(coord)).allMatch(board::contains);
+        for (Coord c : pattern) {
+            Tile tile = null;
+            try {
+                tile = board.getTile(coord.add(c));
+            } catch (BoardException e) {
+                return false;
+            }
+            if (tile instanceof BambooTile bambooTile && bambooTile.getColor() != color) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

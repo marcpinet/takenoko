@@ -18,7 +18,7 @@ class TileDeckTest {
             if (i % 2 != 0) {
                 tiles.add(new PondTile());
             } else {
-                tiles.add(new BambooTile());
+                tiles.add(new BambooTile(Color.GREEN));
             }
         }
         deck = new TileDeck(tiles);
@@ -38,7 +38,8 @@ class TileDeckTest {
     @Test
     void draw() {
         try {
-            assertEquals(new BambooTile(), deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
+            assertEquals(
+                    new BambooTile(Color.GREEN), deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
         } catch (EmptyTileDeckException e) {
             e.printStackTrace();
         }
@@ -53,7 +54,7 @@ class TileDeckTest {
 
     @Test
     void lessThanThreeTiles() throws EmptyTileDeckException {
-        deck = new TileDeck(new ArrayDeque<>(List.of(new BambooTile(), new PondTile())));
+        deck = new TileDeck(new ArrayDeque<>(List.of(new BambooTile(Color.GREEN), new PondTile())));
         TileDeck.DrawTilePredicate predicate =
                 tiles -> {
                     assertEquals(2, tiles.size());

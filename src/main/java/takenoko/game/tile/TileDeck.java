@@ -19,8 +19,11 @@ public class TileDeck {
 
     public TileDeck() {
         var queue = new ArrayDeque<Tile>();
-        for (int i = 0; i < DEFAULT_SIZE; i++) {
-            queue.add(new BambooTile());
+        int numberOfPossibleColors = Color.values().length;
+        for (int i = 0; i < DEFAULT_SIZE / numberOfPossibleColors; i++) {
+            queue.add(new BambooTile(Color.GREEN));
+            queue.add(new BambooTile(Color.YELLOW));
+            queue.add(new BambooTile(Color.PINK));
         }
         tiles = queue;
     }

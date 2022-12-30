@@ -7,6 +7,7 @@ import takenoko.game.Game;
 import takenoko.game.TooManyTurnsException;
 import takenoko.game.objective.Objective;
 import takenoko.game.objective.TilePatternObjective;
+import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.bot.EasyBot;
@@ -16,10 +17,10 @@ public class Main {
         List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
         List<Objective> objectives =
                 List.of(
-                        new TilePatternObjective(TilePatternObjective.TRIANGLE_3),
-                        new TilePatternObjective(TilePatternObjective.DIAMOND_4),
-                        new TilePatternObjective(TilePatternObjective.LINE_3),
-                        new TilePatternObjective(TilePatternObjective.LINE_2));
+                        new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE_3),
+                        new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND_4),
+                        new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3),
+                        new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2));
         var tileDeck = new TileDeck();
         var game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
         game.play();
