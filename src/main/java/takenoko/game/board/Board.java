@@ -125,7 +125,16 @@ public class Board {
             Tile tile = tiles.get(coord);
             if (tile instanceof BambooTile bambooTile) {
                 bambooTile.growBamboo();
-                // TODO : add adjacent bamboo tiles of the same color to grow
+                // Getting all adjacent bamboo tiles with the same color as the tile
+                for (Coord adjacentCoord : coord.adjacentCoords()) {
+                    if (tiles.containsKey(adjacentCoord)) {
+                        Tile adjacentTile = tiles.get(adjacentCoord);
+                        if (adjacentTile instanceof BambooTile adjacentBambooTile
+                                && adjacentBambooTile.getColor() == bambooTile.getColor()) {
+                            adjacentBambooTile.growBamboo();
+                        }
+                    }
+                }
             }
         } else if (pieceType == MovablePiece.PANDA) {
             panda = Pair.of(pieceType, coord);
