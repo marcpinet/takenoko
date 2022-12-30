@@ -51,6 +51,10 @@ class TilePatternObjectiveTest {
         var secondAction = placeBambooTile(board, new Coord(0, 1));
         assertFalse(objective.isAchieved(board, secondAction));
 
+        // Placing tiles, so we can place them without raising error adjacent
+        placeBambooTile(board, new Coord(1, 0));
+        placeBambooTile(board, new Coord(1, 1));
+
         // place the third tile
         var thirdAction = placeBambooTile(board, new Coord(0, 2));
 

@@ -27,6 +27,22 @@ public class Board {
             throw new BoardException(
                     "Error: There is already a tile present at theses coordinates.");
         }
+
+        // Check if the tile is adjacent to the pond AND/OR to at least 2 tiles already on the board
+        // (including the pond)
+        Set<Coord> intersecWithTiles =
+                Stream.of(c.adjacentCoords())
+                        .filter(tiles::containsKey)
+                        .collect(Collectors.toSet());
+
+        if (intersecWithTiles.isEmpty())
+            throw new BoardException(
+                    "Error: The tile must be adjacent to at least one tile already on the board.");
+        else if (intersecWithTiles.size() == 1 && !intersecWithTiles.contains(POND_COORD))
+            throw new BoardException(
+                    "Error: The tile is not adjacent to the pond or to at least 2 tiles already on"
+                            + " the board.");
+
         tiles.put(c, t);
 
         for (TileSide side : TileSide.values()) {
