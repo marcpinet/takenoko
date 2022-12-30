@@ -28,7 +28,7 @@ class TilePatternObjectiveTest {
 
     @Test
     void testLineOfTwo() {
-        var objective = new TilePatternObjective(TilePatternObjective.LINE_2);
+        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2);
 
         var board = new Board();
         assertFalse(objective.isAchieved(board, INITIAL_ACTION));
@@ -42,7 +42,7 @@ class TilePatternObjectiveTest {
 
     @Test
     void testLineOfThree() {
-        var objective = new TilePatternObjective(TilePatternObjective.LINE_3);
+        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3);
 
         var board = new Board();
         assertFalse(objective.isAchieved(board, INITIAL_ACTION));
@@ -60,7 +60,7 @@ class TilePatternObjectiveTest {
 
     @Test
     void testSquareOfTwo() {
-        var objective = new TilePatternObjective(TilePatternObjective.DIAMOND_4);
+        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND_4);
 
         var board = new Board();
         assertFalse(objective.isAchieved(board, INITIAL_ACTION));
@@ -78,7 +78,7 @@ class TilePatternObjectiveTest {
 
     @Test
     void testTriangleOfTwo() {
-        var objective = new TilePatternObjective(TilePatternObjective.TRIANGLE_3);
+        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE_3);
 
         var board = new Board();
         assertFalse(objective.isAchieved(board, INITIAL_ACTION));
@@ -95,7 +95,7 @@ class TilePatternObjectiveTest {
     @Test
     void patternScanOnlyTriggeredByPlaceTileAction() {
         // always true
-        var objective = new TilePatternObjective(List.of(new Coord(0, 0)));
+        var objective = new TilePatternObjective(Color.GREEN, List.of(new Coord(0, 0)));
         var board = new Board();
         assertFalse(objective.isAchieved(board, Action.NONE));
         assertTrue(objective.isAchieved(board, INITIAL_ACTION));
