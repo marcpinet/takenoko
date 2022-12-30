@@ -10,17 +10,20 @@ public class BambooTile implements Tile {
 
     private PowerUp powerUp;
 
-    public BambooTile() {
+    private final Color color;
+
+    public BambooTile(Color color) {
         bambooSize = 0;
         this.powerUp = PowerUp.NONE;
         irrigatedSides = new HashMap<>();
         for (TileSide side : TileSide.values()) {
             irrigatedSides.put(side, false);
         }
+        this.color = color;
     }
 
-    public BambooTile(PowerUp powerUp) {
-        this();
+    public BambooTile(Color color, PowerUp powerUp) {
+        this(color);
         this.powerUp = powerUp;
     }
 
@@ -78,6 +81,10 @@ public class BambooTile implements Tile {
 
     public PowerUp getPowerUp() {
         return powerUp;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public void setPowerUp(PowerUp powerUp) throws PowerUpException {
