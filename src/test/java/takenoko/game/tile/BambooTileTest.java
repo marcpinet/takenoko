@@ -10,7 +10,7 @@ public class BambooTileTest {
 
     @BeforeEach
     void setUp() {
-        bambooTile = new BambooTile();
+        bambooTile = new BambooTile(Color.GREEN);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class BambooTileTest {
 
     @Test
     void testEquals() throws BambooSizeException, BambooIrrigationException {
-        BambooTile otherTile = new BambooTile();
+        BambooTile otherTile = new BambooTile(Color.GREEN);
         assertEquals(bambooTile, otherTile);
         bambooTile.irrigateSide(TileSide.UP);
         otherTile.irrigateSide(TileSide.UP);

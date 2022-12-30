@@ -13,10 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.objective.Objective;
-import takenoko.game.tile.BambooTile;
-import takenoko.game.tile.IrrigationException;
-import takenoko.game.tile.TileDeck;
-import takenoko.game.tile.TileSide;
+import takenoko.game.tile.*;
 import takenoko.utils.Coord;
 
 class ActionValidatorTest {
@@ -44,16 +41,16 @@ class ActionValidatorTest {
 
     private static Stream<Arguments> placeTileProvider() {
         return Stream.of(
-                Arguments.of(new Coord(0, 1), new BambooTile(), true),
-                Arguments.of(new Coord(0, 0), new BambooTile(), false),
-                Arguments.of(new Coord(2, 2), new BambooTile(), false));
+                Arguments.of(new Coord(0, 1), new BambooTile(Color.GREEN), true),
+                Arguments.of(new Coord(0, 0), new BambooTile(Color.GREEN), false),
+                Arguments.of(new Coord(2, 2), new BambooTile(Color.GREEN), false));
     }
 
     @ParameterizedTest
     @MethodSource("placeIrrigationProvider")
     void testPlaceIrrigation(Coord coord, TileSide side, boolean expectedResult)
             throws IrrigationException, BoardException {
-        board.placeTile(new Coord(0, 1), new BambooTile());
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         var action = new Action.PlaceIrrigationStick(coord, side);
         assertEquals(expectedResult, validator.isValid(action));
     }
@@ -104,8 +101,8 @@ class ActionValidatorTest {
     @MethodSource("moveGardenerProvider")
     void testMoveGardener(Coord coord, boolean expectedResult)
             throws IrrigationException, BoardException {
-        board.placeTile(new Coord(0, 1), new BambooTile());
-        board.placeTile(new Coord(2, 2), new BambooTile());
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        board.placeTile(new Coord(2, 2), new BambooTile(Color.GREEN));
         var action = new Action.MoveGardener(coord);
         assertEquals(expectedResult, validator.isValid(action));
     }
@@ -122,8 +119,8 @@ class ActionValidatorTest {
     @MethodSource("movePandaProvider")
     void testMovePanda(Coord coord, boolean expectedResult)
             throws IrrigationException, BoardException {
-        board.placeTile(new Coord(0, 1), new BambooTile());
-        board.placeTile(new Coord(2, 2), new BambooTile());
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        board.placeTile(new Coord(2, 2), new BambooTile(Color.GREEN));
         var action = new Action.MovePanda(coord);
         assertEquals(expectedResult, validator.isValid(action));
     }

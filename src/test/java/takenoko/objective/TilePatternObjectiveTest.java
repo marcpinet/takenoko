@@ -8,6 +8,7 @@ import takenoko.action.Action;
 import takenoko.game.board.Board;
 import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.BambooTile;
+import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
 import takenoko.utils.Coord;
 
@@ -18,7 +19,7 @@ class TilePatternObjectiveTest {
 
     Action.PlaceTile placeBambooTile(Board board, Coord c) {
         try {
-            board.placeTile(c, new BambooTile());
+            board.placeTile(c, new BambooTile(Color.GREEN));
         } catch (Exception e) {
             fail(e);
         }
