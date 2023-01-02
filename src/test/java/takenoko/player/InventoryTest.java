@@ -24,7 +24,7 @@ public class InventoryTest {
     }
 
     @Test
-    void testUseBamboo() {
+    void testUseBamboo() throws InventoryException {
         inventory.incrementBamboo(Color.PINK);
         inventory.incrementBamboo(Color.PINK);
         inventory.incrementBamboo(Color.PINK);

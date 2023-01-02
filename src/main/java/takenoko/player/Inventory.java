@@ -14,6 +14,7 @@ public class Inventory {
     private ArrayList<Objective> objectives;
 
     public Inventory() {
+        bamboos = new HashMap<>();
         irrigations = 0;
         powerUps = new HashMap<>();
         objectives = new ArrayList<>();
@@ -27,9 +28,9 @@ public class Inventory {
         bamboos.put(color, getBamboo(color) + 1);
     }
 
-    public void useBamboo(Color color, int nb) {
+    public void useBamboo(Color color, int nb) throws InventoryException {
         if (getBamboo(color) < nb) {
-            throw new IllegalArgumentException("Not enough bamboo");
+            throw new InventoryException("Not enough bamboo");
         }
         bamboos.put(color, getBamboo(color) - nb);
     }
