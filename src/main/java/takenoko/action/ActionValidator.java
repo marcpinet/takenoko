@@ -3,19 +3,20 @@ package takenoko.action;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.tile.TileDeck;
+import takenoko.player.Inventory;
 
 public class ActionValidator {
     private final Board board;
     private final TileDeck deck;
     private final int irrigationStickCount;
-    private final int playerIrrigationStickCount;
+    private final Inventory playerInventory;
 
     public ActionValidator(
-            Board board, TileDeck deck, int irrigationStickCount, int playerIrrigationStickCount) {
+            Board board, TileDeck deck, int irrigationStickCount, Inventory playerInventory) {
         this.board = board;
         this.deck = deck;
         this.irrigationStickCount = irrigationStickCount;
-        this.playerIrrigationStickCount = playerIrrigationStickCount;
+        this.playerInventory = playerInventory;
     }
 
     public boolean isValid(Action action) {
@@ -31,7 +32,7 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PlaceIrrigationStick action) {
-        if (playerIrrigationStickCount == 0) {
+        if (!playerInventory.hasIrrigation()) {
             return false;
         }
 

@@ -11,6 +11,7 @@ import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
+import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
 import takenoko.utils.Coord;
@@ -25,7 +26,8 @@ public class Game {
     private int irrigationStickLeft = 20;
     private final TileDeck tileDeck;
 
-    public Game(List<Player> players, List<Objective> objectives, Logger out, TileDeck tileDeck) {
+    public Game(List<Player> players, List<Objective> objectives, Logger out, TileDeck tileDeck)
+            throws InventoryException {
         board = new Board();
         this.players = players;
         this.objectives = objectives;
@@ -33,7 +35,7 @@ public class Game {
         this.tileDeck = tileDeck;
         for (var player : players) {
             // TODO: change how objectives are assigned
-            player.addObjective(objectives.get(0));
+            player.getInventory().addObjective(objectives.get(0));
         }
     }
 
@@ -144,21 +146,18 @@ public class Game {
     }
 
     // take an irrigation stick from the stack and put it in the player's inventory
-    private void takeIrrigationStick(Player player) throws BoardException {
+    private void takeIrrigationStick(Player player) throws BoardException, InventoryException {
         if (irrigationStickLeft == 0) {
             throw new BoardException("No more irrigation stick left");
         }
-        player.takeIrrigationStick();
+        player.getInventory().incrementIrrigation();
         irrigationStickLeft--;
     }
 
     private void placeIrrigationStick(Player player, Coord coord, TileSide side)
-            throws PlayerException, IrrigationException {
-        if (player.getInventory() <= 0) {
-            throw new PlayerException("No more irrigation stick left in player's inventory");
-        }
+            throws IrrigationException, InventoryException {
+        player.getInventory().decrementIrrigation();
         board.placeIrrigation(coord, side);
-        player.placeIrrigationStick();
     }
 
     private void checkObjectives(Action lastAction) {

@@ -76,18 +76,7 @@ public class Inventory {
         objectives.add(objective);
     }
 
-    // for testing purposes
     public ArrayList<Objective> getObjectives() {
         return objectives;
-    }
-
-    // for testing purposes
-    public HashMap<PowerUp, Integer> getPowerUps() {
-        return powerUps;
-    }
-
-    // for testing purposes
-    public int getIrrigations() {
-        return irrigations;
     }
 }

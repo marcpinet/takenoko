@@ -43,17 +43,17 @@ public class InventoryTest {
 
     @Test
     void testIncrementIrrigation() {
-        assertEquals(0, inventory.getIrrigations());
+        assertFalse(inventory.hasIrrigation());
         inventory.incrementIrrigation();
-        assertEquals(1, inventory.getIrrigations());
+        assertTrue(inventory.hasIrrigation());
     }
 
     @Test
     void testDecrementIrrigation() throws InventoryException {
         inventory.incrementIrrigation();
-        assertEquals(1, inventory.getIrrigations());
+        assertTrue(inventory.hasIrrigation());
         inventory.decrementIrrigation();
-        assertEquals(0, inventory.getIrrigations());
+        assertFalse(inventory.hasIrrigation());
         assertThrows(InventoryException.class, () -> inventory.decrementIrrigation());
     }
 

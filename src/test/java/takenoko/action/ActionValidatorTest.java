@@ -15,6 +15,7 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
+import takenoko.player.Inventory;
 import takenoko.utils.Coord;
 
 class ActionValidatorTest {
@@ -25,7 +26,9 @@ class ActionValidatorTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        validator = new ActionValidator(board, new TileDeck(new Random(0)), STICK_COUNT, 1);
+        Inventory inventory = new Inventory();
+        inventory.incrementIrrigation();
+        validator = new ActionValidator(board, new TileDeck(new Random(0)), STICK_COUNT, inventory);
     }
 
     @Test
@@ -67,7 +70,9 @@ class ActionValidatorTest {
     void testPlaceIrrigationWhenNotEnough() throws IrrigationException, BoardException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         var action = new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_LEFT);
-        validator = new ActionValidator(board, new TileDeck(new Random(0)), STICK_COUNT, 0);
+        validator =
+                new ActionValidator(
+                        board, new TileDeck(new Random(0)), STICK_COUNT, new Inventory());
         assertFalse(validator.isValid(action));
     }
 
@@ -79,7 +84,7 @@ class ActionValidatorTest {
 
     @Test
     void testTakeIrrigationWhenNotEnough() {
-        var validator = new ActionValidator(board, new TileDeck(new Random(0)), 0, 0);
+        var validator = new ActionValidator(board, new TileDeck(new Random(0)), 0, new Inventory());
         var action = new Action.TakeIrrigationStick();
         assertFalse(validator.isValid(action));
     }
