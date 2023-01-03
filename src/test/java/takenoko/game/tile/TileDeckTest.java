@@ -27,7 +27,7 @@ class TileDeckTest {
     @Test
     void defaultConstructor() {
         var deck = new TileDeck();
-        assertEquals(TileDeck.DEFAULT_SIZE, deck.size());
+        assertEquals(27, deck.size());
     }
 
     @Test
