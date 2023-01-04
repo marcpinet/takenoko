@@ -37,19 +37,13 @@ class TileDeckTest {
     }
 
     @Test
-    void draw() {
-        try {
-            assertEquals(
-                    new BambooTile(Color.GREEN), deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
-        } catch (EmptyTileDeckException e) {
-            e.printStackTrace();
-        }
+    void draw() throws EmptyTileDeckException {
+        assertEquals(new BambooTile(Color.GREEN), deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
+
         assertEquals(DECK_SIZE - 1, deck.size());
-        try {
-            assertEquals(new PondTile(), deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
-        } catch (EmptyTileDeckException e) {
-            e.printStackTrace();
-        }
+
+        assertEquals(new PondTile(), deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
+
         assertEquals(DECK_SIZE - 2, deck.size());
     }
 
@@ -65,14 +59,9 @@ class TileDeckTest {
     }
 
     @Test
-    void emptyDeck() {
+    void emptyDeck() throws EmptyTileDeckException {
         for (int i = 0; i < DECK_SIZE; i++) {
-            try {
-                deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
-            } catch (EmptyTileDeckException e) {
-                e.printStackTrace();
-                fail();
-            }
+            deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
         }
         assertThrows(
                 EmptyTileDeckException.class,

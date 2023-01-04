@@ -93,13 +93,16 @@ public class GameTest {
 
     @Test
     void randomGame() {
-        // We just want to check that the game is not crashing
+        // We just want to check that the game is not crashing for a given seed
+        // Carefully picked seed so that the game is not infinite
+
         final int seed1 = 809349372;
         final int seed2 = 143379137;
         List<Player> players =
                 List.of(new EasyBot(new Random(seed1)), new EasyBot(new Random(seed2)));
         List<Objective> objectives =
                 List.of(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
+
         var game = new Game(players, objectives, logger, new TileDeck(new Random(0)));
 
         assertDoesNotThrow(game::play);

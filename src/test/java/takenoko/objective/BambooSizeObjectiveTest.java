@@ -23,9 +23,7 @@ public class BambooSizeObjectiveTest {
     Action.PlaceTile placeBambooTile(Board board, Coord c) {
         try {
             board.placeTile(c, new BambooTile(Color.GREEN));
-        } catch (BoardException e) {
-            fail(e);
-        } catch (IrrigationException e) {
+        } catch (BoardException | IrrigationException e) {
             fail(e);
         }
         return new Action.PlaceTile(c, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
@@ -54,7 +52,7 @@ public class BambooSizeObjectiveTest {
     }
 
     @Test
-    void testIsAchieved() throws BambooSizeException, BambooIrrigationException {
+    void testIsAchieved() throws BambooSizeException, BambooIrrigationException, BoardException {
         // Initial verification
         assertFalse(b1.isAchieved(board, INITIAL_ACTION));
         assertFalse(b3.isAchieved(board, INITIAL_ACTION));
@@ -62,12 +60,7 @@ public class BambooSizeObjectiveTest {
 
         var secondAction = placeBambooTile(board, new Coord(0, 1));
 
-        Tile bt1 = null;
-        try {
-            bt1 = board.getTile(new Coord(0, 1));
-        } catch (BoardException e) {
-            throw new RuntimeException(e);
-        }
+        var bt1 = board.getTile(new Coord(0, 1));
 
         assertTrue(bt1 instanceof BambooTile);
         BambooTile bt2 = (BambooTile) bt1;
