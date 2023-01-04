@@ -130,7 +130,8 @@ public class Board {
                     "Error: the tile with these coordinates is not present on the board.");
         }
 
-        if (!coord.isAlignedWith(gardener.second())) {
+        Coord currentCoord = getCurrentCoord(pieceType);
+        if (!coord.isAlignedWith(currentCoord)) {
             throw new BoardException("Error: the gardener can only move on an a straight line.");
         }
 
@@ -160,6 +161,13 @@ public class Board {
                 bambooTile.shrinkBamboo();
             }
         }
+    }
+
+    private Coord getCurrentCoord(MovablePiece pieceType) {
+        return switch (pieceType) {
+            case GARDENER -> gardener.second();
+            case PANDA -> panda.second();
+        };
     }
 
     public Coord getGardenerCoord() {

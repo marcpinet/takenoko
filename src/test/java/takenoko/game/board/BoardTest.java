@@ -94,6 +94,6 @@ public class BoardTest {
         Tile t3 = new BambooTile(Color.GREEN);
         tileboard.placeTile(c2, new BambooTile(Color.GREEN));
         tileboard.placeTile(c4, t3);
-        assertThrows(BambooSizeException.class, () -> tileboard.move(MovablePiece.PANDA, c4));
+        assertThrows(BoardException.class, () -> tileboard.move(MovablePiece.PANDA, c4));
     }
 }
