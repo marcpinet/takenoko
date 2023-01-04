@@ -37,7 +37,7 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
         var action = self.chooseActionImpl(board, actionValidator);
         if (!actionValidator.isValid(action)) throw new PlayerException("Invalid action");
 
-        actionCredits -= action.cost();
+        actionCredits -= action.hasCost() ? 1 : 0;
         if (actionCredits < 0) {
             throw new IllegalStateException("Not enough action credits");
         }
