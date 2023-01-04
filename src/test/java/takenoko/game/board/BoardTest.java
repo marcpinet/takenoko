@@ -25,6 +25,25 @@ public class BoardTest {
     }
 
     @Test
+    void placeTileAdjacentToTwo() throws IrrigationException, BoardException {
+        tileboard.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        tileboard.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
+        tileboard.placeTile(new Coord(1, 1), new BambooTile(Color.GREEN));
+        assertEquals(tileboard.getTile(new Coord(1, 1)), new BambooTile(Color.GREEN));
+    }
+
+    @Test
+    void cannotPlaceTileTest() throws IrrigationException, BoardException {
+        tileboard.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+
+        // Must be adjacent to the pond or TWO tiles
+        var c = new Coord(0, 2);
+        var t = new BambooTile(Color.GREEN);
+
+        assertThrows(Exception.class, () -> tileboard.placeTile(c, t));
+    }
+
+    @Test
     void contains() throws Exception {
         Coord c = new Coord(0, 1);
         assertFalse(tileboard.contains(c));

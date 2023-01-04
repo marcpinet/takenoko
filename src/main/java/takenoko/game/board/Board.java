@@ -23,26 +23,9 @@ public class Board {
     }
 
     public void placeTile(Coord c, Tile t) throws BoardException, IrrigationException {
-        if (tiles.containsKey(c)) {
-            throw new BoardException(
-                    "Error: There is already a tile present at theses coordinates.");
+        if (!isAvailableCoord(c)) {
+            throw new BoardException("Coord " + c + " is not available");
         }
-
-        // Check if the tile is adjacent to the pond AND/OR to at least 2 tiles already on the board
-        // (including the pond)
-        Set<Coord> intersecWithTiles =
-                Stream.of(c.adjacentCoords())
-                        .filter(tiles::containsKey)
-                        .collect(Collectors.toSet());
-
-        if (intersecWithTiles.isEmpty())
-            throw new BoardException(
-                    "Error: The tile must be adjacent to at least one tile already on the board.");
-        else if (intersecWithTiles.size() == 1 && !intersecWithTiles.contains(POND_COORD))
-            throw new BoardException(
-                    "Error: The tile is not adjacent to the pond or to at least 2 tiles already on"
-                            + " the board.");
-
         tiles.put(c, t);
 
         for (TileSide side : TileSide.values()) {
@@ -53,6 +36,23 @@ public class Board {
                 }
             }
         }
+    }
+
+    public boolean isAvailableCoord(Coord c) {
+        if (tiles.containsKey(c)) {
+            return false;
+        }
+
+        // Check if the tile is adjacent to the pond AND/OR to at least 2 tiles already on the board
+        // (including the pond)
+        Set<Coord> intersecWithTiles =
+                Stream.of(c.adjacentCoords())
+                        .filter(tiles::containsKey)
+                        .collect(Collectors.toSet());
+
+        if (intersecWithTiles.isEmpty()) return false;
+
+        return intersecWithTiles.size() != 1 || intersecWithTiles.contains(POND_COORD);
     }
 
     public void placeIrrigation(Coord coord, TileSide side) throws IrrigationException {
@@ -76,7 +76,7 @@ public class Board {
     public Set<Coord> getAvailableCoords() {
         return tiles.keySet().stream()
                 .flatMap(c -> Stream.of(c.adjacentCoords()))
-                .filter(c -> !tiles.containsKey(c))
+                .filter(this::isAvailableCoord)
                 .collect(Collectors.toSet());
     }
 

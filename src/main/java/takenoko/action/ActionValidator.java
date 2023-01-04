@@ -47,7 +47,7 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PlaceTile action) {
-        return deck.size() > 0 && board.getAvailableCoords().contains(action.coord());
+        return deck.size() > 0 && board.isAvailableCoord(action.coord());
     }
 
     private boolean isValid(Action.TakeIrrigationStick action) {
