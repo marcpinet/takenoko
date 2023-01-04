@@ -102,19 +102,16 @@ public class Game {
                 try {
                     var tile = tileDeck.draw(placeTile.drawTilePredicate());
                     board.placeTile(placeTile.coord(), tile);
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
             }
             case Action.UnveilObjective ignored -> {
-                player.commitAction(action);
                 return true;
             }
             case Action.TakeIrrigationStick takeIrrigationStick -> {
                 try {
                     takeIrrigationStick(player);
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
@@ -123,7 +120,6 @@ public class Game {
                 try {
                     placeIrrigationStick(
                             player, placeIrrigationStick.coord(), placeIrrigationStick.side());
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
@@ -132,7 +128,6 @@ public class Game {
             case Action.MoveGardener moveGardener -> {
                 try {
                     this.board.move(MovablePiece.GARDENER, moveGardener.coord());
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
@@ -141,7 +136,6 @@ public class Game {
             case Action.MovePanda movePanda -> {
                 try {
                     this.board.move(MovablePiece.PANDA, movePanda.coord());
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }

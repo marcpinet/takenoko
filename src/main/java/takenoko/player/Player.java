@@ -14,6 +14,4 @@ public interface Player {
     boolean wantsToEndTurn();
 
     Inventory getInventory();
-
-    void commitAction(Action action);
 }

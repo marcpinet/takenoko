@@ -34,14 +34,14 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     @Override
     public Action chooseAction(Board board, ActionValidator actionValidator)
             throws PlayerException {
-        return self.chooseActionImpl(board, actionValidator);
-    }
+        var action = self.chooseActionImpl(board, actionValidator);
+        if (!actionValidator.isValid(action)) throw new PlayerException("Invalid action");
 
-    public void commitAction(Action action) {
         actionCredits -= action.cost();
         if (actionCredits < 0) {
             throw new IllegalStateException("Not enough action credits");
         }
+        return action;
     }
 
     public boolean wantsToEndTurn() {
