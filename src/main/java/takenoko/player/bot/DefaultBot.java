@@ -7,11 +7,6 @@ import takenoko.player.PlayerBase;
 
 public class DefaultBot extends PlayerBase<DefaultBot> implements PlayerBase.PlayerBaseInterface {
     public Action chooseActionImpl(Board board, ActionValidator validator) {
-        return Action.NONE;
-    }
-
-    @Override
-    public boolean wantsToEndTurn() {
-        return true;
+        return Action.END_TURN;
     }
 }

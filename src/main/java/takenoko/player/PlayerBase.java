@@ -44,10 +44,6 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
         return action;
     }
 
-    public boolean wantsToEndTurn() {
-        return availableActionCredits() == 0;
-    }
-
     public interface PlayerBaseInterface {
         Action chooseActionImpl(Board board, ActionValidator validator) throws PlayerException;
     }

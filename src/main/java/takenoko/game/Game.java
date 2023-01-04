@@ -67,7 +67,7 @@ public class Game {
         for (Player player : players) {
             this.out.log(Level.INFO, "Turn of player number {0} to play!", numPlayer);
             player.beginTurn(DEFAULT_ACTION_CREDIT);
-            while (!player.wantsToEndTurn()) {
+            while (true) {
                 this.out.log(Level.INFO, "Action number {0}:", numAction);
                 try {
                     var validator =
@@ -76,6 +76,7 @@ public class Game {
                     var action = player.chooseAction(board, validator);
                     if (!validator.isValid(action)) continue;
                     this.out.log(Level.INFO, "Action: {0}", action);
+                    if (action == Action.END_TURN) break;
                     if (playAction(action, player)) return Optional.of(player);
                     checkObjectives(action);
                 } catch (PlayerException e) {
@@ -96,6 +97,9 @@ public class Game {
     private boolean playAction(Action action, Player player) {
         switch (action) {
             case Action.None ignored -> {
+                // do nothing
+            }
+            case Action.EndTurn ignored -> {
                 // do nothing
             }
             case Action.PlaceTile placeTile -> {

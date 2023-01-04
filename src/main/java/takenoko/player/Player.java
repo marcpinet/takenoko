@@ -11,7 +11,5 @@ public interface Player {
 
     Action chooseAction(Board board, ActionValidator actionValidator) throws PlayerException;
 
-    boolean wantsToEndTurn();
-
     Inventory getInventory();
 }

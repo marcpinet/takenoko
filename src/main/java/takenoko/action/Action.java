@@ -13,8 +13,10 @@ public sealed interface Action
                 Action.PlaceIrrigationStick,
                 Action.PlaceTile,
                 Action.TakeIrrigationStick,
-                Action.UnveilObjective {
+                Action.UnveilObjective,
+                Action.EndTurn {
     Action NONE = new Action.None();
+    Action END_TURN = new Action.EndTurn();
 
     int cost();
 
@@ -150,6 +152,25 @@ public sealed interface Action
         @Override
         public int hashCode() {
             return Objects.hash(coord);
+        }
+    }
+
+    final class EndTurn implements Action {
+        private EndTurn() {}
+
+        @Override
+        public int cost() {
+            return 0;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof EndTurn;
+        }
+
+        @Override
+        public int hashCode() {
+            return 0;
         }
     }
 }

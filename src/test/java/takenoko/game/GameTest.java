@@ -2,7 +2,6 @@ package takenoko.game;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -35,9 +34,8 @@ public class GameTest {
     @Mock EasyBot p2 = mock(EasyBot.class);
     @Mock TilePatternObjective line2 = mock(TilePatternObjective.class);
     TileDeck tileDeck;
-
-    Logger logger;
     TestLogHandler logHandler;
+    Logger logger;
 
     @BeforeEach
     public void setUp() throws InventoryException {
@@ -57,7 +55,7 @@ public class GameTest {
     }
 
     @Test
-    void testGame() throws PlayerException, InventoryException {
+    void testGame() throws PlayerException, InventoryException, TooManyTurnsException {
         // For the moment, we verify only one completed objective, because the game stop as soon as
         // an objective is complete.
 
@@ -72,12 +70,11 @@ public class GameTest {
 
         // Don't forget that unveil an objective is an action, just like place a tile
         when(p1.chooseAction(any(), any()))
-                .thenReturn(firstTile, secondTile, new Action.UnveilObjective(line2));
+                .thenReturn(
+                        firstTile, secondTile, Action.END_TURN, new Action.UnveilObjective(line2));
         // If we don't put the last "false", we will be trapped in an infinite loop because players
         // will immediately end the turn before playing it.
-        when(p1.wantsToEndTurn()).thenReturn(false, false, true, false);
-        when(p2.chooseAction(any(), any())).thenReturn(thirdTile, fourthTile);
-        when(p2.wantsToEndTurn()).thenReturn(false, false, true, false);
+        when(p2.chooseAction(any(), any())).thenReturn(thirdTile, fourthTile, Action.END_TURN);
         // line2 objective is achieved after firstTile action is done.
         when(line2.isAchieved(any(), eq(firstTile))).thenReturn(false);
         when(line2.isAchieved(any(), eq(secondTile))).thenReturn(true);
@@ -90,20 +87,13 @@ public class GameTest {
 
         game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
 
-        try {
-            assertEquals(players.get(0), game.play());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(e);
-        }
+        assertEquals(players.get(0), game.play());
         assertNoSevereLog();
     }
 
     @Test
-    void randomGame() throws InventoryException {
-        // We just want to check that the game is not crashing for a given seed
-        // Carefully picked seed so that the game is not infinite
-
+    void randomGame() {
+        // We just want to check that the game is not crashing
         final int seed1 = 809349372;
         final int seed2 = 143379137;
         List<Player> players =
