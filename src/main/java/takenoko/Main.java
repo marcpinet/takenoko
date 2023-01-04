@@ -21,7 +21,7 @@ public class Main {
                         new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND_4),
                         new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3),
                         new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2));
-        var tileDeck = new TileDeck();
+        var tileDeck = new TileDeck(new Random());
         var game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
         game.play();
     }

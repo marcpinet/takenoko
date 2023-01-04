@@ -11,7 +11,7 @@ public class TileDeck {
 
     public static final DrawTilePredicate DEFAULT_DRAW_TILE_PREDICATE = ignored -> 0;
 
-    public TileDeck() {
+    public TileDeck(Random random) {
         List<Tile> tempTiles = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             tempTiles.add(new BambooTile(Color.GREEN, PowerUp.NONE));
@@ -38,7 +38,7 @@ public class TileDeck {
         tempTiles.add(new BambooTile(Color.YELLOW, PowerUp.FERTILIZER));
         tempTiles.add(new BambooTile(Color.YELLOW, PowerUp.ENCLOSURE));
 
-        Collections.shuffle(tempTiles);
+        Collections.shuffle(tempTiles, random);
 
         tiles = new ArrayDeque<>(tempTiles);
     }

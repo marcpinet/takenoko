@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayDeque;
 import java.util.List;
+import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +27,7 @@ class TileDeckTest {
 
     @Test
     void defaultConstructor() {
-        var deck = new TileDeck();
+        var deck = new TileDeck(new Random(0));
         assertEquals(27, deck.size());
     }
 
