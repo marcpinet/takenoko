@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import takenoko.action.Action;
 import takenoko.game.objective.Objective;
 import takenoko.game.objective.TilePatternObjective;
+import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
@@ -68,6 +70,22 @@ public class GameTest {
         try {
             assertEquals(players.get(0), game.play());
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e);
+        }
+    }
+
+    @Test
+    void randomGame() {
+        // We just want to check that the game is not crashing
+
+        List<Player> players = List.of(new EasyBot(new Random(0)), new EasyBot(new Random(0)));
+        List<Objective> objectives =
+                List.of(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
+        var game = new Game(players, objectives, Logger.getGlobal(), new TileDeck());
+        try {
+            game.play();
         } catch (Exception e) {
             e.printStackTrace();
             fail(e);
