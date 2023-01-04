@@ -1,9 +1,6 @@
 package takenoko.game.board;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -123,8 +120,7 @@ public class Board {
         return tiles.containsKey(coord);
     }
 
-    public void move(MovablePiece pieceType, Coord coord)
-            throws BambooSizeException, BambooIrrigationException, BoardException {
+    public void move(MovablePiece pieceType, Coord coord) throws BoardException {
         if (!tiles.containsKey(coord)) {
             throw new BoardException(
                     "Error: the tile with these coordinates is not present on the board.");
@@ -132,33 +128,25 @@ public class Board {
 
         Coord currentCoord = getCurrentCoord(pieceType);
         if (!coord.isAlignedWith(currentCoord)) {
-            throw new BoardException("Error: the gardener can only move on an a straight line.");
+            throw new BoardException(
+                    "Error: the " + pieceType + " can only move on a straight line.");
         }
 
         // Updating piece position
         if (pieceType == MovablePiece.GARDENER) {
             gardener = Pair.of(pieceType, coord);
-            // Making bamboo on the tile grow
-            Tile tile = tiles.get(coord);
-            if (tile instanceof BambooTile bambooTile) {
-                bambooTile.growBamboo();
-                // Getting all adjacent bamboo tiles with the same color as the tile
-                for (Coord adjacentCoord : coord.adjacentCoords()) {
-                    if (tiles.containsKey(adjacentCoord)) {
-                        Tile adjacentTile = tiles.get(adjacentCoord);
-                        if (adjacentTile instanceof BambooTile adjacentBambooTile
-                                && adjacentBambooTile.getColor() == bambooTile.getColor()) {
-                            adjacentBambooTile.growBamboo();
-                        }
-                    }
-                }
-            }
+            growTilesWithGardener(coord);
         } else if (pieceType == MovablePiece.PANDA) {
             panda = Pair.of(pieceType, coord);
             // Making bamboo on the tile grow
             Tile tile = tiles.get(coord);
-            if (tile instanceof BambooTile bambooTile) {
-                bambooTile.shrinkBamboo();
+            if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
+                try {
+                    bambooTile.shrinkBamboo();
+                } catch (BambooSizeException e) {
+                    // This should never happen
+                    throw new IllegalStateException(e);
+                }
             }
         }
     }
@@ -168,6 +156,36 @@ public class Board {
             case GARDENER -> gardener.second();
             case PANDA -> panda.second();
         };
+    }
+
+    private void growTilesWithGardener(Coord gardenerPos) {
+        Tile tile = tiles.get(gardenerPos);
+        // moving the gardener on the pond tile does nothing
+        if (!(tile instanceof BambooTile center)) {
+            return;
+        }
+
+        var adjacentTiles =
+                Stream.concat(Stream.of(gardenerPos), Arrays.stream(gardenerPos.adjacentCoords()));
+
+        var adjacentSameColorBamboos =
+                adjacentTiles
+                        .filter(tiles::containsKey)
+                        .filter(c -> tiles.get(c) instanceof BambooTile)
+                        .map(c -> (BambooTile) tiles.get(c))
+                        .filter(b -> b.getColor() == center.getColor())
+                        .filter(BambooTile::isIrrigated)
+                        .filter(b -> b.getBambooSize() < 3)
+                        .toList();
+
+        for (BambooTile bambooTile : adjacentSameColorBamboos) {
+            try {
+                bambooTile.growBamboo();
+            } catch (BambooSizeException | BambooIrrigationException e) {
+                // This should never happen
+                throw new IllegalStateException(e);
+            }
+        }
     }
 
     public Coord getGardenerCoord() {

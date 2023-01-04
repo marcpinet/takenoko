@@ -82,8 +82,6 @@ public class BoardTest {
         Coord c3 = new Coord(1, 1);
         Tile t2 = new BambooTile(Color.GREEN);
         tileboard.placeTile(c3, t2);
-        assertThrows(
-                BambooIrrigationException.class, () -> tileboard.move(MovablePiece.GARDENER, c3));
         tileboard.placeIrrigation(c3, TileSide.UP_LEFT);
         assertDoesNotThrow(() -> tileboard.move(MovablePiece.GARDENER, c3));
         // Panda
