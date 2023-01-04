@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Random;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ class ActionValidatorTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        validator = new ActionValidator(board, new TileDeck(), STICK_COUNT);
+        validator = new ActionValidator(board, new TileDeck(new Random(0)), STICK_COUNT);
     }
 
     @Test
@@ -70,7 +71,7 @@ class ActionValidatorTest {
 
     @Test
     void testTakeIrrigationWhenNotEnough() {
-        var validator = new ActionValidator(board, new TileDeck(), 0);
+        var validator = new ActionValidator(board, new TileDeck(new Random(0)), 0);
         var action = new Action.TakeIrrigationStick();
         assertFalse(validator.isValid(action));
     }

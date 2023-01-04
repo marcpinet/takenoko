@@ -3,6 +3,7 @@ package takenoko.player;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.action.Action;
@@ -20,7 +21,7 @@ class PlayerBaseTest {
     void setUp() {
         player = new TestPlayer();
         board = new Board();
-        deck = new TileDeck();
+        deck = new TileDeck(new Random(0));
     }
 
     @Test
