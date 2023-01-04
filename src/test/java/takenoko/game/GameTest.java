@@ -21,6 +21,7 @@ import takenoko.player.Player;
 import takenoko.player.PlayerException;
 import takenoko.player.bot.EasyBot;
 import takenoko.utils.Coord;
+import utils.TestLogHandler;
 
 public class GameTest {
     Game game;
@@ -31,13 +32,26 @@ public class GameTest {
     @Mock TilePatternObjective line2 = mock(TilePatternObjective.class);
     TileDeck tileDeck;
 
+    Logger logger;
+    TestLogHandler logHandler;
+
     @BeforeEach
     public void setUp() {
         players = List.of(p1, p2);
         objectives = List.of(line2);
         tileDeck = new TileDeck(new Random(0));
 
+        logger = Logger.getGlobal();
+        logHandler = new TestLogHandler();
+        logger.addHandler(logHandler);
+
         game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
+    }
+
+    void assertNoSevereLog() {
+        assertFalse(
+                logHandler.getRecords().stream()
+                        .anyMatch(r -> r.getLevel().equals(java.util.logging.Level.SEVERE)));
     }
 
     @Test
@@ -68,11 +82,11 @@ public class GameTest {
         when(line2.wasAchievedAfterLastCheck()).thenReturn(true);
         try {
             assertEquals(players.get(0), game.play());
-
         } catch (Exception e) {
             e.printStackTrace();
             fail(e);
         }
+        assertNoSevereLog();
     }
 
     @Test
@@ -82,7 +96,8 @@ public class GameTest {
         List<Player> players = List.of(new EasyBot(new Random(0)), new EasyBot(new Random(0)));
         List<Objective> objectives =
                 List.of(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
-        var game = new Game(players, objectives, Logger.getGlobal(), new TileDeck(new Random(0)));
+        var game = new Game(players, objectives, logger, new TileDeck(new Random(0)));
         assertDoesNotThrow(game::play);
+        assertNoSevereLog();
     }
 }
