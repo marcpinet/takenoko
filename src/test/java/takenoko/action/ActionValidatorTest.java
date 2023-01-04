@@ -25,7 +25,7 @@ class ActionValidatorTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        validator = new ActionValidator(board, new TileDeck(new Random(0)), STICK_COUNT);
+        validator = new ActionValidator(board, new TileDeck(new Random(0)), STICK_COUNT, 1);
     }
 
     @Test
@@ -64,6 +64,14 @@ class ActionValidatorTest {
     }
 
     @Test
+    void testPlaceIrrigationWhenNotEnough() throws IrrigationException, BoardException {
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        var action = new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_LEFT);
+        validator = new ActionValidator(board, new TileDeck(new Random(0)), STICK_COUNT, 0);
+        assertFalse(validator.isValid(action));
+    }
+
+    @Test
     void testTakeIrrigation() {
         var action = new Action.TakeIrrigationStick();
         assertTrue(validator.isValid(action));
@@ -71,7 +79,7 @@ class ActionValidatorTest {
 
     @Test
     void testTakeIrrigationWhenNotEnough() {
-        var validator = new ActionValidator(board, new TileDeck(new Random(0)), 0);
+        var validator = new ActionValidator(board, new TileDeck(new Random(0)), 0, 0);
         var action = new Action.TakeIrrigationStick();
         assertFalse(validator.isValid(action));
     }

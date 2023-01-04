@@ -65,7 +65,9 @@ public class Game {
                         Level.INFO,
                         "Player number " + numPlayer + " do his action number " + numAction + ":");
                 try {
-                    var validator = new ActionValidator(board, tileDeck, irrigationStickLeft);
+                    var validator =
+                            new ActionValidator(
+                                    board, tileDeck, irrigationStickLeft, player.getInventory());
                     var action = player.chooseAction(board, validator);
                     if (!validator.isValid(action)) continue;
                     this.out.log(Level.INFO, "Action: " + action);
