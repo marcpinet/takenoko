@@ -36,11 +36,11 @@ class TilePatternObjectiveTest {
 
     Board prepareBoard(Objective obj, Coord... coords) {
         var board = new Board();
-        assertFalse(obj.isAchieved(board, INITIAL_ACTION));
+        assertFalse(obj.isAchieved(board, INITIAL_ACTION, null));
 
         for (var c : coords) {
             var action = placeBambooTile(board, c);
-            assertFalse(obj.isAchieved(board, action));
+            assertFalse(obj.isAchieved(board, action, null));
         }
         return board;
     }
@@ -52,7 +52,7 @@ class TilePatternObjectiveTest {
         var board = prepareBoard(objective, new Coord(-1, 0));
 
         var lastAction = placeBambooTile(board, new Coord(0, -1));
-        assertTrue(objective.isAchieved(board, lastAction));
+        assertTrue(objective.isAchieved(board, lastAction, null));
     }
 
     @Test
@@ -63,7 +63,7 @@ class TilePatternObjectiveTest {
         var board = prepareBoard(objective, new Coord(1, 0), new Coord(0, 1), new Coord(-1, 1));
 
         var lastAction = placeBambooTile(board, new Coord(-1, 2));
-        assertTrue(objective.isAchieved(board, lastAction));
+        assertTrue(objective.isAchieved(board, lastAction, null));
     }
 
     @Test
@@ -79,7 +79,7 @@ class TilePatternObjectiveTest {
                         new Coord(-2, 1));
 
         var lastAction = placeBambooTile(board, new Coord(-2, 0));
-        assertTrue(objective.isAchieved(board, lastAction));
+        assertTrue(objective.isAchieved(board, lastAction, null));
     }
 
     @Test
@@ -89,7 +89,7 @@ class TilePatternObjectiveTest {
         var board = prepareBoard(objective, new Coord(0, -1), new Coord(1, -1));
 
         var lastAction = placeBambooTile(board, new Coord(1, -2));
-        assertTrue(objective.isAchieved(board, lastAction));
+        assertTrue(objective.isAchieved(board, lastAction, null));
     }
 
     @Test
@@ -99,10 +99,10 @@ class TilePatternObjectiveTest {
         var board = new Board();
         var action = placeBambooTile(board, new Coord(0, 1));
 
-        assertFalse(objective.isAchieved(board, Action.NONE));
-        assertTrue(objective.isAchieved(board, action));
+        assertFalse(objective.isAchieved(board, Action.NONE, null));
+        assertTrue(objective.isAchieved(board, action, null));
         // but once the objective is achieved, it stays achieved
-        assertTrue(objective.isAchieved(board, Action.NONE));
+        assertTrue(objective.isAchieved(board, Action.NONE, null));
     }
 
     @Test
@@ -115,13 +115,13 @@ class TilePatternObjectiveTest {
         var action = new Action.PlaceTile(new Coord(0, -1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
 
         // the objective is not achieved because the color is different
-        assertFalse(objective.isAchieved(board, action));
+        assertFalse(objective.isAchieved(board, action, null));
 
         // but if we place a green tile, it is achieved
         board.placeTile(new Coord(-1, 1), new BambooTile(Color.GREEN));
         var lastAction =
                 new Action.PlaceTile(new Coord(-1, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
-        assertTrue(objective.isAchieved(board, lastAction));
+        assertTrue(objective.isAchieved(board, lastAction, null));
     }
 
     @Test
@@ -142,7 +142,7 @@ class TilePatternObjectiveTest {
 
         // pattern not yet achieved
         var action = new Action.PlaceTile(new Coord(-1, -1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
-        assertFalse(objective.isAchieved(board, action));
+        assertFalse(objective.isAchieved(board, action, null));
 
         // place the last tile, not irrigated
         board.placeTile(new Coord(-2, 0), new BambooTile(Color.PINK));
@@ -151,12 +151,12 @@ class TilePatternObjectiveTest {
         var lastTile = (BambooTile) board.getTile(new Coord(-2, 0));
         assertFalse(lastTile.isIrrigated());
 
-        assertFalse(objective.isAchieved(board, action));
+        assertFalse(objective.isAchieved(board, action, null));
 
         // but if we irrigate it, it is achieved
         lastTile.irrigateSide(TileSide.UP_LEFT);
         assertTrue(lastTile.isIrrigated());
 
-        assertTrue(objective.isAchieved(board, lastAction));
+        assertTrue(objective.isAchieved(board, lastAction, null));
     }
 }

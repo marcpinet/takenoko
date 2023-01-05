@@ -75,8 +75,8 @@ class GameTest {
         // will immediately end the turn before playing it.
         when(p2.chooseAction(any(), any())).thenReturn(thirdTile, fourthTile, Action.END_TURN);
         // line2 objective is achieved after firstTile action is done.
-        when(line2.isAchieved(any(), eq(firstTile))).thenReturn(false);
-        when(line2.isAchieved(any(), eq(secondTile))).thenReturn(true);
+        when(line2.isAchieved(any(), eq(firstTile), any())).thenReturn(false);
+        when(line2.isAchieved(any(), eq(secondTile), any())).thenReturn(true);
         when(line2.wasAchievedAfterLastCheck()).thenReturn(true);
 
         var inventory1 = new Inventory();

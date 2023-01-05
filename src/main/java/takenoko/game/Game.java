@@ -9,10 +9,13 @@ import takenoko.action.ActionValidator;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
+import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
+import takenoko.game.tile.Color;
 import takenoko.game.tile.IrrigationException;
 import takenoko.game.tile.TileDeck;
 import takenoko.game.tile.TileSide;
+import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
@@ -78,7 +81,7 @@ public class Game {
                     this.out.log(Level.INFO, "Action: {0}", action);
                     if (action == Action.END_TURN) break;
                     if (playAction(action, player)) return Optional.of(player);
-                    checkObjectives(action);
+                    checkObjectives(action, player.getInventory());
                 } catch (PlayerException e) {
                     this.out.log(Level.SEVERE, "Player exception: {0}", e.getMessage());
                 }
@@ -110,7 +113,18 @@ public class Game {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
             }
-            case Action.UnveilObjective ignored -> {
+            case Action.UnveilObjective unveilObjective -> {
+                if (unveilObjective.objective() instanceof HarvestingObjective needs) {
+                    Inventory inventory = player.getInventory();
+                    try {
+                        inventory.useBamboo(Color.GREEN, needs.getGreen());
+                        inventory.useBamboo(Color.YELLOW, needs.getYellow());
+                        inventory.useBamboo(Color.PINK, needs.getPink());
+
+                    } catch (InventoryException e) {
+                        this.out.log(Level.SEVERE, e.getMessage());
+                    }
+                }
                 return true;
             }
             case Action.TakeIrrigationStick takeIrrigationStick -> {
@@ -163,9 +177,9 @@ public class Game {
         board.placeIrrigation(coord, side);
     }
 
-    private void checkObjectives(Action lastAction) {
+    private void checkObjectives(Action lastAction, Inventory inventory) {
         for (Objective objective : objectives) {
-            objective.isAchieved(board, lastAction);
+            objective.isAchieved(board, lastAction, inventory);
         }
     }
 }

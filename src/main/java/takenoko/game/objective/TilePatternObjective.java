@@ -9,6 +9,7 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.Color;
+import takenoko.player.Inventory;
 import takenoko.utils.Coord;
 
 /// This class works by storing a list of deltas from one edge of the pattern.
@@ -91,7 +92,7 @@ public class TilePatternObjective implements Objective {
     }
 
     @Override
-    public boolean isAchieved(Board board, Action lastAction) {
+    public boolean isAchieved(Board board, Action lastAction, Inventory ignored) {
         // Once the objective is achieved, it stays achieved
         if (achieved) {
             return true;
