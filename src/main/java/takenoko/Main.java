@@ -9,12 +9,11 @@ import takenoko.game.objective.Objective;
 import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
-import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.bot.EasyBot;
 
 public class Main {
-    public static void main(String... args) throws TooManyTurnsException, InventoryException {
+    public static void main(String... args) throws TooManyTurnsException {
         List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
         List<Objective> objectives =
                 List.of(

@@ -26,8 +26,7 @@ public class Game {
     private int irrigationStickLeft = 20;
     private final TileDeck tileDeck;
 
-    public Game(List<Player> players, List<Objective> objectives, Logger out, TileDeck tileDeck)
-            throws InventoryException {
+    public Game(List<Player> players, List<Objective> objectives, Logger out, TileDeck tileDeck) {
         board = new Board();
         this.players = players;
         this.objectives = objectives;
@@ -35,7 +34,11 @@ public class Game {
         this.tileDeck = tileDeck;
         for (var player : players) {
             // TODO: change how objectives are assigned
-            player.getInventory().addObjective(objectives.get(0));
+            try {
+                player.getInventory().addObjective(objectives.get(0));
+            } catch (InventoryException e) {
+                out.log(Level.SEVERE, "Failed to add objective to player", e);
+            }
         }
     }
 

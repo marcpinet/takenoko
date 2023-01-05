@@ -1,22 +1,23 @@
 package takenoko.player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.List;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.PowerUp;
 
 public class Inventory {
 
-    private HashMap<Color, Integer> bamboos;
+    private final EnumMap<Color, Integer> bamboos;
     private int irrigations;
-    private HashMap<PowerUp, Integer> powerUps;
-    private ArrayList<Objective> objectives;
+    private final EnumMap<PowerUp, Integer> powerUps;
+    private final ArrayList<Objective> objectives;
 
     public Inventory() {
-        bamboos = new HashMap<>();
+        bamboos = new EnumMap<>(Color.class);
         irrigations = 0;
-        powerUps = new HashMap<>();
+        powerUps = new EnumMap<>(PowerUp.class);
         objectives = new ArrayList<>();
     }
 
@@ -76,7 +77,7 @@ public class Inventory {
         objectives.add(objective);
     }
 
-    public ArrayList<Objective> getObjectives() {
+    public List<Objective> getObjectives() {
         return objectives;
     }
 }
