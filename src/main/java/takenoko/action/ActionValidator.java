@@ -8,11 +8,14 @@ public class ActionValidator {
     private final Board board;
     private final TileDeck deck;
     private final int irrigationStickCount;
+    private final int playerIrrigationStickCount;
 
-    public ActionValidator(Board board, TileDeck deck, int irrigationStickCount) {
+    public ActionValidator(
+            Board board, TileDeck deck, int irrigationStickCount, int playerIrrigationStickCount) {
         this.board = board;
         this.deck = deck;
         this.irrigationStickCount = irrigationStickCount;
+        this.playerIrrigationStickCount = playerIrrigationStickCount;
     }
 
     public boolean isValid(Action action) {
@@ -28,6 +31,10 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PlaceIrrigationStick action) {
+        if (playerIrrigationStickCount == 0) {
+            return false;
+        }
+
         var coord = action.coord();
         var side = action.side();
 
@@ -40,7 +47,7 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PlaceTile action) {
-        return deck.size() > 0 && board.getAvailableCoords().contains(action.coord());
+        return deck.size() > 0 && board.isAvailableCoord(action.coord());
     }
 
     private boolean isValid(Action.TakeIrrigationStick action) {

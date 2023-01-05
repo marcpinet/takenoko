@@ -1,9 +1,6 @@
 package takenoko.game.board;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,26 +20,9 @@ public class Board {
     }
 
     public void placeTile(Coord c, Tile t) throws BoardException, IrrigationException {
-        if (tiles.containsKey(c)) {
-            throw new BoardException(
-                    "Error: There is already a tile present at theses coordinates.");
+        if (!isAvailableCoord(c)) {
+            throw new BoardException("Coord " + c + " is not available");
         }
-
-        // Check if the tile is adjacent to the pond AND/OR to at least 2 tiles already on the board
-        // (including the pond)
-        Set<Coord> intersecWithTiles =
-                Stream.of(c.adjacentCoords())
-                        .filter(tiles::containsKey)
-                        .collect(Collectors.toSet());
-
-        if (intersecWithTiles.isEmpty())
-            throw new BoardException(
-                    "Error: The tile must be adjacent to at least one tile already on the board.");
-        else if (intersecWithTiles.size() == 1 && !intersecWithTiles.contains(POND_COORD))
-            throw new BoardException(
-                    "Error: The tile is not adjacent to the pond or to at least 2 tiles already on"
-                            + " the board.");
-
         tiles.put(c, t);
 
         for (TileSide side : TileSide.values()) {
@@ -53,6 +33,23 @@ public class Board {
                 }
             }
         }
+    }
+
+    public boolean isAvailableCoord(Coord c) {
+        if (tiles.containsKey(c)) {
+            return false;
+        }
+
+        // Check if the tile is adjacent to the pond AND/OR to at least 2 tiles already on the board
+        // (including the pond)
+        Set<Coord> intersecWithTiles =
+                Stream.of(c.adjacentCoords())
+                        .filter(tiles::containsKey)
+                        .collect(Collectors.toSet());
+
+        if (intersecWithTiles.isEmpty()) return false;
+
+        return intersecWithTiles.size() != 1 || intersecWithTiles.contains(POND_COORD);
     }
 
     public void placeIrrigation(Coord coord, TileSide side) throws IrrigationException {
@@ -76,7 +73,7 @@ public class Board {
     public Set<Coord> getAvailableCoords() {
         return tiles.keySet().stream()
                 .flatMap(c -> Stream.of(c.adjacentCoords()))
-                .filter(c -> !tiles.containsKey(c))
+                .filter(this::isAvailableCoord)
                 .collect(Collectors.toSet());
     }
 
@@ -123,41 +120,70 @@ public class Board {
         return tiles.containsKey(coord);
     }
 
-    public void move(MovablePiece pieceType, Coord coord)
-            throws BambooSizeException, BambooIrrigationException, BoardException {
+    public void move(MovablePiece pieceType, Coord coord) throws BoardException {
         if (!tiles.containsKey(coord)) {
             throw new BoardException(
                     "Error: the tile with these coordinates is not present on the board.");
         }
 
-        if (!coord.isAlignedWith(gardener.second())) {
-            throw new BoardException("Error: the gardener can only move on an a straight line.");
+        Coord currentCoord = getCurrentCoord(pieceType);
+        if (!coord.isAlignedWith(currentCoord)) {
+            throw new BoardException(
+                    "Error: the " + pieceType + " can only move on a straight line.");
         }
 
         // Updating piece position
         if (pieceType == MovablePiece.GARDENER) {
             gardener = Pair.of(pieceType, coord);
-            // Making bamboo on the tile grow
-            Tile tile = tiles.get(coord);
-            if (tile instanceof BambooTile bambooTile) {
-                bambooTile.growBamboo();
-                // Getting all adjacent bamboo tiles with the same color as the tile
-                for (Coord adjacentCoord : coord.adjacentCoords()) {
-                    if (tiles.containsKey(adjacentCoord)) {
-                        Tile adjacentTile = tiles.get(adjacentCoord);
-                        if (adjacentTile instanceof BambooTile adjacentBambooTile
-                                && adjacentBambooTile.getColor() == bambooTile.getColor()) {
-                            adjacentBambooTile.growBamboo();
-                        }
-                    }
-                }
-            }
+            growTilesWithGardener(coord);
         } else if (pieceType == MovablePiece.PANDA) {
             panda = Pair.of(pieceType, coord);
             // Making bamboo on the tile grow
             Tile tile = tiles.get(coord);
-            if (tile instanceof BambooTile bambooTile) {
-                bambooTile.shrinkBamboo();
+            if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
+                try {
+                    bambooTile.shrinkBamboo();
+                } catch (BambooSizeException e) {
+                    // This should never happen
+                    throw new IllegalStateException(e);
+                }
+            }
+        }
+    }
+
+    private Coord getCurrentCoord(MovablePiece pieceType) {
+        return switch (pieceType) {
+            case GARDENER -> gardener.second();
+            case PANDA -> panda.second();
+        };
+    }
+
+    private void growTilesWithGardener(Coord gardenerPos) {
+        Tile tile = tiles.get(gardenerPos);
+        // moving the gardener on the pond tile does nothing
+        if (!(tile instanceof BambooTile center)) {
+            return;
+        }
+
+        var adjacentTiles =
+                Stream.concat(Stream.of(gardenerPos), Arrays.stream(gardenerPos.adjacentCoords()));
+
+        var adjacentSameColorBamboos =
+                adjacentTiles
+                        .filter(tiles::containsKey)
+                        .filter(c -> tiles.get(c) instanceof BambooTile)
+                        .map(c -> (BambooTile) tiles.get(c))
+                        .filter(b -> b.getColor() == center.getColor())
+                        .filter(BambooTile::isIrrigated)
+                        .filter(b -> b.getBambooSize() < 3)
+                        .toList();
+
+        for (BambooTile bambooTile : adjacentSameColorBamboos) {
+            try {
+                bambooTile.growBamboo();
+            } catch (BambooSizeException | BambooIrrigationException e) {
+                // This should never happen
+                throw new IllegalStateException(e);
             }
         }
     }

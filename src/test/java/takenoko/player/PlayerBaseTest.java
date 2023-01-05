@@ -29,7 +29,7 @@ class PlayerBaseTest {
         player.beginTurn(3);
         assertEquals(3, player.availableActionCredits());
 
-        var validator = new ActionValidator(board, deck, 20);
+        var validator = new ActionValidator(board, deck, 20, 1);
 
         var action = player.chooseAction(board, validator);
         player.commitAction(action);

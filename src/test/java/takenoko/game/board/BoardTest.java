@@ -25,6 +25,25 @@ public class BoardTest {
     }
 
     @Test
+    void placeTileAdjacentToTwo() throws IrrigationException, BoardException {
+        tileboard.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        tileboard.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
+        tileboard.placeTile(new Coord(1, 1), new BambooTile(Color.GREEN));
+        assertEquals(tileboard.getTile(new Coord(1, 1)), new BambooTile(Color.GREEN));
+    }
+
+    @Test
+    void cannotPlaceTileTest() throws IrrigationException, BoardException {
+        tileboard.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+
+        // Must be adjacent to the pond or TWO tiles
+        var c = new Coord(0, 2);
+        var t = new BambooTile(Color.GREEN);
+
+        assertThrows(Exception.class, () -> tileboard.placeTile(c, t));
+    }
+
+    @Test
     void contains() throws Exception {
         Coord c = new Coord(0, 1);
         assertFalse(tileboard.contains(c));
@@ -63,8 +82,6 @@ public class BoardTest {
         Coord c3 = new Coord(1, 1);
         Tile t2 = new BambooTile(Color.GREEN);
         tileboard.placeTile(c3, t2);
-        assertThrows(
-                BambooIrrigationException.class, () -> tileboard.move(MovablePiece.GARDENER, c3));
         tileboard.placeIrrigation(c3, TileSide.UP_LEFT);
         assertDoesNotThrow(() -> tileboard.move(MovablePiece.GARDENER, c3));
         // Panda
@@ -75,6 +92,6 @@ public class BoardTest {
         Tile t3 = new BambooTile(Color.GREEN);
         tileboard.placeTile(c2, new BambooTile(Color.GREEN));
         tileboard.placeTile(c4, t3);
-        assertThrows(BambooSizeException.class, () -> tileboard.move(MovablePiece.PANDA, c4));
+        assertThrows(BoardException.class, () -> tileboard.move(MovablePiece.PANDA, c4));
     }
 }

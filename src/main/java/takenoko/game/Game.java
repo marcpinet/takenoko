@@ -58,47 +58,28 @@ public class Game {
         int numPlayer = 1;
         int numAction = 1;
         for (Player player : players) {
-            this.out.log(Level.INFO, "Turn of player number " + numPlayer + " to play!");
+            this.out.log(Level.INFO, "Turn of player number {0} to play!", numPlayer);
             player.beginTurn(DEFAULT_ACTION_CREDIT);
             while (!player.wantsToEndTurn()) {
-                this.out.log(
-                        Level.INFO,
-                        "Player number " + numPlayer + " do his action number " + numAction + ":");
+                this.out.log(Level.INFO, "Action number {0}:", numAction);
                 try {
-                    var validator = new ActionValidator(board, tileDeck, irrigationStickLeft);
+                    var validator =
+                            new ActionValidator(
+                                    board, tileDeck, irrigationStickLeft, player.getInventory());
                     var action = player.chooseAction(board, validator);
                     if (!validator.isValid(action)) continue;
-                    this.out.log(Level.INFO, "Action: " + action);
+                    this.out.log(Level.INFO, "Action: {0}", action);
                     if (playAction(action, player)) return Optional.of(player);
                     checkObjectives(action);
                 } catch (PlayerException e) {
-                    this.out.log(Level.SEVERE, "Player exception occurred: " + e.getMessage());
+                    this.out.log(Level.SEVERE, "Player exception: {0}", e.getMessage());
                 }
                 numAction++;
             }
-            growBamboosOnBambooTiles();
             numPlayer++;
             numAction = 1;
         }
         return Optional.empty();
-    }
-
-    private void growBamboosOnBambooTiles() {
-        board.applyOnEachTile(
-                tile -> {
-                    if (tile instanceof BambooTile bambooTile
-                            && bambooTile.isCultivable()
-                            && bambooTile.isIrrigated()) {
-                        try {
-                            bambooTile.growBamboo();
-                        } catch (BambooSizeException ignored) {
-                            this.out.log(Level.WARNING, "Bamboo size exception ignored");
-                        } catch (BambooIrrigationException ignored) {
-                            this.out.log(Level.WARNING, "Bamboo irrigation exception ignored");
-                        }
-                    }
-                    return null;
-                });
     }
 
     // S1301: we want pattern matching so switch is necessary
@@ -116,7 +97,7 @@ public class Game {
                     board.placeTile(placeTile.coord(), tile);
                     player.commitAction(action);
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    this.out.log(Level.SEVERE, e.getMessage());
                 }
             }
             case Action.UnveilObjective ignored -> {
@@ -128,7 +109,7 @@ public class Game {
                     takeIrrigationStick(player);
                     player.commitAction(action);
                 } catch (Exception e) {
-                    this.out.log(Level.INFO, e.getMessage());
+                    this.out.log(Level.SEVERE, e.getMessage());
                 }
             }
             case Action.PlaceIrrigationStick placeIrrigationStick -> {
@@ -137,7 +118,7 @@ public class Game {
                             player, placeIrrigationStick.coord(), placeIrrigationStick.side());
                     player.commitAction(action);
                 } catch (Exception e) {
-                    this.out.log(Level.INFO, e.getMessage());
+                    this.out.log(Level.SEVERE, e.getMessage());
                 }
             }
 
@@ -146,7 +127,7 @@ public class Game {
                     this.board.move(MovablePiece.GARDENER, moveGardener.coord());
                     player.commitAction(action);
                 } catch (Exception e) {
-                    this.out.log(Level.INFO, e.getMessage());
+                    this.out.log(Level.SEVERE, e.getMessage());
                 }
             }
 
@@ -155,7 +136,7 @@ public class Game {
                     this.board.move(MovablePiece.PANDA, movePanda.coord());
                     player.commitAction(action);
                 } catch (Exception e) {
-                    this.out.log(Level.INFO, e.getMessage());
+                    this.out.log(Level.SEVERE, e.getMessage());
                 }
             }
         }
