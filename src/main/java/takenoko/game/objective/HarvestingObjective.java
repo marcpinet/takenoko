@@ -1,5 +1,6 @@
 package takenoko.game.objective;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import takenoko.action.Action;
 import takenoko.game.board.Board;
@@ -18,14 +19,10 @@ public class HarvestingObjective implements Objective {
     }
 
     public boolean isAchieved(Board ignoredB, Action ignoredA, Inventory inventory) {
-        for (Color color : Color.values()) {
-            if (inventory.getBamboo(color) < needs.get(color)) {
-                achieved = false;
-                return false;
-            }
-        }
-        achieved = true;
-        return true;
+        achieved =
+                Arrays.stream(Color.values())
+                        .allMatch(color -> inventory.getBamboo(color) >= needs.get(color));
+        return achieved;
     }
 
     public boolean wasAchievedAfterLastCheck() {
