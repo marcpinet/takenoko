@@ -16,6 +16,6 @@ class MainTest {
 
     @Test
     void helloTest() {
-        assertEquals(varToBeInitInSetup, "Hello World!");
+        assertEquals("Hello World!", varToBeInitInSetup);
     }
 }

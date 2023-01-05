@@ -27,10 +27,9 @@ public class Board {
 
         for (TileSide side : TileSide.values()) {
             Coord adjacentCoord = c.adjacentCoordSide(side);
-            if (tiles.containsKey(adjacentCoord)) {
-                if (tiles.get(adjacentCoord).isSideIrrigated(side.oppositeSide())) {
-                    t.irrigateSide(side);
-                }
+            if (tiles.containsKey(adjacentCoord)
+                    && tiles.get(adjacentCoord).isSideIrrigated(side.oppositeSide())) {
+                t.irrigateSide(side);
             }
         }
     }

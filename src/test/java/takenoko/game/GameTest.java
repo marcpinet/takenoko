@@ -1,7 +1,6 @@
 package takenoko.game;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -26,7 +25,7 @@ import takenoko.player.bot.EasyBot;
 import takenoko.utils.Coord;
 import utils.TestLogHandler;
 
-public class GameTest {
+class GameTest {
     Game game;
     List<Player> players;
     List<Objective> objectives;

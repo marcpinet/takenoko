@@ -1,7 +1,6 @@
 package takenoko.game.objective;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,12 +19,12 @@ import takenoko.utils.Coord;
 // placed.
 public class TilePatternObjective implements Objective {
     public static final List<Coord> DIAMOND_4 =
-            Arrays.asList(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0), new Coord(1, 1));
-    public static final List<Coord> LINE_2 = Arrays.asList(new Coord(0, 0), new Coord(0, 1));
+            List.of(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0), new Coord(1, 1));
+    public static final List<Coord> LINE_2 = List.of(new Coord(0, 0), new Coord(0, 1));
     public static final List<Coord> LINE_3 =
-            Arrays.asList(new Coord(0, 0), new Coord(0, 1), new Coord(0, 2));
+            List.of(new Coord(0, 0), new Coord(0, 1), new Coord(0, 2));
     public static final List<Coord> TRIANGLE_3 =
-            Arrays.asList(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0));
+            List.of(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0));
 
     private final Set<List<Coord>> patternRotations;
     private boolean achieved = false;

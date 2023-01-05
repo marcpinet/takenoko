@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import takenoko.game.tile.*;
 import takenoko.utils.Coord;
 
-public class BoardTest {
+class BoardTest {
 
     Board tileboard;
 

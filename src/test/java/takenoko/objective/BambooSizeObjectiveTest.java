@@ -11,7 +11,7 @@ import takenoko.game.objective.BambooSizeObjective;
 import takenoko.game.tile.*;
 import takenoko.utils.Coord;
 
-public class BambooSizeObjectiveTest {
+class BambooSizeObjectiveTest {
 
     BambooSizeObjective b1, b3, b4;
     Board board;

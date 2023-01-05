@@ -9,7 +9,7 @@ import takenoko.game.tile.BambooSizeException;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.PowerUp;
 
-public class InventoryTest {
+class InventoryTest {
 
     Inventory inventory;
 

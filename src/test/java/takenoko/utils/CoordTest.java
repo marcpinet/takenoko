@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.game.tile.TileSide;
 
-public class CoordTest {
+class CoordTest {
     Coord center;
 
     Coord coordx1y2;
