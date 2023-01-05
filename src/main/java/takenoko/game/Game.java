@@ -114,8 +114,7 @@ public class Game {
                 }
             }
             case Action.UnveilObjective unveilObjective -> {
-                if (unveilObjective.objective().getClass() == HarvestingObjective.class) {
-                    HarvestingObjective needs = ((HarvestingObjective) unveilObjective.objective());
+                if (unveilObjective.objective() instanceof HarvestingObjective needs) {
                     Inventory inventory = player.getInventory();
                     try {
                         inventory.useBamboo(Color.GREEN, needs.getGreen());
