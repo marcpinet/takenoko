@@ -9,10 +9,10 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
         implements Player {
     private final SELF self;
     private int actionCredits = 0;
-    private Inventory inventory;
+    private final Inventory inventory;
 
     @SuppressWarnings("unchecked")
-    public PlayerBase() {
+    protected PlayerBase() {
         // SAFETY: This is safe because we're an abstract class using CRTP
         self = (SELF) this;
         inventory = new Inventory();

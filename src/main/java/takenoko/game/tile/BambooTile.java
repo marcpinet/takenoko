@@ -1,6 +1,6 @@
 package takenoko.game.tile;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class BambooTile implements Tile {
@@ -15,7 +15,7 @@ public class BambooTile implements Tile {
     public BambooTile(Color color) {
         bambooSize = 0;
         this.powerUp = PowerUp.NONE;
-        irrigatedSides = new HashMap<>();
+        irrigatedSides = new EnumMap<>(TileSide.class);
         for (TileSide side : TileSide.values()) {
             irrigatedSides.put(side, false);
         }
