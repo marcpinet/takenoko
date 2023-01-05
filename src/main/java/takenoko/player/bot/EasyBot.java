@@ -26,6 +26,9 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
         for (var obj : getInventory().getObjectives())
             if (obj.wasAchievedAfterLastCheck()) return new Action.UnveilObjective(obj);
 
+        // if we do not have enough action credits, end the turn
+        if (availableActionCredits() == 0) return Action.END_TURN;
+
         final List<Function<Board, Action>> availableActions =
                 List.of(this::placeTile, this::takeIrrigation, this::placeIrrigation);
 

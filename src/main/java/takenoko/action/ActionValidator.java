@@ -28,6 +28,7 @@ public class ActionValidator {
             case Action.UnveilObjective a -> isValid(a);
             case Action.MoveGardener a -> isValid(a);
             case Action.MovePanda a -> isValid(a);
+            case Action.EndTurn ignored -> true;
         };
     }
 

@@ -13,34 +13,29 @@ public sealed interface Action
                 Action.PlaceIrrigationStick,
                 Action.PlaceTile,
                 Action.TakeIrrigationStick,
-                Action.UnveilObjective {
+                Action.UnveilObjective,
+                Action.EndTurn {
     Action NONE = new Action.None();
+    Action END_TURN = new Action.EndTurn();
 
-    int cost();
+    default boolean hasCost() {
+        return true;
+    }
 
     final class None implements Action {
-        @Override
-        public int cost() {
-            return 1;
-        }
+        private None() {}
+    }
+
+    final class EndTurn implements Action {
+        private EndTurn() {}
 
         @Override
-        public boolean equals(Object o) {
-            return o instanceof None;
-        }
-
-        @Override
-        public int hashCode() {
-            return 0;
+        public boolean hasCost() {
+            return false;
         }
     }
 
     record PlaceTile(Coord coord, TileDeck.DrawTilePredicate drawTilePredicate) implements Action {
-        @Override
-        public int cost() {
-            return 1;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (o instanceof PlaceTile other) {
@@ -58,8 +53,8 @@ public sealed interface Action
 
     record UnveilObjective(Objective objective) implements Action {
         @Override
-        public int cost() {
-            return 0;
+        public boolean hasCost() {
+            return false;
         }
 
         @Override
@@ -78,11 +73,6 @@ public sealed interface Action
 
     record TakeIrrigationStick() implements Action {
         @Override
-        public int cost() {
-            return 1;
-        }
-
-        @Override
         public boolean equals(Object o) {
             return o instanceof TakeIrrigationStick;
         }
@@ -95,8 +85,8 @@ public sealed interface Action
 
     record PlaceIrrigationStick(Coord coord, TileSide side) implements Action {
         @Override
-        public int cost() {
-            return 0;
+        public boolean hasCost() {
+            return false;
         }
 
         @Override
@@ -115,11 +105,6 @@ public sealed interface Action
 
     record MoveGardener(Coord coord) implements Action {
         @Override
-        public int cost() {
-            return 1;
-        }
-
-        @Override
         public boolean equals(Object o) {
             if (o instanceof MoveGardener other) {
                 return coord.equals(other.coord);
@@ -134,11 +119,6 @@ public sealed interface Action
     }
 
     record MovePanda(Coord coord) implements Action {
-        @Override
-        public int cost() {
-            return 1;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (o instanceof MovePanda other) {

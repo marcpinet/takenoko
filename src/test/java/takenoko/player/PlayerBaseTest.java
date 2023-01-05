@@ -32,21 +32,17 @@ class PlayerBaseTest {
         player.getInventory().incrementIrrigation();
         var validator = new ActionValidator(board, deck, 20, player.getInventory());
 
-        var action = player.chooseAction(board, validator);
-        player.commitAction(action);
+        player.chooseAction(board, validator);
         assertEquals(2, player.availableActionCredits());
 
-        action = player.chooseAction(board, validator);
-        player.commitAction(action);
+        player.chooseAction(board, validator);
         assertEquals(1, player.availableActionCredits());
 
-        action = player.chooseAction(board, validator);
-        player.commitAction(action);
+        player.chooseAction(board, validator);
         assertEquals(0, player.availableActionCredits());
 
         // No more credits
-        var finalAction = player.chooseAction(board, validator);
-        assertThrows(IllegalStateException.class, () -> player.commitAction(finalAction));
+        assertThrows(IllegalStateException.class, () -> player.chooseAction(board, validator));
     }
 
     private static class TestPlayer extends PlayerBase<TestPlayer>

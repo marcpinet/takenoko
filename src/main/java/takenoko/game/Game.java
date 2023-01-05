@@ -67,7 +67,7 @@ public class Game {
         for (Player player : players) {
             this.out.log(Level.INFO, "Turn of player number {0} to play!", numPlayer);
             player.beginTurn(DEFAULT_ACTION_CREDIT);
-            while (!player.wantsToEndTurn()) {
+            while (true) {
                 this.out.log(Level.INFO, "Action number {0}:", numAction);
                 try {
                     var validator =
@@ -76,6 +76,7 @@ public class Game {
                     var action = player.chooseAction(board, validator);
                     if (!validator.isValid(action)) continue;
                     this.out.log(Level.INFO, "Action: {0}", action);
+                    if (action == Action.END_TURN) break;
                     if (playAction(action, player)) return Optional.of(player);
                     checkObjectives(action);
                 } catch (PlayerException e) {
@@ -98,23 +99,23 @@ public class Game {
             case Action.None ignored -> {
                 // do nothing
             }
+            case Action.EndTurn ignored -> {
+                // do nothing
+            }
             case Action.PlaceTile placeTile -> {
                 try {
                     var tile = tileDeck.draw(placeTile.drawTilePredicate());
                     board.placeTile(placeTile.coord(), tile);
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
             }
             case Action.UnveilObjective ignored -> {
-                player.commitAction(action);
                 return true;
             }
             case Action.TakeIrrigationStick takeIrrigationStick -> {
                 try {
                     takeIrrigationStick(player);
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
@@ -123,7 +124,6 @@ public class Game {
                 try {
                     placeIrrigationStick(
                             player, placeIrrigationStick.coord(), placeIrrigationStick.side());
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
@@ -132,7 +132,6 @@ public class Game {
             case Action.MoveGardener moveGardener -> {
                 try {
                     this.board.move(MovablePiece.GARDENER, moveGardener.coord());
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
@@ -141,7 +140,6 @@ public class Game {
             case Action.MovePanda movePanda -> {
                 try {
                     this.board.move(MovablePiece.PANDA, movePanda.coord());
-                    player.commitAction(action);
                 } catch (Exception e) {
                     this.out.log(Level.SEVERE, e.getMessage());
                 }
