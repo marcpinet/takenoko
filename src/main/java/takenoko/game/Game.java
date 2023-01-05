@@ -10,7 +10,9 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.Objective;
-import takenoko.game.tile.*;
+import takenoko.game.tile.IrrigationException;
+import takenoko.game.tile.TileDeck;
+import takenoko.game.tile.TileSide;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
@@ -149,7 +151,7 @@ public class Game {
     }
 
     // take an irrigation stick from the stack and put it in the player's inventory
-    private void takeIrrigationStick(Player player) throws BoardException, InventoryException {
+    private void takeIrrigationStick(Player player) throws BoardException {
         if (irrigationStickLeft == 0) {
             throw new BoardException("No more irrigation stick left");
         }
