@@ -5,6 +5,7 @@ import takenoko.action.Action;
 import takenoko.game.board.Board;
 import takenoko.game.tile.BambooSizeException;
 import takenoko.game.tile.BambooTile;
+import takenoko.player.Inventory;
 
 public class BambooSizeObjective implements Objective {
 
@@ -19,7 +20,7 @@ public class BambooSizeObjective implements Objective {
     }
 
     @Override
-    public boolean isAchieved(Board board, Action lastAction) {
+    public boolean isAchieved(Board board, Action lastAction, Inventory ignored) {
         AtomicBoolean res = new AtomicBoolean(false);
         board.applyOnEachTile(
                 tile -> {

@@ -54,9 +54,9 @@ class BambooSizeObjectiveTest {
     @Test
     void testIsAchieved() throws BambooSizeException, BambooIrrigationException, BoardException {
         // Initial verification
-        assertFalse(b1.isAchieved(board, INITIAL_ACTION));
-        assertFalse(b3.isAchieved(board, INITIAL_ACTION));
-        assertFalse(b4.isAchieved(board, INITIAL_ACTION));
+        assertFalse(b1.isAchieved(board, INITIAL_ACTION, null));
+        assertFalse(b3.isAchieved(board, INITIAL_ACTION, null));
+        assertFalse(b4.isAchieved(board, INITIAL_ACTION, null));
 
         var secondAction = placeBambooTile(board, new Coord(0, 1));
 
@@ -68,26 +68,26 @@ class BambooSizeObjectiveTest {
         // First bamboo grow
         bt2.growBamboo();
         // Now b1 is achieved
-        assertTrue(b1.isAchieved(board, secondAction));
+        assertTrue(b1.isAchieved(board, secondAction, null));
         assertTrue(b1.wasAchievedAfterLastCheck());
 
         // Second bamboo grow
         bt2.growBamboo();
         // b1 is no longer achieved
-        assertFalse(b1.isAchieved(board, secondAction));
+        assertFalse(b1.isAchieved(board, secondAction, null));
         assertFalse(b1.wasAchievedAfterLastCheck());
 
         // Third bamboo grow
         bt2.growBamboo();
         // b3 is achieved
-        assertTrue(b3.isAchieved(board, secondAction));
+        assertTrue(b3.isAchieved(board, secondAction, null));
         assertTrue(b3.wasAchievedAfterLastCheck());
 
         // Fourth bamboo grow
         bt2.growBamboo();
         // b3 is no longer achieved, but b4 is
-        assertFalse(b3.isAchieved(board, secondAction));
-        assertTrue(b4.isAchieved(board, secondAction));
+        assertFalse(b3.isAchieved(board, secondAction, null));
+        assertTrue(b4.isAchieved(board, secondAction, null));
         assertFalse(b3.wasAchievedAfterLastCheck());
         assertTrue(b4.wasAchievedAfterLastCheck());
     }
