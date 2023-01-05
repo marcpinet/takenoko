@@ -14,6 +14,7 @@ import takenoko.action.Action;
 import takenoko.action.ActionValidator;
 import takenoko.game.board.Board;
 import takenoko.game.objective.Objective;
+import takenoko.player.InventoryException;
 import takenoko.player.PlayerException;
 import takenoko.utils.Coord;
 
@@ -43,14 +44,14 @@ class EasyBotTest {
     }
 
     @Test
-    void unveilsObjectiveASAP() throws PlayerException {
+    void unveilsObjectiveASAP() throws PlayerException, InventoryException {
         Board board = new Board();
         EasyBot bot = new EasyBot(randomSource);
 
         var objMock = mock(Objective.class);
         when(objMock.wasAchievedAfterLastCheck()).thenReturn(true);
 
-        bot.addObjective(objMock);
+        bot.getInventory().addObjective(objMock);
 
         bot.beginTurn(1);
         Action action = bot.chooseAction(board, validator);

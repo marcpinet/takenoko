@@ -23,7 +23,7 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
 
     public Action chooseActionImpl(Board board, ActionValidator validator) {
         // If an objective is achieved, unveil it
-        for (var obj : getObjectives())
+        for (var obj : getInventory().getObjectives())
             if (obj.wasAchievedAfterLastCheck()) return new Action.UnveilObjective(obj);
 
         final List<Function<Board, Action>> availableActions =

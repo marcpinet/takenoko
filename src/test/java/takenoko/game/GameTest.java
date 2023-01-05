@@ -1,6 +1,8 @@
 package takenoko.game;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -17,6 +19,8 @@ import takenoko.game.objective.Objective;
 import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
+import takenoko.player.Inventory;
+import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
 import takenoko.player.bot.EasyBot;
@@ -36,7 +40,7 @@ public class GameTest {
     TestLogHandler logHandler;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InventoryException {
         players = List.of(p1, p2);
         objectives = List.of(line2);
         tileDeck = new TileDeck(new Random(0));
@@ -44,8 +48,6 @@ public class GameTest {
         logger = Logger.getGlobal();
         logHandler = new TestLogHandler();
         logger.addHandler(logHandler);
-
-        game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
     }
 
     void assertNoSevereLog() {
@@ -55,7 +57,7 @@ public class GameTest {
     }
 
     @Test
-    void testGame() throws PlayerException {
+    void testGame() throws PlayerException, InventoryException {
         // For the moment, we verify only one completed objective, because the game stop as soon as
         // an objective is complete.
 
@@ -68,7 +70,7 @@ public class GameTest {
         Action.PlaceTile fourthTile =
                 new Action.PlaceTile(new Coord(-1, +1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
 
-        // Don't forget that unveil an objective is an action, just like place a tile!!!
+        // Don't forget that unveil an objective is an action, just like place a tile
         when(p1.chooseAction(any(), any()))
                 .thenReturn(firstTile, secondTile, new Action.UnveilObjective(line2));
         // If we don't put the last "false", we will be trapped in an infinite loop because players
@@ -80,6 +82,14 @@ public class GameTest {
         when(line2.isAchieved(any(), eq(firstTile))).thenReturn(false);
         when(line2.isAchieved(any(), eq(secondTile))).thenReturn(true);
         when(line2.wasAchievedAfterLastCheck()).thenReturn(true);
+
+        var inventory1 = new Inventory();
+        var inventory2 = new Inventory();
+        when(p1.getInventory()).thenReturn(inventory1);
+        when(p2.getInventory()).thenReturn(inventory2);
+
+        game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
+
         try {
             assertEquals(players.get(0), game.play());
         } catch (Exception e) {
@@ -90,12 +100,12 @@ public class GameTest {
     }
 
     @Test
-    void randomGame() {
+    void randomGame() throws InventoryException {
         // We just want to check that the game is not crashing for a given seed
         // Carefully picked seed so that the game is not infinite
+
         final int seed1 = 809349372;
         final int seed2 = 143379137;
-
         List<Player> players =
                 List.of(new EasyBot(new Random(seed1)), new EasyBot(new Random(seed2)));
         List<Objective> objectives =

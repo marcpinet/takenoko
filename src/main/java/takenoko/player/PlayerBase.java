@@ -1,53 +1,26 @@
 package takenoko.player;
 
-import java.util.ArrayList;
-import java.util.List;
 import takenoko.action.Action;
 import takenoko.action.ActionValidator;
 import takenoko.game.board.Board;
-import takenoko.game.objective.Objective;
 
 @SuppressWarnings("java:S119") // Why couldn't I name my template SELF?
 public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.PlayerBaseInterface>
         implements Player {
     private final SELF self;
-    private final List<Objective> objectives;
     private int actionCredits = 0;
-
-    // TODO : Inventory should become a class with irrigations, power-ups, and objectives
-    private int inventory;
+    private Inventory inventory;
 
     @SuppressWarnings("unchecked")
     public PlayerBase() {
         // SAFETY: This is safe because we're an abstract class using CRTP
         self = (SELF) this;
-        objectives = new ArrayList<>();
-        inventory = 0;
+        inventory = new Inventory();
     }
 
     @Override
-    public void addObjective(Objective objective) {
-        objectives.add(objective);
-    }
-
-    @Override
-    public List<Objective> getObjectives() {
-        return objectives;
-    }
-
-    @Override
-    public int getInventory() {
+    public Inventory getInventory() {
         return inventory;
-    }
-
-    @Override
-    public void takeIrrigationStick() {
-        inventory++;
-    }
-
-    @Override
-    public void placeIrrigationStick() {
-        inventory--;
     }
 
     public void beginTurn(int actionCredits) {

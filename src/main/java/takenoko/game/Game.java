@@ -10,7 +10,10 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.Objective;
-import takenoko.game.tile.*;
+import takenoko.game.tile.IrrigationException;
+import takenoko.game.tile.TileDeck;
+import takenoko.game.tile.TileSide;
+import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
 import takenoko.utils.Coord;
@@ -33,7 +36,11 @@ public class Game {
         this.tileDeck = tileDeck;
         for (var player : players) {
             // TODO: change how objectives are assigned
-            player.addObjective(objectives.get(0));
+            try {
+                player.getInventory().addObjective(objectives.get(0));
+            } catch (InventoryException e) {
+                out.log(Level.SEVERE, "Failed to add objective to player", e);
+            }
         }
     }
 
@@ -148,17 +155,14 @@ public class Game {
         if (irrigationStickLeft == 0) {
             throw new BoardException("No more irrigation stick left");
         }
-        player.takeIrrigationStick();
+        player.getInventory().incrementIrrigation();
         irrigationStickLeft--;
     }
 
     private void placeIrrigationStick(Player player, Coord coord, TileSide side)
-            throws PlayerException, IrrigationException {
-        if (player.getInventory() <= 0) {
-            throw new PlayerException("No more irrigation stick left in player's inventory");
-        }
+            throws IrrigationException, InventoryException {
+        player.getInventory().decrementIrrigation();
         board.placeIrrigation(coord, side);
-        player.placeIrrigationStick();
     }
 
     private void checkObjectives(Action lastAction) {
