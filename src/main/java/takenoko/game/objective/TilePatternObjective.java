@@ -10,7 +10,6 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.Color;
-import takenoko.game.tile.Tile;
 import takenoko.utils.Coord;
 
 /// This class works by storing a list of deltas from one edge of the pattern.
@@ -114,19 +113,21 @@ public class TilePatternObjective implements Objective {
         return achieved;
     }
 
-    private boolean isPatternAt(Board board, Coord coord, List<Coord> pattern) {
-        for (Coord c : pattern) {
-            Tile tile = null;
-            try {
-                tile = board.getTile(coord.add(c));
-            } catch (BoardException e) {
-                return false;
+    // A tile is part of the pattern if it is the right color and if it's irrigated
+    private boolean isValidTile(Board board, Coord coord) {
+        try {
+            var tile = board.getTile(coord);
+            if (tile instanceof BambooTile bambooTile) {
+                return bambooTile.getColor() == color && bambooTile.isIrrigated();
             }
-            if (tile instanceof BambooTile bambooTile && bambooTile.getColor() != color) {
-                return false;
-            }
+        } catch (BoardException e) {
+            // The tile is not on the board, so it's not part of the pattern
         }
-        return true;
+        return false;
+    }
+
+    private boolean isPatternAt(Board board, Coord coord, List<Coord> pattern) {
+        return pattern.stream().map(coord::add).allMatch(c -> isValidTile(board, c));
     }
 
     public Color getColor() {

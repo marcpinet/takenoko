@@ -94,9 +94,17 @@ public class Board {
             for (int j = -2; j < 3; j++) {
                 var tile = getTileAtDisplayPosition(i, j);
                 if (tile.isPresent()) {
+                    if (tile.get() instanceof BambooTile bambooTile) {
+                        sb.append(' ')
+                                .append(bambooTile.getColor().toString().charAt(0))
+                                .append(' ');
+                    } else {
+                        sb.append("---");
+                    }
                     sb.append("(").append(i).append(",").append(j).append(") ");
+
                 } else {
-                    sb.append("----- ");
+                    sb.append("-------- ");
                 }
             }
             sb.append("\n");
