@@ -29,15 +29,11 @@ public class ActionValidator {
 
     public ActionValidator(
             Board board, TileDeck deck, int irrigationStickCount, Inventory playerInventory) {
-        this.board = board;
-        this.deck = deck;
-        this.irrigationStickCount = irrigationStickCount;
-        this.playerInventory = playerInventory;
-        this.alreadyPlayedActions = new ArrayList<>();
+        this(board, deck, irrigationStickCount, playerInventory, new ArrayList<>());
     }
 
     public boolean isValid(Action action) {
-        if (alreadyPlayedActions != null && alreadyPlayedActions.contains(action)) return false;
+        for (Action a : alreadyPlayedActions) if (a.isSameTypeAs(action)) return false;
 
         return switch (action) {
             case Action.None ignored -> true;

@@ -90,6 +90,7 @@ public class Game {
                     this.out.log(Level.INFO, "Action: {0}", action);
                     if (action == Action.END_TURN) break;
                     if (playAction(action, player)) return Optional.of(player);
+                    alreadyPlayedActions.add(action);
                     checkObjectives(action, player.getInventory());
                 } catch (PlayerException e) {
                     this.out.log(Level.SEVERE, "Player exception: {0}", e.getMessage());

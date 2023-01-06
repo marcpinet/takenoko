@@ -22,6 +22,10 @@ public sealed interface Action
         return true;
     }
 
+    default boolean isSameTypeAs(Action other) {
+        return this.getClass() == other.getClass();
+    }
+
     final class None implements Action {
         private None() {}
     }
