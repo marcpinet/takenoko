@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +55,7 @@ class GameTest {
     }
 
     @Test
-    void testGame() throws PlayerException, InventoryException, TooManyTurnsException {
+    void testGame() throws PlayerException, InventoryException {
         // For the moment, we verify only one completed objective, because the game stop as soon as
         // an objective is complete.
 
@@ -86,7 +87,7 @@ class GameTest {
 
         game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
 
-        assertEquals(players.get(0), game.play());
+        assertEquals(Optional.of(players.get(0)), game.play());
         assertNoSevereLog();
     }
 

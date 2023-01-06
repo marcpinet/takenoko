@@ -47,19 +47,22 @@ public class Game {
         }
     }
 
-    public Player play() throws TooManyTurnsException {
+    public Optional<Player> play() {
         this.out.log(Level.INFO, "Beginning of the game!");
         while (true) {
-            if (numTurn > 100) {
-                throw new TooManyTurnsException("ERROR : too many turns. Game end.");
+
+            if (numTurn > 200) {
+                this.out.log(Level.INFO, "Too many turns, no winner.");
+                return Optional.empty();
             }
+
             this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!");
             var winner = playTurn();
             numTurn++;
             if (winner.isPresent()) {
                 this.out.log(Level.INFO, "Someone won!");
                 this.out.log(Level.INFO, "End of the game.");
-                return winner.get();
+                return winner;
             }
         }
     }

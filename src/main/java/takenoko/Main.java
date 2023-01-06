@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 import takenoko.game.Game;
-import takenoko.game.TooManyTurnsException;
 import takenoko.game.objective.Objective;
 import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.Color;
@@ -13,7 +12,7 @@ import takenoko.player.Player;
 import takenoko.player.bot.EasyBot;
 
 public class Main {
-    public static void main(String... args) throws TooManyTurnsException {
+    public static void main(String... args) {
         List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
         List<Objective> objectives =
                 List.of(
