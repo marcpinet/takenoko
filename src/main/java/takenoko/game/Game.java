@@ -1,5 +1,6 @@
 package takenoko.game;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -73,12 +74,17 @@ public class Game {
         for (Player player : players) {
             this.out.log(Level.INFO, "Turn of player number {0} to play!", numPlayer);
             player.beginTurn(DEFAULT_ACTION_CREDIT);
+            ArrayList<Action> alreadyPlayedActions = new ArrayList<>();
             while (true) {
                 this.out.log(Level.INFO, "Action number {0}:", numAction);
                 try {
                     var validator =
                             new ActionValidator(
-                                    board, tileDeck, irrigationStickLeft, player.getInventory());
+                                    board,
+                                    tileDeck,
+                                    irrigationStickLeft,
+                                    player.getInventory(),
+                                    alreadyPlayedActions);
                     var action = player.chooseAction(board, validator);
                     if (!validator.isValid(action)) continue;
                     this.out.log(Level.INFO, "Action: {0}", action);
