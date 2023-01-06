@@ -12,4 +12,8 @@ public interface Player {
     Action chooseAction(Board board, ActionValidator actionValidator) throws PlayerException;
 
     Inventory getInventory();
+
+    void increaseScore(int delta);
+
+    int getScore();
 }

@@ -113,6 +113,11 @@ public class TilePatternObjective implements Objective {
         return achieved;
     }
 
+    @Override
+    public int getScore() {
+        return 1;
+    }
+
     // A tile is part of the pattern if it is the right color and if it's irrigated
     private boolean isValidTile(Board board, Coord coord) {
         try {

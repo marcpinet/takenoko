@@ -85,6 +85,7 @@ public class ActionApplier {
                 this.out.log(Level.SEVERE, e.getMessage());
             }
         }
+        player.increaseScore(unveilObjective.objective().getScore());
         return true;
     }
 

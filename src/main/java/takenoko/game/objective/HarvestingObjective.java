@@ -29,6 +29,11 @@ public class HarvestingObjective implements Objective {
         return achieved;
     }
 
+    @Override
+    public int getScore() {
+        return 1;
+    }
+
     public int getGreen() {
         return needs.get(Color.GREEN);
     }

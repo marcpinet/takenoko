@@ -40,4 +40,9 @@ public class BambooSizeObjective implements Objective {
     public boolean wasAchievedAfterLastCheck() {
         return achieved;
     }
+
+    @Override
+    public int getScore() {
+        return 1;
+    }
 }
