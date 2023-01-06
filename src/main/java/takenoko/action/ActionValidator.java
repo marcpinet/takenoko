@@ -1,5 +1,7 @@
 package takenoko.action;
 
+import java.util.ArrayList;
+import java.util.List;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.tile.TileDeck;
@@ -10,16 +12,29 @@ public class ActionValidator {
     private final TileDeck deck;
     private final int irrigationStickCount;
     private final Inventory playerInventory;
+    private final List<Action> alreadyPlayedActions;
 
     public ActionValidator(
-            Board board, TileDeck deck, int irrigationStickCount, Inventory playerInventory) {
+            Board board,
+            TileDeck deck,
+            int irrigationStickCount,
+            Inventory playerInventory,
+            List<Action> alreadyPlayedActions) {
         this.board = board;
         this.deck = deck;
         this.irrigationStickCount = irrigationStickCount;
         this.playerInventory = playerInventory;
+        this.alreadyPlayedActions = alreadyPlayedActions;
+    }
+
+    public ActionValidator(
+            Board board, TileDeck deck, int irrigationStickCount, Inventory playerInventory) {
+        this(board, deck, irrigationStickCount, playerInventory, new ArrayList<>());
     }
 
     public boolean isValid(Action action) {
+        for (Action a : alreadyPlayedActions) if (a.isSameTypeAs(action)) return false;
+
         return switch (action) {
             case Action.None ignored -> true;
             case Action.PlaceIrrigationStick a -> isValid(a);

@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
@@ -139,5 +141,20 @@ class ActionValidatorTest {
         board.placeTile(new Coord(1, 1), new BambooTile(Color.GREEN));
         var action = new Action.MovePanda(coord);
         assertEquals(expectedResult, validator.isValid(action));
+    }
+
+    @Test
+    void testTwiceAction() {
+        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        assertTrue(validator.isValid(action));
+        validator =
+                new ActionValidator(
+                        board,
+                        new TileDeck(new Random(0)),
+                        STICK_COUNT,
+                        new Inventory(),
+                        new ArrayList<>(List.of(action)));
+        var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        assertFalse(validator.isValid(action2));
     }
 }

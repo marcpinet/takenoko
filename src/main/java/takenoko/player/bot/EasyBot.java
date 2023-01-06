@@ -41,7 +41,7 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
                 return action;
             }
         }
-        return Action.NONE;
+        return Action.END_TURN;
     }
 
     private Action placeTile(Board board) {
