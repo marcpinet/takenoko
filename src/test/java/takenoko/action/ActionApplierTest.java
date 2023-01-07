@@ -15,6 +15,7 @@ import takenoko.game.board.BoardException;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
+import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.bot.DefaultBot;
 import takenoko.utils.Coord;
@@ -52,8 +53,8 @@ class ActionApplierTest {
 
     @Test
     void doNothing() {
-        assertFalse(applier.apply(Action.NONE, player));
-        assertFalse(applier.apply(Action.END_TURN, player));
+        applier.apply(Action.NONE, player);
+        applier.apply(Action.END_TURN, player);
         assertNoSevereLog();
     }
 
@@ -61,7 +62,7 @@ class ActionApplierTest {
     void placeTile() throws BoardException {
         var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
         int originalDeckSize = deck.size();
-        assertFalse(applier.apply(action, player));
+        applier.apply(action, player);
 
         var tile = board.getTile(new Coord(0, 1));
         assertTrue(tile instanceof BambooTile);
@@ -70,18 +71,24 @@ class ActionApplierTest {
     }
 
     @Test
-    void unveilObjective() {
+    void unveilObjective() throws InventoryException {
         var mockObj = mock(Objective.class);
         when(mockObj.isAchieved(any(), any(), any())).thenReturn(true);
         when(mockObj.wasAchievedAfterLastCheck()).thenReturn(true);
+        when(mockObj.getScore()).thenReturn(1);
+
+        player.getInventory().addObjective(mockObj);
 
         var action = new Action.UnveilObjective(mockObj);
-        assertTrue(applier.apply(action, player));
+        applier.apply(action, player);
+
+        assertEquals(mockObj.getScore(), player.getScore());
+
         assertNoSevereLog();
     }
 
     @Test
-    void unveilHarvestingObjective() {
+    void unveilHarvestingObjective() throws InventoryException {
         var inv = player.getInventory();
         inv.incrementBamboo(Color.GREEN);
         inv.incrementBamboo(Color.PINK);
@@ -94,12 +101,16 @@ class ActionApplierTest {
         when(mockObj.getPink()).thenReturn(1);
         when(mockObj.getYellow()).thenReturn(1);
 
+        inv.addObjective(mockObj);
+
         var action = new Action.UnveilObjective(mockObj);
-        assertTrue(applier.apply(action, player));
+        applier.apply(action, player);
 
         assertEquals(0, inv.getBamboo(Color.GREEN));
         assertEquals(0, inv.getBamboo(Color.PINK));
         assertEquals(0, inv.getBamboo(Color.YELLOW));
+
+        assertEquals(mockObj.getScore(), player.getScore());
 
         assertNoSevereLog();
     }
@@ -114,7 +125,7 @@ class ActionApplierTest {
         assertFalse(bambooTile.isSideIrrigated(TileSide.UP_RIGHT));
 
         var action = new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_RIGHT);
-        assertFalse(applier.apply(action, player));
+        applier.apply(action, player);
 
         assertTrue(bambooTile.isSideIrrigated(TileSide.UP_RIGHT));
         assertFalse(player.getInventory().hasIrrigation());
@@ -127,7 +138,7 @@ class ActionApplierTest {
         assertTrue(gameInventory.hasIrrigation());
 
         var action = new Action.TakeIrrigationStick();
-        assertFalse(applier.apply(action, player));
+        applier.apply(action, player);
 
         assertTrue(player.getInventory().hasIrrigation());
         assertFalse(gameInventory.hasIrrigation());
@@ -140,7 +151,7 @@ class ActionApplierTest {
         board.placeTile(c, new BambooTile(Color.GREEN));
 
         var action = new Action.MovePanda(c);
-        assertFalse(applier.apply(action, player));
+        applier.apply(action, player);
 
         assertEquals(c, board.getPandaCoord());
         assertNoSevereLog();
@@ -152,7 +163,7 @@ class ActionApplierTest {
         board.placeTile(c, new BambooTile(Color.GREEN));
 
         var action = new Action.MoveGardener(c);
-        assertFalse(applier.apply(action, player));
+        applier.apply(action, player);
 
         assertEquals(c, board.getGardenerCoord());
         assertNoSevereLog();

@@ -8,7 +8,6 @@ import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
-import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.utils.Coord;
@@ -30,10 +29,10 @@ public class ActionApplier {
     // S1481: pattern matching requires variable name even if unused
     // S131: we're using pattern matching, so we don't need a default branch
     @SuppressWarnings({"java:S1301", "java:S1481", "java:S131", "DuplicateBranchesInSwitch"})
-    public boolean apply(Action action, Player player) {
-        return switch (action) {
-            case Action.None ignored -> false;
-            case Action.EndTurn ignored -> false;
+    public void apply(Action action, Player player) {
+        switch (action) {
+            case Action.None ignored -> {}
+            case Action.EndTurn ignored -> {}
             case Action.PlaceTile placeTile -> apply(placeTile);
             case Action.UnveilObjective unveilObjective -> apply(player, unveilObjective);
             case Action.TakeIrrigationStick ignored -> apply(player);
@@ -42,60 +41,56 @@ public class ActionApplier {
             case Action.MoveGardener moveGardener -> apply(
                     MovablePiece.GARDENER, moveGardener.coord());
             case Action.MovePanda movePanda -> apply(MovablePiece.PANDA, movePanda.coord());
-        };
+        }
     }
 
-    private boolean apply(MovablePiece piece, Coord pieceCoord) {
+    private void apply(MovablePiece piece, Coord pieceCoord) {
         try {
             this.board.move(piece, pieceCoord);
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());
         }
-        return false;
     }
 
-    private boolean apply(Player player, Action.PlaceIrrigationStick placeIrrigationStick) {
+    private void apply(Player player, Action.PlaceIrrigationStick placeIrrigationStick) {
         try {
             player.getInventory().decrementIrrigation();
             board.placeIrrigation(placeIrrigationStick.coord(), placeIrrigationStick.side());
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());
         }
-        return false;
     }
 
-    private boolean apply(Player player) {
+    private void apply(Player player) {
         try {
             gameInventory.decrementIrrigation();
             player.getInventory().incrementIrrigation();
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());
         }
-        return false;
     }
 
-    private boolean apply(Player player, Action.UnveilObjective unveilObjective) {
-        if (unveilObjective.objective() instanceof HarvestingObjective needs) {
-            Inventory inventory = player.getInventory();
-            try {
+    private void apply(Player player, Action.UnveilObjective unveilObjective) {
+        var inventory = player.getInventory();
+        try {
+            if (unveilObjective.objective() instanceof HarvestingObjective needs) {
                 inventory.useBamboo(Color.GREEN, needs.getGreen());
                 inventory.useBamboo(Color.YELLOW, needs.getYellow());
                 inventory.useBamboo(Color.PINK, needs.getPink());
-            } catch (InventoryException e) {
-                this.out.log(Level.SEVERE, e.getMessage());
             }
+            inventory.removeObjective(unveilObjective.objective());
+            player.increaseScore(unveilObjective.objective().getScore());
+        } catch (InventoryException e) {
+            this.out.log(Level.SEVERE, e.getMessage());
         }
-        player.increaseScore(unveilObjective.objective().getScore());
-        return true;
     }
 
-    private boolean apply(Action.PlaceTile placeTile) {
+    private void apply(Action.PlaceTile placeTile) {
         try {
             var tile = tileDeck.draw(placeTile.drawTilePredicate());
             board.placeTile(placeTile.coord(), tile);
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());
         }
-        return false;
     }
 }

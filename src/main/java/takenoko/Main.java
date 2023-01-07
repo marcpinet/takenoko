@@ -21,7 +21,14 @@ public class Main {
                         new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3),
                         new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2));
         var tileDeck = new TileDeck(new Random());
-        var game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
-        game.play();
+        var logger = Logger.getGlobal();
+        var game = new Game(players, objectives, logger, tileDeck);
+        var winner = game.play();
+
+        if (winner.isPresent()) {
+            logger.info("There is a winner: " + winner.get());
+        } else {
+            logger.info("No winner");
+        }
     }
 }

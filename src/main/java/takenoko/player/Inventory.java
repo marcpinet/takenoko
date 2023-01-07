@@ -77,6 +77,12 @@ public class Inventory {
         objectives.add(objective);
     }
 
+    public void removeObjective(Objective objective) throws InventoryException {
+        if (!objectives.remove(objective)) {
+            throw new InventoryException("Objective not found");
+        }
+    }
+
     public List<Objective> getObjectives() {
         return objectives;
     }
