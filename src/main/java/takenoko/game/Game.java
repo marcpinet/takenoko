@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import takenoko.action.Action;
 import takenoko.action.ActionValidator;
 import takenoko.game.board.Board;
-import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
@@ -29,7 +28,7 @@ public class Game {
     private final Logger out;
     private final List<Objective> objectives;
     private int numTurn = 1;
-    private int irrigationStickLeft = 20;
+    private final GameInventory inventory;
     private final TileDeck tileDeck;
 
     public Game(List<Player> players, List<Objective> objectives, Logger out, TileDeck tileDeck) {
@@ -46,6 +45,7 @@ public class Game {
                 out.log(Level.SEVERE, "Failed to add objective to player", e);
             }
         }
+        inventory = new GameInventory(20);
     }
 
     public Optional<Player> play() {
@@ -82,7 +82,7 @@ public class Game {
                             new ActionValidator(
                                     board,
                                     tileDeck,
-                                    irrigationStickLeft,
+                                    inventory,
                                     player.getInventory(),
                                     alreadyPlayedActions);
                     var action = player.chooseAction(board, validator);
@@ -173,12 +173,9 @@ public class Game {
     }
 
     // take an irrigation stick from the stack and put it in the player's inventory
-    private void takeIrrigationStick(Player player) throws BoardException {
-        if (irrigationStickLeft == 0) {
-            throw new BoardException("No more irrigation stick left");
-        }
+    private void takeIrrigationStick(Player player) throws GameInventoryException {
+        inventory.decrementIrrigation();
         player.getInventory().incrementIrrigation();
-        irrigationStickLeft--;
     }
 
     private void placeIrrigationStick(Player player, Coord coord, TileSide side)

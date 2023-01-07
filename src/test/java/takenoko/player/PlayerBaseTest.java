@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.action.Action;
 import takenoko.action.ActionValidator;
+import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.tile.TileDeck;
 
@@ -30,7 +31,8 @@ class PlayerBaseTest {
         assertEquals(3, player.availableActionCredits());
 
         player.getInventory().incrementIrrigation();
-        var validator = new ActionValidator(board, deck, 20, player.getInventory());
+        var validator =
+                new ActionValidator(board, deck, new GameInventory(20), player.getInventory());
 
         player.chooseAction(board, validator);
         assertEquals(2, player.availableActionCredits());
