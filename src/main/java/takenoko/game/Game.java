@@ -6,21 +6,15 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import takenoko.action.Action;
+import takenoko.action.ActionApplier;
 import takenoko.action.ActionValidator;
 import takenoko.game.board.Board;
-import takenoko.game.board.BoardException;
-import takenoko.game.board.MovablePiece;
-import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
-import takenoko.game.tile.Color;
-import takenoko.game.tile.IrrigationException;
 import takenoko.game.tile.TileDeck;
-import takenoko.game.tile.TileSide;
 import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
-import takenoko.utils.Coord;
 
 public class Game {
     private static final int DEFAULT_ACTION_CREDIT = 2;
@@ -29,7 +23,7 @@ public class Game {
     private final Logger out;
     private final List<Objective> objectives;
     private int numTurn = 1;
-    private int irrigationStickLeft = 20;
+    private final GameInventory inventory;
     private final TileDeck tileDeck;
 
     public Game(List<Player> players, List<Objective> objectives, Logger out, TileDeck tileDeck) {
@@ -46,6 +40,7 @@ public class Game {
                 out.log(Level.SEVERE, "Failed to add objective to player", e);
             }
         }
+        inventory = new GameInventory(20);
     }
 
     public Optional<Player> play() {
@@ -82,14 +77,15 @@ public class Game {
                             new ActionValidator(
                                     board,
                                     tileDeck,
-                                    irrigationStickLeft,
+                                    inventory,
                                     player.getInventory(),
                                     alreadyPlayedActions);
                     var action = player.chooseAction(board, validator);
-                    if (!validator.isValid(action)) continue;
                     this.out.log(Level.INFO, "Action: {0}", action);
+                    if (!validator.isValid(action)) continue;
                     if (action == Action.END_TURN) break;
-                    if (playAction(action, player)) return Optional.of(player);
+                    var applier = new ActionApplier(board, out, inventory, tileDeck);
+                    if (applier.apply(action, player)) return Optional.of(player);
                     alreadyPlayedActions.add(action);
                     checkObjectives(action, player.getInventory());
                 } catch (PlayerException e) {
@@ -101,90 +97,6 @@ public class Game {
             numAction = 1;
         }
         return Optional.empty();
-    }
-
-    // S1301: we want pattern matching so switch is necessary
-    // S1481: pattern matching requires variable name even if unused
-    // S131: we're using pattern matching, so we don't need a default branch
-    @SuppressWarnings({"java:S1301", "java:S1481", "java:S131"})
-    private boolean playAction(Action action, Player player) {
-        switch (action) {
-            case Action.None ignored -> {
-                // do nothing
-            }
-            case Action.EndTurn ignored -> {
-                // do nothing
-            }
-            case Action.PlaceTile placeTile -> {
-                try {
-                    var tile = tileDeck.draw(placeTile.drawTilePredicate());
-                    board.placeTile(placeTile.coord(), tile);
-                } catch (Exception e) {
-                    this.out.log(Level.SEVERE, e.getMessage());
-                }
-            }
-            case Action.UnveilObjective unveilObjective -> {
-                if (unveilObjective.objective() instanceof HarvestingObjective needs) {
-                    Inventory inventory = player.getInventory();
-                    try {
-                        inventory.useBamboo(Color.GREEN, needs.getGreen());
-                        inventory.useBamboo(Color.YELLOW, needs.getYellow());
-                        inventory.useBamboo(Color.PINK, needs.getPink());
-
-                    } catch (InventoryException e) {
-                        this.out.log(Level.SEVERE, e.getMessage());
-                    }
-                }
-                return true;
-            }
-            case Action.TakeIrrigationStick takeIrrigationStick -> {
-                try {
-                    takeIrrigationStick(player);
-                } catch (Exception e) {
-                    this.out.log(Level.SEVERE, e.getMessage());
-                }
-            }
-            case Action.PlaceIrrigationStick placeIrrigationStick -> {
-                try {
-                    placeIrrigationStick(
-                            player, placeIrrigationStick.coord(), placeIrrigationStick.side());
-                } catch (Exception e) {
-                    this.out.log(Level.SEVERE, e.getMessage());
-                }
-            }
-
-            case Action.MoveGardener moveGardener -> {
-                try {
-                    this.board.move(MovablePiece.GARDENER, moveGardener.coord());
-                } catch (Exception e) {
-                    this.out.log(Level.SEVERE, e.getMessage());
-                }
-            }
-
-            case Action.MovePanda movePanda -> {
-                try {
-                    this.board.move(MovablePiece.PANDA, movePanda.coord());
-                } catch (Exception e) {
-                    this.out.log(Level.SEVERE, e.getMessage());
-                }
-            }
-        }
-        return false;
-    }
-
-    // take an irrigation stick from the stack and put it in the player's inventory
-    private void takeIrrigationStick(Player player) throws BoardException {
-        if (irrigationStickLeft == 0) {
-            throw new BoardException("No more irrigation stick left");
-        }
-        player.getInventory().incrementIrrigation();
-        irrigationStickLeft--;
-    }
-
-    private void placeIrrigationStick(Player player, Coord coord, TileSide side)
-            throws IrrigationException, InventoryException {
-        player.getInventory().decrementIrrigation();
-        board.placeIrrigation(coord, side);
     }
 
     private void checkObjectives(Action lastAction, Inventory inventory) {
