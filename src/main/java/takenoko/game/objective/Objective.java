@@ -8,4 +8,6 @@ public interface Objective {
     boolean isAchieved(Board board, Action lastAction, Inventory inventory);
 
     boolean wasAchievedAfterLastCheck();
+
+    int getScore();
 }

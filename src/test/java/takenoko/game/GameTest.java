@@ -2,7 +2,6 @@ package takenoko.game;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -12,7 +11,6 @@ import java.util.Random;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import takenoko.action.Action;
 import takenoko.game.objective.Objective;
 import takenoko.game.objective.TilePatternObjective;
@@ -23,24 +21,15 @@ import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
 import takenoko.player.bot.EasyBot;
-import takenoko.utils.Coord;
 import utils.TestLogHandler;
 
 class GameTest {
-    Game game;
-    List<Player> players;
-    List<Objective> objectives;
-    @Mock EasyBot p1 = mock(EasyBot.class);
-    @Mock EasyBot p2 = mock(EasyBot.class);
-    @Mock TilePatternObjective line2 = mock(TilePatternObjective.class);
     TileDeck tileDeck;
     TestLogHandler logHandler;
     Logger logger;
 
     @BeforeEach
     public void setUp() throws InventoryException {
-        players = List.of(p1, p2);
-        objectives = List.of(line2);
         tileDeck = new TileDeck(new Random(0));
 
         logger = Logger.getGlobal();
@@ -55,39 +44,25 @@ class GameTest {
     }
 
     @Test
-    void testGame() throws PlayerException, InventoryException {
-        // For the moment, we verify only one completed objective, because the game stop as soon as
-        // an objective is complete.
-
-        Action.PlaceTile firstTile =
-                new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
-        Action.PlaceTile secondTile =
-                new Action.PlaceTile(new Coord(0, 2), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
-        Action.PlaceTile thirdTile =
-                new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
-        Action.PlaceTile fourthTile =
-                new Action.PlaceTile(new Coord(-1, +1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
-
+    void testGetWinner() throws PlayerException {
         // Don't forget that unveil an objective is an action, just like place a tile
-        when(p1.chooseAction(any(), any()))
-                .thenReturn(
-                        firstTile, secondTile, Action.END_TURN, new Action.UnveilObjective(line2));
-        // If we don't put the last "false", we will be trapped in an infinite loop because players
-        // will immediately end the turn before playing it.
-        when(p2.chooseAction(any(), any())).thenReturn(thirdTile, fourthTile, Action.END_TURN);
-        // line2 objective is achieved after firstTile action is done.
-        when(line2.isAchieved(any(), eq(firstTile), any())).thenReturn(false);
-        when(line2.isAchieved(any(), eq(secondTile), any())).thenReturn(true);
-        when(line2.wasAchievedAfterLastCheck()).thenReturn(true);
+        var p1 = mock(Player.class);
+        when(p1.getInventory()).thenReturn(new Inventory());
+        when(p1.getScore()).thenReturn(1);
+        when(p1.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 
-        var inventory1 = new Inventory();
-        var inventory2 = new Inventory();
-        when(p1.getInventory()).thenReturn(inventory1);
-        when(p2.getInventory()).thenReturn(inventory2);
+        var p2 = mock(Player.class);
+        when(p2.getInventory()).thenReturn(new Inventory());
+        when(p2.getScore()).thenReturn(2);
+        when(p2.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 
-        game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
+        var players = List.of(p1, p2);
+        List<Objective> objectives =
+                List.of(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
 
-        assertEquals(Optional.of(players.get(0)), game.play());
+        var game = new Game(players, objectives, logger, tileDeck);
+
+        assertEquals(Optional.of(p2), game.play());
         assertNoSevereLog();
     }
 
@@ -101,7 +76,7 @@ class GameTest {
             List<Objective> objectives =
                     List.of(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
 
-            game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
+            var game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
             game.play();
             assertNoSevereLog();
         }

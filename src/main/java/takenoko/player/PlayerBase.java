@@ -9,6 +9,7 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
         implements Player {
     private final SELF self;
     private int actionCredits = 0;
+    private int score = 0;
     private final Inventory inventory;
 
     @SuppressWarnings("unchecked")
@@ -42,6 +43,16 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
             throw new IllegalStateException("Not enough action credits");
         }
         return action;
+    }
+
+    @Override
+    public void increaseScore(int delta) {
+        score += delta;
+    }
+
+    @Override
+    public int getScore() {
+        return score;
     }
 
     public interface PlayerBaseInterface {

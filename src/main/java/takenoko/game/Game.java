@@ -45,25 +45,25 @@ public class Game {
 
     public Optional<Player> play() {
         this.out.log(Level.INFO, "Beginning of the game!");
-        while (true) {
-
-            if (numTurn > 200) {
-                this.out.log(Level.INFO, "Too many turns, no winner.");
-                return Optional.empty();
-            }
-
+        while (numTurn < 200) {
             this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!");
-            var winner = playTurn();
+            playTurn();
             numTurn++;
-            if (winner.isPresent()) {
-                this.out.log(Level.INFO, "Someone won!");
-                this.out.log(Level.INFO, "End of the game.");
-                return winner;
-            }
         }
+        return getWinner();
     }
 
-    private Optional<Player> playTurn() {
+    private Optional<Player> getWinner() {
+        Optional<Player> winner = Optional.empty();
+        for (var player : players) {
+            if (player.getScore() > winner.map(Player::getScore).orElse(0)) {
+                winner = Optional.of(player);
+            }
+        }
+        return winner;
+    }
+
+    private void playTurn() {
         int numPlayer = 1;
         int numAction = 1;
         for (Player player : players) {
@@ -73,19 +73,12 @@ public class Game {
             while (true) {
                 this.out.log(Level.INFO, "Action number {0}:", numAction);
                 try {
-                    var validator =
-                            new ActionValidator(
-                                    board,
-                                    tileDeck,
-                                    inventory,
-                                    player.getInventory(),
-                                    alreadyPlayedActions);
+                    var validator = makeValidator(player, alreadyPlayedActions);
                     var action = player.chooseAction(board, validator);
                     this.out.log(Level.INFO, "Action: {0}", action);
-                    if (!validator.isValid(action)) continue;
                     if (action == Action.END_TURN) break;
                     var applier = new ActionApplier(board, out, inventory, tileDeck);
-                    if (applier.apply(action, player)) return Optional.of(player);
+                    applier.apply(action, player);
                     alreadyPlayedActions.add(action);
                     checkObjectives(action, player.getInventory());
                 } catch (PlayerException e) {
@@ -96,7 +89,11 @@ public class Game {
             numPlayer++;
             numAction = 1;
         }
-        return Optional.empty();
+    }
+
+    private ActionValidator makeValidator(Player player, List<Action> alreadyPlayedActions) {
+        return new ActionValidator(
+                board, tileDeck, inventory, player.getInventory(), alreadyPlayedActions);
     }
 
     private void checkObjectives(Action lastAction, Inventory inventory) {

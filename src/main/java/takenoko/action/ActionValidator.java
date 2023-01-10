@@ -5,6 +5,8 @@ import java.util.List;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.objective.HarvestingObjective;
+import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Inventory;
 
@@ -73,7 +75,14 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.UnveilObjective action) {
-        return action.objective().wasAchievedAfterLastCheck();
+        if (!action.objective().wasAchievedAfterLastCheck()) return false;
+
+        if (action.objective() instanceof HarvestingObjective needs) {
+            return playerInventory.getBamboo(Color.GREEN) >= needs.getGreen()
+                    && playerInventory.getBamboo(Color.PINK) >= needs.getPink()
+                    && playerInventory.getBamboo(Color.YELLOW) >= needs.getYellow();
+        }
+        return true;
     }
 
     private boolean isValid(Action.MoveGardener action) {
