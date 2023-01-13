@@ -26,16 +26,7 @@ public class BambooSizeObjective implements Objective {
         if (size < 1 || size > 4) {
             throw new BambooSizeException("Error : unreachable bamboo size.");
         }
-        Color[] colors = Color.values();
-        for (Color co : colors) {
-            if (c.equals(co)) {
-                isVerified = true;
-                break;
-            }
-        }
-        if (!isVerified) {
-            throw new BambooSizeException("Error : unknown color.");
-        }
+
         this.numberOfBamboos = nbOfBamboos;
         this.sizeObjective = size;
         this.color = c;
@@ -50,14 +41,14 @@ public class BambooSizeObjective implements Objective {
             try {
                 tile = board.getTile(coord);
             } catch (BoardException e) {
-                // TODO
+                throw new IllegalStateException();
             }
             if (tile instanceof BambooTile bambooTile
                     && bambooTile.getBambooSize() == sizeObjective) {
                 nbOfBamboos--;
             }
         }
-        if (nbOfBamboos == 0) {
+        if (nbOfBamboos <= 0) {
             achieved = true;
         }
         return achieved;
