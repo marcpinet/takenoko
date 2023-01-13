@@ -18,8 +18,6 @@ public class BambooSizeObjective implements Objective {
 
     public BambooSizeObjective(int nbOfBamboos, int size, Color c) throws BambooSizeException {
 
-        boolean isVerified = false;
-
         if (nbOfBamboos < 1 || nbOfBamboos > 4) {
             throw new BambooSizeException("Error : unreachable number of bamboos.");
         }
@@ -44,7 +42,8 @@ public class BambooSizeObjective implements Objective {
                 throw new IllegalStateException();
             }
             if (tile instanceof BambooTile bambooTile
-                    && bambooTile.getBambooSize() == sizeObjective) {
+                    && bambooTile.getBambooSize() == sizeObjective
+                    && bambooTile.getColor() == color) {
                 nbOfBamboos--;
             }
         }
