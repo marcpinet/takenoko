@@ -76,7 +76,7 @@ class InventoryTest {
 
     @Test
     void testObjective() throws BambooSizeException, InventoryException {
-        var objective = new BambooSizeObjective(2);
+        var objective = new BambooSizeObjective(1, 2, Color.PINK);
         for (int i = 0; i < 5; i++) {
             assertTrue(inventory.canDrawObjective());
             inventory.addObjective(objective);
