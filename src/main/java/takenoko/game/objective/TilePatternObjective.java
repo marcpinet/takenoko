@@ -27,7 +27,7 @@ public class TilePatternObjective implements Objective {
     public static final List<Coord> TRIANGLE_3 =
             List.of(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0));
 
-    private final Set<List<Coord>> patternRotations;
+    private final Set<List<Coord>> patternVariations;
     private boolean achieved = false;
     private final Color color;
 
@@ -36,7 +36,7 @@ public class TilePatternObjective implements Objective {
     public TilePatternObjective(Color color, List<Coord> pattern) {
         this.color = color;
         // initial pattern without rotation
-        patternRotations =
+        patternVariations =
                 generateShifts(pattern).stream()
                         .unordered()
                         // add the shifted patterns
@@ -104,7 +104,7 @@ public class TilePatternObjective implements Objective {
         // Test all possible patterns
         var coord = placeTile.coord();
         achieved =
-                patternRotations.stream().anyMatch(pattern -> isPatternAt(board, coord, pattern));
+                patternVariations.stream().anyMatch(pattern -> isPatternAt(board, coord, pattern));
         return achieved;
     }
 
