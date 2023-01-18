@@ -87,11 +87,13 @@ public class ActionValidator {
 
     private boolean isValid(Action.MoveGardener action) {
         return board.getPlacedCoords().contains(action.coord())
-                && board.getGardenerCoord().isAlignedWith(action.coord());
+                && board.getGardenerCoord().isAlignedWith(action.coord())
+                && !board.getGardenerCoord().equals(action.coord());
     }
 
     private boolean isValid(Action.MovePanda action) {
         return board.getPlacedCoords().contains(action.coord())
-                && board.getPandaCoord().isAlignedWith(action.coord());
+                && board.getPandaCoord().isAlignedWith(action.coord())
+                && !board.getPandaCoord().equals(action.coord());
     }
 }
