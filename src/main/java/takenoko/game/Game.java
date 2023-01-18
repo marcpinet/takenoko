@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import takenoko.action.Action;
 import takenoko.action.ActionApplier;
 import takenoko.action.ActionValidator;
+import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
@@ -73,8 +74,8 @@ public class Game {
             while (true) {
                 this.out.log(Level.INFO, "Action number {0}:", numAction);
                 try {
-                    var validator = makeValidator(player, alreadyPlayedActions);
-                    var action = player.chooseAction(board, validator);
+                    var actionLister = makeActionLister(player, alreadyPlayedActions);
+                    var action = player.chooseAction(board, actionLister);
                     this.out.log(Level.INFO, "Action: {0}", action);
                     if (action == Action.END_TURN) break;
                     var applier = new ActionApplier(board, out, inventory, tileDeck);
@@ -91,9 +92,13 @@ public class Game {
         }
     }
 
-    private ActionValidator makeValidator(Player player, List<Action> alreadyPlayedActions) {
-        return new ActionValidator(
-                board, tileDeck, inventory, player.getInventory(), alreadyPlayedActions);
+    private PossibleActionLister makeActionLister(
+            Player player, List<Action> alreadyPlayedActions) {
+        var validator =
+                new ActionValidator(
+                        board, tileDeck, inventory, player.getInventory(), alreadyPlayedActions);
+
+        return new PossibleActionLister(board, validator, player.getInventory());
     }
 
     private void checkObjectives(Action lastAction, Inventory inventory) {

@@ -1,32 +1,32 @@
 package takenoko.player.bot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import takenoko.action.Action;
-import takenoko.action.ActionValidator;
+import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
 import takenoko.game.objective.Objective;
+import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.player.PlayerException;
 import takenoko.utils.Coord;
 
 class EasyBotTest {
     Random randomSource;
-    @Mock ActionValidator validator = mock(ActionValidator.class);
+    @Mock PossibleActionLister actionLister = mock(PossibleActionLister.class);
 
     @BeforeEach
     void setUp() {
         // Fixed seed
         randomSource = new Random(0);
-        when(validator.isValid(any())).thenReturn(true);
     }
 
     @Test
@@ -35,12 +35,13 @@ class EasyBotTest {
         EasyBot bot = new EasyBot(randomSource);
 
         bot.beginTurn(1);
-        Action action = bot.chooseAction(board, validator);
 
-        assertTrue(action instanceof Action.PlaceTile);
+        var expectedAction =
+                new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        when(actionLister.getPossibleActions(any())).thenReturn(List.of(expectedAction));
 
-        var expected = new Coord(-1, 0);
-        assertEquals(expected, ((Action.PlaceTile) action).coord());
+        Action chosenAction = bot.chooseAction(board, actionLister);
+        assertEquals(expectedAction, chosenAction);
     }
 
     @Test
@@ -52,10 +53,15 @@ class EasyBotTest {
         when(objMock.wasAchievedAfterLastCheck()).thenReturn(true);
 
         bot.getInventory().addObjective(objMock);
+        var possibleAction =
+                new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var expectedAction = new Action.UnveilObjective(objMock);
+        when(actionLister.getPossibleActions(any()))
+                .thenReturn(List.of(possibleAction, expectedAction));
 
         bot.beginTurn(1);
-        Action action = bot.chooseAction(board, validator);
+        Action chosenAction = bot.chooseAction(board, actionLister);
 
-        assertEquals(new Action.UnveilObjective(objMock), action);
+        assertEquals(expectedAction, chosenAction);
     }
 }
