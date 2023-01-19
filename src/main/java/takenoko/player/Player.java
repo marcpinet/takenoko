@@ -1,7 +1,7 @@
 package takenoko.player;
 
 import takenoko.action.Action;
-import takenoko.action.ActionValidator;
+import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
 
 public interface Player {
@@ -9,7 +9,7 @@ public interface Player {
 
     int availableActionCredits();
 
-    Action chooseAction(Board board, ActionValidator actionValidator) throws PlayerException;
+    Action chooseAction(Board board, PossibleActionLister actionLister) throws PlayerException;
 
     Inventory getInventory();
 

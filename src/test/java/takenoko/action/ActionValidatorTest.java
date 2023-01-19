@@ -113,7 +113,7 @@ class ActionValidatorTest {
     private static Stream<Arguments> moveGardenerProvider() {
         return Stream.of(
                 Arguments.of(new Coord(0, 1), true),
-                Arguments.of(new Coord(0, 0), true),
+                Arguments.of(new Coord(0, 0), false), // already there
                 Arguments.of(new Coord(1, 1), false),
                 Arguments.of(new Coord(99, 99), false));
     }
@@ -132,7 +132,7 @@ class ActionValidatorTest {
     private static Stream<Arguments> movePandaProvider() {
         return Stream.of(
                 Arguments.of(new Coord(0, 1), true),
-                Arguments.of(new Coord(0, 0), true),
+                Arguments.of(new Coord(0, 0), false), // already there
                 Arguments.of(new Coord(2, 2), false),
                 Arguments.of(new Coord(99, 99), false));
     }
