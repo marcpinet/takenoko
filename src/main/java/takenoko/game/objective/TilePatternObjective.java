@@ -1,6 +1,7 @@
 package takenoko.game.objective;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,6 +20,20 @@ import takenoko.utils.Coord;
 /// This way, we can check if a pattern is achieved by only checking starting from the last tile
 // placed.
 public class TilePatternObjective implements Objective {
+    private record Element(Color color, Coord coord) {
+        public Element offset(Coord offset) {
+            return new Element(color, coord.add(offset));
+        }
+
+        public Element rotate(Coord center) {
+            return new Element(color, coord.rotate(center));
+        }
+
+        public Element reversed() {
+            return new Element(color, coord.reversed());
+        }
+    }
+
     public static final List<Coord> DIAMOND_4 =
             List.of(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0), new Coord(1, 1));
     public static final List<Coord> LINE_2 = List.of(new Coord(0, 0), new Coord(0, 1));
@@ -27,17 +42,25 @@ public class TilePatternObjective implements Objective {
     public static final List<Coord> TRIANGLE_3 =
             List.of(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0));
 
-    private final Set<List<Coord>> patternRotations;
+    private final Set<List<Element>> patternVariations;
     private boolean achieved = false;
-    private final Color color;
 
     /// pattern is an array of deltas from one edge of the pattern to the next, expected to start
-    // with (0, 0)
-    public TilePatternObjective(Color color, List<Coord> pattern) {
-        this.color = color;
+    /// with (0, 0)
+    public TilePatternObjective(List<Color> color, List<Coord> pattern) {
+        if (pattern.size() != color.size()) {
+            throw new IllegalArgumentException("Pattern and color must have the same size");
+        }
+
+        // mix the pattern with the color
+        var patternWithColors = new ArrayList<Element>();
+        for (int i = 0; i < pattern.size(); ++i) {
+            patternWithColors.add(new Element(color.get(i), pattern.get(i)));
+        }
+
         // initial pattern without rotation
-        patternRotations =
-                generateShifts(pattern).stream()
+        patternVariations =
+                generateShifts(patternWithColors).stream()
                         .unordered()
                         // add the shifted patterns
                         .flatMap(pat -> generateRotations(pat).stream())
@@ -47,18 +70,23 @@ public class TilePatternObjective implements Objective {
                         .collect(Collectors.toSet());
     }
 
+    /// alternative constructor for a pattern with only one color
+    public TilePatternObjective(Color color, List<Coord> pattern) {
+        this(Collections.nCopies(pattern.size(), color), pattern);
+    }
+
     /// Generate all possible rotations of a pattern
-    private List<List<Coord>> generateRotations(List<Coord> pattern) {
-        var rotations = new ArrayList<List<Coord>>();
+    private List<List<Element>> generateRotations(List<Element> pattern) {
+        var rotations = new ArrayList<List<Element>>();
         rotations.add(pattern);
 
         // rotate the pattern to find all possible patterns
         final int ROTATION_COUNT = 6;
         for (int i = 1; i < ROTATION_COUNT; ++i) {
-            var rotated = new ArrayList<Coord>();
+            var rotated = new ArrayList<Element>();
             rotated.add(pattern.get(0));
             for (int j = 1; j < pattern.size(); ++j) {
-                rotated.add(rotations.get(i - 1).get(j).rotate(rotated.get(0)));
+                rotated.add(rotations.get(i - 1).get(j).rotate(rotated.get(0).coord()));
             }
             rotations.add(rotated);
         }
@@ -66,11 +94,11 @@ public class TilePatternObjective implements Objective {
     }
 
     /// Generate all possible patterns by shifting the pattern by one tile.
-    private List<List<Coord>> generateShifts(List<Coord> pattern) {
-        var shifts = new ArrayList<List<Coord>>();
+    private List<List<Element>> generateShifts(List<Element> pattern) {
+        var shifts = new ArrayList<List<Element>>();
         shifts.add(pattern);
         for (int i = 1; i < pattern.size(); ++i) {
-            var shifted = new ArrayList<Coord>();
+            var shifted = new ArrayList<Element>();
             for (int j = 0; j < pattern.size(); ++j) {
                 shifted.add(shifts.get(i - 1).get((j + 1) % pattern.size()));
             }
@@ -80,11 +108,11 @@ public class TilePatternObjective implements Objective {
     }
 
     /// Generate all possible patterns by reversing the pattern.
-    private List<List<Coord>> generateReversed(List<Coord> pattern) {
-        var reversed = new ArrayList<List<Coord>>();
-        var revertedPattern = new ArrayList<Coord>();
-        for (var c : pattern) {
-            revertedPattern.add(c.reversed());
+    private List<List<Element>> generateReversed(List<Element> pattern) {
+        var reversed = new ArrayList<List<Element>>();
+        var revertedPattern = new ArrayList<Element>();
+        for (var el : pattern) {
+            revertedPattern.add(el.reversed());
         }
         reversed.add(revertedPattern);
         reversed.add(pattern);
@@ -104,7 +132,7 @@ public class TilePatternObjective implements Objective {
         // Test all possible patterns
         var coord = placeTile.coord();
         achieved =
-                patternRotations.stream().anyMatch(pattern -> isPatternAt(board, coord, pattern));
+                patternVariations.stream().anyMatch(pattern -> isPatternAt(board, coord, pattern));
         return achieved;
     }
 
@@ -119,11 +147,11 @@ public class TilePatternObjective implements Objective {
     }
 
     // A tile is part of the pattern if it is the right color and if it's irrigated
-    private boolean isValidTile(Board board, Coord coord) {
+    private boolean isValidTile(Board board, Element element) {
         try {
-            var tile = board.getTile(coord);
+            var tile = board.getTile(element.coord());
             if (tile instanceof BambooTile bambooTile) {
-                return bambooTile.getColor() == color && bambooTile.isIrrigated();
+                return bambooTile.getColor() == element.color() && bambooTile.isIrrigated();
             }
         } catch (BoardException e) {
             // The tile is not on the board, so it's not part of the pattern
@@ -131,11 +159,7 @@ public class TilePatternObjective implements Objective {
         return false;
     }
 
-    private boolean isPatternAt(Board board, Coord coord, List<Coord> pattern) {
-        return pattern.stream().map(coord::add).allMatch(c -> isValidTile(board, c));
-    }
-
-    public Color getColor() {
-        return color;
+    private boolean isPatternAt(Board board, Coord coord, List<Element> pattern) {
+        return pattern.stream().map(el -> el.offset(coord)).allMatch(el -> isValidTile(board, el));
     }
 }
