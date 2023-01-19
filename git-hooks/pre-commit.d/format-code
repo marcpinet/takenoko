@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+
+# Do not run when rebasing
+if [ -z $(git branch --show-current) ]
+then
+ exit 0
+fi
+
 # From gist at https://gist.github.com/chadmaughan/5889802
 echo "[hook] Checking formatting"
 # stash any unstaged changes
