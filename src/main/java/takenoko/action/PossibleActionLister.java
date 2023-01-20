@@ -6,17 +6,18 @@ import takenoko.game.Deck;
 import takenoko.game.board.Board;
 import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
-import takenoko.player.Inventory;
+import takenoko.player.PrivateInventory;
 
 public class PossibleActionLister {
     private final Board board;
     private final ActionValidator validator;
-    private final Inventory playerInventory;
+    private final PrivateInventory playerPrivateInventory;
 
-    public PossibleActionLister(Board board, ActionValidator validator, Inventory playerInventory) {
+    public PossibleActionLister(
+            Board board, ActionValidator validator, PrivateInventory playerPrivateInventory) {
         this.board = board;
         this.validator = validator;
-        this.playerInventory = playerInventory;
+        this.playerPrivateInventory = playerPrivateInventory;
     }
 
     public List<Action> getPossibleActions(Deck.DrawPredicate<Tile> drawPredicate) {
@@ -42,7 +43,7 @@ public class PossibleActionLister {
             }
         }
 
-        for (var objective : playerInventory.getObjectives()) {
+        for (var objective : playerPrivateInventory.getObjectives()) {
             possibleActions.add(new Action.UnveilObjective(objective));
         }
 

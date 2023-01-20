@@ -3,6 +3,7 @@ package takenoko.player;
 import takenoko.action.Action;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
+import takenoko.game.board.VisibleInventory;
 
 @SuppressWarnings("java:S119") // Why couldn't I name my template SELF?
 public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.PlayerBaseInterface>
@@ -10,18 +11,24 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     private final SELF self;
     private int actionCredits = 0;
     private int score = 0;
-    private final Inventory inventory;
+    private final PrivateInventory privateInventory;
+    private final VisibleInventory visibleInventory;
 
     @SuppressWarnings("unchecked")
     protected PlayerBase() {
         // SAFETY: This is safe because we're an abstract class using CRTP
         self = (SELF) this;
-        inventory = new Inventory();
+        privateInventory = new PrivateInventory();
+        visibleInventory = new VisibleInventory();
     }
 
     @Override
-    public Inventory getInventory() {
-        return inventory;
+    public PrivateInventory getPrivateInventory() {
+        return privateInventory;
+    }
+
+    public VisibleInventory getVisibleInventory() {
+        return visibleInventory;
     }
 
     public void beginTurn(int actionCredits) {

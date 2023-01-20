@@ -3,11 +3,11 @@ package takenoko.game.objective;
 import takenoko.action.Action;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.BambooSizeException;
 import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.Tile;
-import takenoko.player.Inventory;
 
 public class BambooSizeObjective implements Objective {
 
@@ -31,7 +31,7 @@ public class BambooSizeObjective implements Objective {
     }
 
     @Override
-    public boolean isAchieved(Board board, Action lastAction, Inventory ignored) {
+    public boolean isAchieved(Board board, Action lastAction, VisibleInventory ignored) {
         int nbOfBamboos = numberOfBamboos;
         achieved = false;
         for (var coord : board.getPlacedCoords()) {

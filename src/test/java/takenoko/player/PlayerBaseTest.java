@@ -31,10 +31,14 @@ class PlayerBaseTest {
         player.beginTurn(3);
         assertEquals(3, player.availableActionCredits());
 
-        player.getInventory().incrementIrrigation();
+        player.getVisibleInventory().incrementIrrigation();
         var validator =
-                new ActionValidator(board, new GameInventory(20, deck), player.getInventory());
-        var lister = new PossibleActionLister(board, validator, player.getInventory());
+                new ActionValidator(
+                        board,
+                        new GameInventory(20, deck),
+                        player.getPrivateInventory(),
+                        player.getVisibleInventory());
+        var lister = new PossibleActionLister(board, validator, player.getPrivateInventory());
 
         player.chooseAction(board, lister);
         assertEquals(2, player.availableActionCredits());

@@ -52,7 +52,7 @@ class EasyBotTest {
         var objMock = mock(Objective.class);
         when(objMock.wasAchievedAfterLastCheck()).thenReturn(true);
 
-        bot.getInventory().addObjective(objMock);
+        bot.getPrivateInventory().addObjective(objMock);
         var possibleAction =
                 new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         var expectedAction = new Action.UnveilObjective(objMock);

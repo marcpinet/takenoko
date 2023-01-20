@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import takenoko.action.Action;
 import takenoko.game.board.Board;
+import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.Color;
-import takenoko.player.Inventory;
 
 public class HarvestingObjective implements Objective {
     private final EnumMap<Color, Integer> needs;
@@ -18,10 +18,10 @@ public class HarvestingObjective implements Objective {
         this.needs.put(Color.PINK, pink);
     }
 
-    public boolean isAchieved(Board ignoredB, Action ignoredA, Inventory inventory) {
+    public boolean isAchieved(Board ignoredB, Action ignoredA, VisibleInventory visibleInventory) {
         achieved =
                 Arrays.stream(Color.values())
-                        .allMatch(color -> inventory.getBamboo(color) >= needs.get(color));
+                        .allMatch(color -> visibleInventory.getBamboo(color) >= needs.get(color));
         return achieved;
     }
 

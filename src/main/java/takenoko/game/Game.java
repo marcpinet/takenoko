@@ -10,9 +10,9 @@ import takenoko.action.ActionApplier;
 import takenoko.action.ActionValidator;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
+import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
-import takenoko.player.Inventory;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
 
@@ -67,10 +67,11 @@ public class Game {
                     var action = player.chooseAction(board, actionLister);
                     this.out.log(Level.INFO, "Action: {0}", action);
                     if (action == Action.END_TURN) break;
-                    var applier = new ActionApplier(board, out, inventory, player.getInventory());
+                    var applier =
+                            new ActionApplier(board, out, inventory, player.getPrivateInventory());
                     applier.apply(action, player);
                     alreadyPlayedActions.add(action);
-                    checkObjectives(action, player.getInventory());
+                    checkObjectives(action, player.getVisibleInventory());
                 } catch (PlayerException e) {
                     this.out.log(Level.SEVERE, "Player exception: {0}", e.getMessage());
                 }
@@ -84,14 +85,19 @@ public class Game {
     private PossibleActionLister makeActionLister(
             Player player, List<Action> alreadyPlayedActions) {
         var validator =
-                new ActionValidator(board, inventory, player.getInventory(), alreadyPlayedActions);
+                new ActionValidator(
+                        board,
+                        inventory,
+                        player.getPrivateInventory(),
+                        player.getVisibleInventory(),
+                        alreadyPlayedActions);
 
-        return new PossibleActionLister(board, validator, player.getInventory());
+        return new PossibleActionLister(board, validator, player.getPrivateInventory());
     }
 
-    private void checkObjectives(Action lastAction, Inventory inventory) {
+    private void checkObjectives(Action lastAction, VisibleInventory visibleInventory) {
         for (Objective objective : objectives) {
-            objective.isAchieved(board, lastAction, inventory);
+            objective.isAchieved(board, lastAction, visibleInventory);
         }
     }
 }

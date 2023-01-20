@@ -10,23 +10,26 @@ import takenoko.game.objective.Objective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.EmptyDeckException;
-import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
+import takenoko.player.PrivateInventory;
 import takenoko.utils.Coord;
 
 public class ActionApplier {
     private final Board board;
     private final Logger out;
     private final GameInventory gameInventory;
-    private final Inventory playerInventory;
+    private final PrivateInventory playerPrivateInventory;
 
     public ActionApplier(
-            Board board, Logger out, GameInventory gameInventory, Inventory playerInventory) {
+            Board board,
+            Logger out,
+            GameInventory gameInventory,
+            PrivateInventory playerPrivateInventory) {
         this.board = board;
         this.out = out;
         this.gameInventory = gameInventory;
-        this.playerInventory = playerInventory;
+        this.playerPrivateInventory = playerPrivateInventory;
     }
 
     // S1301: we want pattern matching so switch is necessary
@@ -57,7 +60,7 @@ public class ActionApplier {
     private <O extends Objective> void drawObjective(ObjectiveDeck<O> objectiveDeck) {
         try {
             var obj = objectiveDeck.draw();
-            playerInventory.addObjective(obj);
+            playerPrivateInventory.addObjective(obj);
         } catch (EmptyDeckException e) {
             this.out.log(Level.SEVERE, "Objective deck is empty", e);
         } catch (InventoryException e) {
@@ -75,7 +78,7 @@ public class ActionApplier {
 
     private void apply(Player player, Action.PlaceIrrigationStick placeIrrigationStick) {
         try {
-            player.getInventory().decrementIrrigation();
+            player.getVisibleInventory().decrementIrrigation();
             board.placeIrrigation(placeIrrigationStick.coord(), placeIrrigationStick.side());
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());
@@ -85,21 +88,22 @@ public class ActionApplier {
     private void apply(Player player) {
         try {
             gameInventory.decrementIrrigation();
-            player.getInventory().incrementIrrigation();
+            player.getVisibleInventory().incrementIrrigation();
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());
         }
     }
 
     private void apply(Player player, Action.UnveilObjective unveilObjective) {
-        var inventory = player.getInventory();
+        var visibleInventory = player.getVisibleInventory();
+        var privateInventory = player.getPrivateInventory();
         try {
             if (unveilObjective.objective() instanceof HarvestingObjective needs) {
-                inventory.useBamboo(Color.GREEN, needs.getGreen());
-                inventory.useBamboo(Color.YELLOW, needs.getYellow());
-                inventory.useBamboo(Color.PINK, needs.getPink());
+                visibleInventory.useBamboo(Color.GREEN, needs.getGreen());
+                visibleInventory.useBamboo(Color.YELLOW, needs.getYellow());
+                visibleInventory.useBamboo(Color.PINK, needs.getPink());
             }
-            inventory.removeObjective(unveilObjective.objective());
+            privateInventory.removeObjective(unveilObjective.objective());
             player.increaseScore(unveilObjective.objective().getScore());
         } catch (InventoryException e) {
             this.out.log(Level.SEVERE, e.getMessage());
