@@ -32,7 +32,8 @@ class GameTest {
     public void setUp() throws InventoryException {
         tileDeck = new TileDeck(new Random(0));
 
-        logger = Logger.getGlobal();
+        logger = Logger.getAnonymousLogger();
+        logger.setUseParentHandlers(false);
         logHandler = new TestLogHandler();
         logger.addHandler(logHandler);
     }
@@ -76,7 +77,7 @@ class GameTest {
             List<Objective> objectives =
                     List.of(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
 
-            var game = new Game(players, objectives, Logger.getGlobal(), tileDeck);
+            var game = new Game(players, objectives, logger, tileDeck);
             game.play();
             assertNoSevereLog();
         }
