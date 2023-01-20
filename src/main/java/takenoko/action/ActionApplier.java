@@ -7,7 +7,6 @@ import takenoko.game.board.Board;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.tile.Color;
-import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.utils.Coord;
@@ -16,13 +15,11 @@ public class ActionApplier {
     private final Board board;
     private final Logger out;
     private final GameInventory gameInventory;
-    private final TileDeck tileDeck;
 
-    public ActionApplier(Board board, Logger out, GameInventory gameInventory, TileDeck tileDeck) {
+    public ActionApplier(Board board, Logger out, GameInventory gameInventory) {
         this.board = board;
         this.out = out;
         this.gameInventory = gameInventory;
-        this.tileDeck = tileDeck;
     }
 
     // S1301: we want pattern matching so switch is necessary
@@ -87,7 +84,7 @@ public class ActionApplier {
 
     private void apply(Action.PlaceTile placeTile) {
         try {
-            var tile = tileDeck.draw(placeTile.drawPredicate());
+            var tile = gameInventory.getTileDeck().draw(placeTile.drawPredicate());
             board.placeTile(placeTile.coord(), tile);
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());

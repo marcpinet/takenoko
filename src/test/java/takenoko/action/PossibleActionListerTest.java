@@ -22,10 +22,10 @@ class PossibleActionListerTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        GameInventory gameInventory = new GameInventory(20);
-        inventory = new Inventory();
         deck = new TileDeck(new Random(0));
-        validator = new ActionValidator(board, deck, gameInventory, inventory);
+        GameInventory gameInventory = new GameInventory(20, deck);
+        inventory = new Inventory();
+        validator = new ActionValidator(board, gameInventory, inventory);
     }
 
     @Test

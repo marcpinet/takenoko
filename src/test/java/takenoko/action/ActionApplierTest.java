@@ -43,10 +43,10 @@ class ActionApplierTest {
         logger.addHandler(logHandler);
 
         board = new Board();
-        gameInventory = new GameInventory(1);
         deck = new TileDeck(new Random(0));
+        gameInventory = new GameInventory(1, deck);
 
-        applier = new ActionApplier(board, logger, gameInventory, deck);
+        applier = new ActionApplier(board, logger, gameInventory);
 
         player = new DefaultBot();
     }
