@@ -1,12 +1,12 @@
-package takenoko.player;
+package takenoko.game.board;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.PowerUp;
+import takenoko.player.InventoryException;
 
 class VisibleInventoryTest {
 
