@@ -81,9 +81,13 @@ class ActionApplierTest {
         player.getPrivateInventory().addObjective(mockObj);
 
         var action = new Action.UnveilObjective(mockObj);
+        assertFalse(player.getVisibleInventory().getFinishedObjectives().contains(mockObj));
+        assertTrue(player.getPrivateInventory().getObjectives().contains(mockObj));
         applier.apply(action, player);
 
         assertEquals(mockObj.getScore(), player.getScore());
+        assertTrue(player.getVisibleInventory().getFinishedObjectives().contains(mockObj));
+        assertFalse(player.getPrivateInventory().getObjectives().contains(mockObj));
 
         assertNoSevereLog();
     }

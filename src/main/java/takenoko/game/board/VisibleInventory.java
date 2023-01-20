@@ -13,7 +13,7 @@ public class VisibleInventory {
     private final EnumMap<Color, Integer> bamboos;
     private int irrigations;
     private final EnumMap<PowerUp, Integer> powerUps;
-    private final ArrayList<Objective> finishedObjectives;
+    private final List<Objective> finishedObjectives;
 
     public VisibleInventory() {
         bamboos = new EnumMap<>(Color.class);
@@ -65,6 +65,10 @@ public class VisibleInventory {
             throw new InventoryException("Not enough power up");
         }
         powerUps.put(powerUp, powerUps.get(powerUp) - 1);
+    }
+
+    public void addObjective(Objective objective) {
+        finishedObjectives.add(objective);
     }
 
     public List<Objective> getFinishedObjectives() {

@@ -5,6 +5,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import takenoko.game.tile.*;
+import takenoko.player.Player;
 import takenoko.utils.Coord;
 import takenoko.utils.Pair;
 
@@ -13,10 +14,16 @@ public class Board {
     private final Map<Coord, Tile> tiles;
     private Pair<MovablePiece, Coord> gardener = Pair.of(MovablePiece.GARDENER, POND_COORD);
     private Pair<MovablePiece, Coord> panda = Pair.of(MovablePiece.PANDA, POND_COORD);
+    private final Map<Player, VisibleInventory> playersInventories;
 
     public Board() {
+        this(new HashMap<>());
+    }
+
+    public Board(Map<Player, VisibleInventory> playersInventories) {
         tiles = new HashMap<>();
         tiles.put(POND_COORD, new PondTile());
+        this.playersInventories = playersInventories;
     }
 
     public void placeTile(Coord c, Tile t) throws BoardException, IrrigationException {
@@ -201,5 +208,9 @@ public class Board {
 
     public Coord getPandaCoord() {
         return panda.second();
+    }
+
+    public Map<Player, VisibleInventory> getPlayersInventories() {
+        return playersInventories;
     }
 }

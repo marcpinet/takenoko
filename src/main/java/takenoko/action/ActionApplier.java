@@ -103,6 +103,7 @@ public class ActionApplier {
                 visibleInventory.useBamboo(Color.YELLOW, needs.getYellow());
                 visibleInventory.useBamboo(Color.PINK, needs.getPink());
             }
+            visibleInventory.addObjective(unveilObjective.objective());
             privateInventory.removeObjective(unveilObjective.objective());
             player.increaseScore(unveilObjective.objective().getScore());
         } catch (InventoryException e) {
