@@ -60,7 +60,7 @@ class ActionApplierTest {
 
     @Test
     void placeTile() throws BoardException {
-        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
         int originalDeckSize = deck.size();
         applier.apply(action, player);
 

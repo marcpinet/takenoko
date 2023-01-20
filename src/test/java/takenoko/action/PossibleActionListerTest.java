@@ -32,7 +32,7 @@ class PossibleActionListerTest {
     void listActionsWhenfirstAction() {
         PossibleActionLister lister = new PossibleActionLister(board, validator, inventory);
 
-        var TILE_PRED = TileDeck.DEFAULT_DRAW_TILE_PREDICATE;
+        var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;
 
         var expected =
                 List.of(
@@ -61,7 +61,7 @@ class PossibleActionListerTest {
     void listActionsWhenATileWasPlaced() throws IrrigationException, BoardException {
         PossibleActionLister lister = new PossibleActionLister(board, validator, inventory);
 
-        var TILE_PRED = TileDeck.DEFAULT_DRAW_TILE_PREDICATE;
+        var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;
 
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         inventory.incrementIrrigation(); // we assume that the player has an irrigation stick

@@ -44,7 +44,7 @@ class ActionValidatorTest {
     @ParameterizedTest
     @MethodSource("placeTileProvider")
     void testPlaceTile(Coord coord, BambooTile tile, boolean expectedResult) {
-        var action = new Action.PlaceTile(coord, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action = new Action.PlaceTile(coord, TileDeck.DEFAULT_DRAW_PREDICATE);
         assertEquals(expectedResult, validator.isValid(action));
     }
 
@@ -150,7 +150,7 @@ class ActionValidatorTest {
 
     @Test
     void testTwiceAction() {
-        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertTrue(validator.isValid(action));
         validator =
                 new ActionValidator(
@@ -159,7 +159,7 @@ class ActionValidatorTest {
                         gameInventory,
                         new Inventory(),
                         new ArrayList<>(List.of(action)));
-        var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertFalse(validator.isValid(action2));
     }
 }

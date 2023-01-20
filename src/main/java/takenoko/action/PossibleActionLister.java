@@ -2,8 +2,9 @@ package takenoko.action;
 
 import java.util.ArrayList;
 import java.util.List;
+import takenoko.game.Deck;
 import takenoko.game.board.Board;
-import takenoko.game.tile.TileDeck;
+import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
 import takenoko.player.Inventory;
 
@@ -18,7 +19,7 @@ public class PossibleActionLister {
         this.playerInventory = playerInventory;
     }
 
-    public List<Action> getPossibleActions(TileDeck.DrawTilePredicate drawTilePredicate) {
+    public List<Action> getPossibleActions(Deck.DrawPredicate<Tile> drawPredicate) {
         List<Action> possibleActions = new ArrayList<>();
 
         possibleActions.add(Action.NONE);
@@ -42,7 +43,7 @@ public class PossibleActionLister {
         }
 
         for (var coord : board.getAvailableCoords()) {
-            possibleActions.add(new Action.PlaceTile(coord, drawTilePredicate));
+            possibleActions.add(new Action.PlaceTile(coord, drawPredicate));
         }
 
         return possibleActions.stream().filter(validator::isValid).toList();

@@ -17,7 +17,7 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
     }
 
     public Action chooseActionImpl(Board board, PossibleActionLister actionLister) {
-        var possibleActions = actionLister.getPossibleActions(TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var possibleActions = actionLister.getPossibleActions(TileDeck.DEFAULT_DRAW_PREDICATE);
         // If an objective is achieved, unveil it
         for (var action : possibleActions) {
             if (action instanceof Action.UnveilObjective) {

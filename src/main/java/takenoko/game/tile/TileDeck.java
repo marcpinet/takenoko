@@ -1,17 +1,16 @@
 package takenoko.game.tile;
 
 import java.util.*;
-import java.util.function.Function;
 
-public class TileDeck {
+public class TileDeck extends takenoko.game.Deck<Tile> {
     private static final int DRAW_SIZE = 3;
-    private final Queue<Tile> tiles;
-
-    public interface DrawTilePredicate extends Function<List<Tile>, Integer> {}
-
-    public static final DrawTilePredicate DEFAULT_DRAW_TILE_PREDICATE = ignored -> 0;
+    public static final DrawPredicate<Tile> DEFAULT_DRAW_PREDICATE = ignored -> 0;
 
     public TileDeck(Random random) {
+        this(generateOfficialTiles(random));
+    }
+
+    private static Queue<Tile> generateOfficialTiles(Random random) {
         List<Tile> tempTiles = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             tempTiles.add(new BambooTile(Color.GREEN, PowerUp.NONE));
@@ -39,37 +38,10 @@ public class TileDeck {
         tempTiles.add(new BambooTile(Color.YELLOW, PowerUp.ENCLOSURE));
 
         Collections.shuffle(tempTiles, random);
-
-        tiles = new ArrayDeque<>(tempTiles);
+        return new ArrayDeque<>(tempTiles);
     }
 
     public TileDeck(Queue<Tile> tiles) {
-        this.tiles = tiles;
-    }
-
-    public Tile draw(DrawTilePredicate predicate) throws EmptyTileDeckException {
-        if (tiles.isEmpty()) {
-            throw new EmptyTileDeckException("Tile deck is empty.");
-        }
-        // picking a tile in Takenoko means choosing between the first three tiles
-        int drawCount = Math.min(DRAW_SIZE, tiles.size());
-
-        var availableTiles = new ArrayList<Tile>(drawCount);
-        for (int i = 0; i < drawCount; ++i) {
-            availableTiles.add(tiles.poll());
-        }
-        int pickedIndex = predicate.apply(availableTiles);
-
-        var res = availableTiles.get(pickedIndex);
-        availableTiles.remove(pickedIndex);
-
-        // put back the tiles that were not picked
-        tiles.addAll(availableTiles);
-
-        return res;
-    }
-
-    public int size() {
-        return tiles.size();
+        super(tiles, DRAW_SIZE);
     }
 }

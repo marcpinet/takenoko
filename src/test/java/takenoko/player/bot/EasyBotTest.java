@@ -37,7 +37,7 @@ class EasyBotTest {
         bot.beginTurn(1);
 
         var expectedAction =
-                new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+                new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         when(actionLister.getPossibleActions(any())).thenReturn(List.of(expectedAction));
 
         Action chosenAction = bot.chooseAction(board, actionLister);
@@ -54,7 +54,7 @@ class EasyBotTest {
 
         bot.getInventory().addObjective(objMock);
         var possibleAction =
-                new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+                new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         var expectedAction = new Action.UnveilObjective(objMock);
         when(actionLister.getPossibleActions(any()))
                 .thenReturn(List.of(possibleAction, expectedAction));

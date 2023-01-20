@@ -87,7 +87,7 @@ public class ActionApplier {
 
     private void apply(Action.PlaceTile placeTile) {
         try {
-            var tile = tileDeck.draw(placeTile.drawTilePredicate());
+            var tile = tileDeck.draw(placeTile.drawPredicate());
             board.placeTile(placeTile.coord(), tile);
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());

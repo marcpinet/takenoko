@@ -18,7 +18,7 @@ class BambooSizeObjectiveTest {
 
     // The board always apply this action first
     static final Action.PlaceTile INITIAL_ACTION =
-            new Action.PlaceTile(new Coord(0, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+            new Action.PlaceTile(new Coord(0, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
 
     Action.PlaceTile placeBambooTile(Board board, Coord c, Color co) {
         try {
@@ -26,7 +26,7 @@ class BambooSizeObjectiveTest {
         } catch (BoardException | IrrigationException e) {
             fail(e);
         }
-        return new Action.PlaceTile(c, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        return new Action.PlaceTile(c, TileDeck.DEFAULT_DRAW_PREDICATE);
     }
 
     @BeforeEach

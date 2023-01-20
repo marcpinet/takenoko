@@ -15,7 +15,7 @@ import takenoko.utils.Coord;
 class TilePatternObjectiveTest {
     // The board always apply this action first
     static final Action.PlaceTile INITIAL_ACTION =
-            new Action.PlaceTile(new Coord(0, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+            new Action.PlaceTile(new Coord(0, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
 
     Action.PlaceTile placeBambooTile(Board board, Coord c) {
         try {
@@ -31,7 +31,7 @@ class TilePatternObjectiveTest {
         } catch (Exception e) {
             fail(e);
         }
-        return new Action.PlaceTile(c, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        return new Action.PlaceTile(c, TileDeck.DEFAULT_DRAW_PREDICATE);
     }
 
     Board prepareBoard(Objective obj, Coord... coords) {
@@ -112,15 +112,14 @@ class TilePatternObjectiveTest {
         var board = prepareBoard(objective, new Coord(-1, 0));
 
         board.placeTile(new Coord(0, -1), new BambooTile(Color.PINK));
-        var action = new Action.PlaceTile(new Coord(0, -1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action = new Action.PlaceTile(new Coord(0, -1), TileDeck.DEFAULT_DRAW_PREDICATE);
 
         // the objective is not achieved because the color is different
         assertFalse(objective.isAchieved(board, action, null));
 
         // but if we place a green tile, it is achieved
         board.placeTile(new Coord(-1, 1), new BambooTile(Color.GREEN));
-        var lastAction =
-                new Action.PlaceTile(new Coord(-1, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var lastAction = new Action.PlaceTile(new Coord(-1, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertTrue(objective.isAchieved(board, lastAction, null));
     }
 
@@ -141,13 +140,12 @@ class TilePatternObjectiveTest {
         assertTrue(beforeLastTile.isIrrigated());
 
         // pattern not yet achieved
-        var action = new Action.PlaceTile(new Coord(-1, -1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action = new Action.PlaceTile(new Coord(-1, -1), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertFalse(objective.isAchieved(board, action, null));
 
         // place the last tile, not irrigated
         board.placeTile(new Coord(-2, 0), new BambooTile(Color.PINK));
-        var lastAction =
-                new Action.PlaceTile(new Coord(-2, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var lastAction = new Action.PlaceTile(new Coord(-2, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         var lastTile = (BambooTile) board.getTile(new Coord(-2, 0));
         assertFalse(lastTile.isIrrigated());
 
