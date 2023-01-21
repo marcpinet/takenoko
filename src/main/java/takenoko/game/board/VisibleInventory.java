@@ -1,4 +1,4 @@
-package takenoko.player;
+package takenoko.game.board;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -6,19 +6,20 @@ import java.util.List;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.PowerUp;
+import takenoko.player.InventoryException;
 
-public class Inventory {
+public class VisibleInventory {
 
     private final EnumMap<Color, Integer> bamboos;
     private int irrigations;
     private final EnumMap<PowerUp, Integer> powerUps;
-    private final ArrayList<Objective> objectives;
+    private final List<Objective> finishedObjectives;
 
-    public Inventory() {
+    public VisibleInventory() {
         bamboos = new EnumMap<>(Color.class);
         irrigations = 0;
         powerUps = new EnumMap<>(PowerUp.class);
-        objectives = new ArrayList<>();
+        finishedObjectives = new ArrayList<>();
     }
 
     public int getBamboo(Color color) {
@@ -66,24 +67,11 @@ public class Inventory {
         powerUps.put(powerUp, powerUps.get(powerUp) - 1);
     }
 
-    public boolean canDrawObjective() {
-        return objectives.size() < 5;
+    public void addObjective(Objective objective) {
+        finishedObjectives.add(objective);
     }
 
-    public void addObjective(Objective objective) throws InventoryException {
-        if (!canDrawObjective()) {
-            throw new InventoryException("Too many objectives");
-        }
-        objectives.add(objective);
-    }
-
-    public void removeObjective(Objective objective) throws InventoryException {
-        if (!objectives.remove(objective)) {
-            throw new InventoryException("Objective not found");
-        }
-    }
-
-    public List<Objective> getObjectives() {
-        return objectives;
+    public List<Objective> getFinishedObjectives() {
+        return finishedObjectives;
     }
 }

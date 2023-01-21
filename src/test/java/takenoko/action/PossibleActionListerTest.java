@@ -9,13 +9,15 @@ import org.junit.jupiter.api.Test;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.*;
-import takenoko.player.Inventory;
+import takenoko.player.PrivateInventory;
 import takenoko.utils.Coord;
 
 class PossibleActionListerTest {
     ActionValidator validator;
-    Inventory inventory;
+    PrivateInventory privateInventory;
+    VisibleInventory visibleInventory;
     Board board;
     TileDeck deck;
 
@@ -24,13 +26,14 @@ class PossibleActionListerTest {
         board = new Board();
         deck = new TileDeck(new Random(0));
         GameInventory gameInventory = new GameInventory(20, deck);
-        inventory = new Inventory();
-        validator = new ActionValidator(board, gameInventory, inventory);
+        privateInventory = new PrivateInventory();
+        visibleInventory = new VisibleInventory();
+        validator = new ActionValidator(board, gameInventory, privateInventory, visibleInventory);
     }
 
     @Test
     void listActionsWhenfirstAction() {
-        PossibleActionLister lister = new PossibleActionLister(board, validator, inventory);
+        PossibleActionLister lister = new PossibleActionLister(board, validator, privateInventory);
 
         var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;
 
@@ -62,12 +65,12 @@ class PossibleActionListerTest {
 
     @Test
     void listActionsWhenATileWasPlaced() throws IrrigationException, BoardException {
-        PossibleActionLister lister = new PossibleActionLister(board, validator, inventory);
+        PossibleActionLister lister = new PossibleActionLister(board, validator, privateInventory);
 
         var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;
 
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
-        inventory.incrementIrrigation(); // we assume that the player has an irrigation stick
+        visibleInventory.incrementIrrigation(); // we assume that the player has an irrigation stick
 
         var expected =
                 List.of(

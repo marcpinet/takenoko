@@ -15,9 +15,9 @@ import takenoko.game.board.BoardException;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
-import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
+import takenoko.player.PrivateInventory;
 import takenoko.player.bot.DefaultBot;
 import takenoko.utils.Coord;
 import utils.TestLogHandler;
@@ -47,7 +47,7 @@ class ActionApplierTest {
         deck = new TileDeck(new Random(0));
         gameInventory = new GameInventory(1, deck);
 
-        applier = new ActionApplier(board, logger, gameInventory, new Inventory());
+        applier = new ActionApplier(board, logger, gameInventory, new PrivateInventory());
 
         player = new DefaultBot();
     }
@@ -78,22 +78,27 @@ class ActionApplierTest {
         when(mockObj.wasAchievedAfterLastCheck()).thenReturn(true);
         when(mockObj.getScore()).thenReturn(1);
 
-        player.getInventory().addObjective(mockObj);
+        player.getPrivateInventory().addObjective(mockObj);
 
         var action = new Action.UnveilObjective(mockObj);
+        assertFalse(player.getVisibleInventory().getFinishedObjectives().contains(mockObj));
+        assertTrue(player.getPrivateInventory().getObjectives().contains(mockObj));
         applier.apply(action, player);
 
         assertEquals(mockObj.getScore(), player.getScore());
+        assertTrue(player.getVisibleInventory().getFinishedObjectives().contains(mockObj));
+        assertFalse(player.getPrivateInventory().getObjectives().contains(mockObj));
 
         assertNoSevereLog();
     }
 
     @Test
     void unveilHarvestingObjective() throws InventoryException {
-        var inv = player.getInventory();
-        inv.incrementBamboo(Color.GREEN);
-        inv.incrementBamboo(Color.PINK);
-        inv.incrementBamboo(Color.YELLOW);
+        var visibleInv = player.getVisibleInventory();
+        var privateInv = player.getPrivateInventory();
+        visibleInv.incrementBamboo(Color.GREEN);
+        visibleInv.incrementBamboo(Color.PINK);
+        visibleInv.incrementBamboo(Color.YELLOW);
 
         var mockObj = mock(HarvestingObjective.class);
         when(mockObj.isAchieved(any(), any(), any())).thenReturn(true);
@@ -102,14 +107,14 @@ class ActionApplierTest {
         when(mockObj.getPink()).thenReturn(1);
         when(mockObj.getYellow()).thenReturn(1);
 
-        inv.addObjective(mockObj);
+        privateInv.addObjective(mockObj);
 
         var action = new Action.UnveilObjective(mockObj);
         applier.apply(action, player);
 
-        assertEquals(0, inv.getBamboo(Color.GREEN));
-        assertEquals(0, inv.getBamboo(Color.PINK));
-        assertEquals(0, inv.getBamboo(Color.YELLOW));
+        assertEquals(0, visibleInv.getBamboo(Color.GREEN));
+        assertEquals(0, visibleInv.getBamboo(Color.PINK));
+        assertEquals(0, visibleInv.getBamboo(Color.YELLOW));
 
         assertEquals(mockObj.getScore(), player.getScore());
 
@@ -119,7 +124,7 @@ class ActionApplierTest {
     @Test
     void placeIrrigation() throws BoardException, IrrigationException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
-        player.getInventory().incrementIrrigation();
+        player.getVisibleInventory().incrementIrrigation();
 
         var tile = board.getTile(new Coord(0, 1));
         var bambooTile = (BambooTile) tile;
@@ -129,19 +134,19 @@ class ActionApplierTest {
         applier.apply(action, player);
 
         assertTrue(bambooTile.isSideIrrigated(TileSide.UP_RIGHT));
-        assertFalse(player.getInventory().hasIrrigation());
+        assertFalse(player.getVisibleInventory().hasIrrigation());
         assertNoSevereLog();
     }
 
     @Test
     void takeIrrigation() {
-        assertFalse(player.getInventory().hasIrrigation());
+        assertFalse(player.getVisibleInventory().hasIrrigation());
         assertTrue(gameInventory.hasIrrigation());
 
         var action = new Action.TakeIrrigationStick();
         applier.apply(action, player);
 
-        assertTrue(player.getInventory().hasIrrigation());
+        assertTrue(player.getVisibleInventory().hasIrrigation());
         assertFalse(gameInventory.hasIrrigation());
         assertNoSevereLog();
     }

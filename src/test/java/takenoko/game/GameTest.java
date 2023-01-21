@@ -18,10 +18,10 @@ import takenoko.game.objective.Objective;
 import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
-import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
+import takenoko.player.PrivateInventory;
 import takenoko.player.bot.EasyBot;
 import utils.TestLogHandler;
 
@@ -54,12 +54,12 @@ class GameTest {
     void testGetWinner() throws PlayerException {
         // Don't forget that unveil an objective is an action, just like place a tile
         var p1 = mock(Player.class);
-        when(p1.getInventory()).thenReturn(new Inventory());
+        when(p1.getPrivateInventory()).thenReturn(new PrivateInventory());
         when(p1.getScore()).thenReturn(1);
         when(p1.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 
         var p2 = mock(Player.class);
-        when(p2.getInventory()).thenReturn(new Inventory());
+        when(p2.getPrivateInventory()).thenReturn(new PrivateInventory());
         when(p2.getScore()).thenReturn(2);
         when(p2.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 

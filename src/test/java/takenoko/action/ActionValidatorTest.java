@@ -16,9 +16,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
-import takenoko.player.Inventory;
+import takenoko.player.PrivateInventory;
 import takenoko.utils.Coord;
 
 class ActionValidatorTest {
@@ -29,10 +30,11 @@ class ActionValidatorTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        Inventory inventory = new Inventory();
-        inventory.incrementIrrigation();
+        PrivateInventory privateInventory = new PrivateInventory();
+        VisibleInventory visibleInventory = new VisibleInventory();
+        visibleInventory.incrementIrrigation();
         gameInventory = new GameInventory(20, new TileDeck(new Random(0)));
-        validator = new ActionValidator(board, gameInventory, inventory);
+        validator = new ActionValidator(board, gameInventory, privateInventory, visibleInventory);
     }
 
     @Test
@@ -74,7 +76,9 @@ class ActionValidatorTest {
     void testPlaceIrrigationWhenNotEnough() throws IrrigationException, BoardException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         var action = new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_LEFT);
-        validator = new ActionValidator(board, gameInventory, new Inventory());
+        validator =
+                new ActionValidator(
+                        board, gameInventory, new PrivateInventory(), new VisibleInventory());
         assertFalse(validator.isValid(action));
     }
 
@@ -88,7 +92,10 @@ class ActionValidatorTest {
     void testTakeIrrigationWhenNotEnough() {
         var validator =
                 new ActionValidator(
-                        board, new GameInventory(0, new TileDeck(new Random(0))), new Inventory());
+                        board,
+                        new GameInventory(0, new TileDeck(new Random(0))),
+                        new PrivateInventory(),
+                        new VisibleInventory());
         var action = new Action.TakeIrrigationStick();
         assertFalse(validator.isValid(action));
     }
@@ -151,7 +158,11 @@ class ActionValidatorTest {
         assertTrue(validator.isValid(action));
         validator =
                 new ActionValidator(
-                        board, gameInventory, new Inventory(), new ArrayList<>(List.of(action)));
+                        board,
+                        gameInventory,
+                        new PrivateInventory(),
+                        new VisibleInventory(),
+                        new ArrayList<>(List.of(action)));
         var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertFalse(validator.isValid(action2));
     }

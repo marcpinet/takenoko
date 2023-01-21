@@ -3,6 +3,7 @@ package takenoko.player;
 import takenoko.action.Action;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
+import takenoko.game.board.VisibleInventory;
 
 public interface Player {
     void beginTurn(int actionCredits);
@@ -11,7 +12,9 @@ public interface Player {
 
     Action chooseAction(Board board, PossibleActionLister actionLister) throws PlayerException;
 
-    Inventory getInventory();
+    PrivateInventory getPrivateInventory();
+
+    VisibleInventory getVisibleInventory();
 
     void increaseScore(int delta);
 
