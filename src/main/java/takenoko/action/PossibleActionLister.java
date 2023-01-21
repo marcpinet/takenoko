@@ -25,6 +25,10 @@ public class PossibleActionLister {
         possibleActions.add(Action.NONE);
         possibleActions.add(Action.END_TURN);
 
+        possibleActions.add(new Action.TakeBambooSizeObjective());
+        possibleActions.add(new Action.TakeHarvestingObjective());
+        possibleActions.add(new Action.TakeTilePatternObjective());
+
         for (var coord : board.getPlacedCoords()) {
             possibleActions.add(new Action.MoveGardener(coord));
             possibleActions.add(new Action.MovePanda(coord));

@@ -6,6 +6,8 @@ import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.objective.HarvestingObjective;
+import takenoko.game.objective.Objective;
+import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.Color;
 import takenoko.player.Inventory;
 
@@ -38,11 +40,21 @@ public class ActionValidator {
             case Action.PlaceIrrigationStick a -> isValid(a);
             case Action.PlaceTile a -> isValid(a);
             case Action.TakeIrrigationStick a -> isValid(a);
+            case Action.TakeHarvestingObjective ignored -> canTakeObjective(
+                    gameInventory.getHarvestingObjectiveDeck());
+            case Action.TakeBambooSizeObjective ignored -> canTakeObjective(
+                    gameInventory.getBambooSizeObjectiveDeck());
+            case Action.TakeTilePatternObjective ignored -> canTakeObjective(
+                    gameInventory.getTilePatternObjectiveDeck());
             case Action.UnveilObjective a -> isValid(a);
             case Action.MoveGardener a -> isValid(a);
             case Action.MovePanda a -> isValid(a);
             case Action.EndTurn ignored -> true;
         };
+    }
+
+    private <O extends Objective> boolean canTakeObjective(ObjectiveDeck<O> deck) {
+        return deck.size() > 0 && playerInventory.canDrawObjective();
     }
 
     private boolean isValid(Action.PlaceIrrigationStick action) {

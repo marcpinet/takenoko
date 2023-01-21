@@ -15,6 +15,7 @@ import takenoko.game.board.BoardException;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
+import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.bot.DefaultBot;
@@ -46,7 +47,7 @@ class ActionApplierTest {
         deck = new TileDeck(new Random(0));
         gameInventory = new GameInventory(1, deck);
 
-        applier = new ActionApplier(board, logger, gameInventory);
+        applier = new ActionApplier(board, logger, gameInventory, new Inventory());
 
         player = new DefaultBot();
     }

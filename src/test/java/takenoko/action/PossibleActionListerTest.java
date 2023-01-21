@@ -38,6 +38,9 @@ class PossibleActionListerTest {
                 List.of(
                         Action.NONE,
                         Action.END_TURN,
+                        new Action.TakeBambooSizeObjective(),
+                        new Action.TakeHarvestingObjective(),
+                        new Action.TakeTilePatternObjective(),
 
                         // not possible to move characters on the first turn
 
@@ -70,6 +73,9 @@ class PossibleActionListerTest {
                 List.of(
                         Action.NONE,
                         Action.END_TURN,
+                        new Action.TakeBambooSizeObjective(),
+                        new Action.TakeHarvestingObjective(),
+                        new Action.TakeTilePatternObjective(),
                         new Action.MoveGardener(new Coord(0, 1)),
                         new Action.MovePanda(new Coord(0, 1)),
                         new Action.TakeIrrigationStick(),

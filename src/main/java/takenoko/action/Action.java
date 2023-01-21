@@ -8,14 +8,17 @@ import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
 
 public sealed interface Action
-        permits Action.MoveGardener,
+        permits Action.EndTurn,
+                Action.MoveGardener,
                 Action.MovePanda,
                 Action.None,
                 Action.PlaceIrrigationStick,
                 Action.PlaceTile,
+                Action.TakeHarvestingObjective,
+                Action.TakeBambooSizeObjective,
                 Action.TakeIrrigationStick,
-                Action.UnveilObjective,
-                Action.EndTurn {
+                Action.TakeTilePatternObjective,
+                Action.UnveilObjective {
     Action NONE = new Action.None();
     Action END_TURN = new Action.EndTurn();
 
@@ -52,6 +55,27 @@ public sealed interface Action
         @Override
         public int hashCode() {
             return Objects.hash(coord, drawPredicate);
+        }
+    }
+
+    record TakeTilePatternObjective() implements Action {
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof TakeTilePatternObjective;
+        }
+    }
+
+    record TakeHarvestingObjective() implements Action {
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof TakeHarvestingObjective;
+        }
+    }
+
+    record TakeBambooSizeObjective() implements Action {
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof TakeBambooSizeObjective;
         }
     }
 

@@ -13,7 +13,6 @@ import takenoko.game.board.Board;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Inventory;
-import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
 
@@ -31,14 +30,6 @@ public class Game {
         this.players = players;
         this.objectives = objectives;
         this.out = out;
-        for (var player : players) {
-            // TODO: change how objectives are assigned
-            try {
-                player.getInventory().addObjective(objectives.get(0));
-            } catch (InventoryException e) {
-                out.log(Level.SEVERE, "Failed to add objective to player", e);
-            }
-        }
         inventory = new GameInventory(20, tileDeck);
     }
 
@@ -76,7 +67,7 @@ public class Game {
                     var action = player.chooseAction(board, actionLister);
                     this.out.log(Level.INFO, "Action: {0}", action);
                     if (action == Action.END_TURN) break;
-                    var applier = new ActionApplier(board, out, inventory);
+                    var applier = new ActionApplier(board, out, inventory, player.getInventory());
                     applier.apply(action, player);
                     alreadyPlayedActions.add(action);
                     checkObjectives(action, player.getInventory());
