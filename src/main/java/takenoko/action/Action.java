@@ -1,20 +1,24 @@
 package takenoko.action;
 
 import java.util.Objects;
+import takenoko.game.Deck;
 import takenoko.game.objective.Objective;
-import takenoko.game.tile.TileDeck;
+import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
 
 public sealed interface Action
-        permits Action.MoveGardener,
+        permits Action.EndTurn,
+                Action.MoveGardener,
                 Action.MovePanda,
                 Action.None,
                 Action.PlaceIrrigationStick,
                 Action.PlaceTile,
+                Action.TakeHarvestingObjective,
+                Action.TakeBambooSizeObjective,
                 Action.TakeIrrigationStick,
-                Action.UnveilObjective,
-                Action.EndTurn {
+                Action.TakeTilePatternObjective,
+                Action.UnveilObjective {
     Action NONE = new Action.None();
     Action END_TURN = new Action.EndTurn();
 
@@ -39,19 +43,39 @@ public sealed interface Action
         }
     }
 
-    record PlaceTile(Coord coord, TileDeck.DrawTilePredicate drawTilePredicate) implements Action {
+    record PlaceTile(Coord coord, Deck.DrawPredicate<Tile> drawPredicate) implements Action {
         @Override
         public boolean equals(Object o) {
             if (o instanceof PlaceTile other) {
-                return coord.equals(other.coord)
-                        && drawTilePredicate.equals(other.drawTilePredicate);
+                return coord.equals(other.coord) && drawPredicate.equals(other.drawPredicate);
             }
             return false;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(coord, drawTilePredicate);
+            return Objects.hash(coord, drawPredicate);
+        }
+    }
+
+    record TakeTilePatternObjective() implements Action {
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof TakeTilePatternObjective;
+        }
+    }
+
+    record TakeHarvestingObjective() implements Action {
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof TakeHarvestingObjective;
+        }
+    }
+
+    record TakeBambooSizeObjective() implements Action {
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof TakeBambooSizeObjective;
         }
     }
 

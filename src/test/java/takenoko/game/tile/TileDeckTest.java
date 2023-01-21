@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import takenoko.game.Deck;
 
 class TileDeckTest {
     TileDeck deck;
@@ -37,20 +38,20 @@ class TileDeckTest {
     }
 
     @Test
-    void draw() throws EmptyTileDeckException {
-        assertEquals(new BambooTile(Color.GREEN), deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
+    void draw() throws EmptyDeckException {
+        assertEquals(new BambooTile(Color.GREEN), deck.draw(TileDeck.DEFAULT_DRAW_PREDICATE));
 
         assertEquals(DECK_SIZE - 1, deck.size());
 
-        assertEquals(new PondTile(), deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
+        assertEquals(new PondTile(), deck.draw(TileDeck.DEFAULT_DRAW_PREDICATE));
 
         assertEquals(DECK_SIZE - 2, deck.size());
     }
 
     @Test
-    void lessThanThreeTiles() throws EmptyTileDeckException {
+    void lessThanThreeTiles() throws EmptyDeckException {
         deck = new TileDeck(new ArrayDeque<>(List.of(new BambooTile(Color.GREEN), new PondTile())));
-        TileDeck.DrawTilePredicate predicate =
+        Deck.DrawPredicate<Tile> predicate =
                 tiles -> {
                     assertEquals(2, tiles.size());
                     return 0;
@@ -59,12 +60,10 @@ class TileDeckTest {
     }
 
     @Test
-    void emptyDeck() throws EmptyTileDeckException {
+    void emptyDeck() throws EmptyDeckException {
         for (int i = 0; i < DECK_SIZE; i++) {
-            deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+            deck.draw(TileDeck.DEFAULT_DRAW_PREDICATE);
         }
-        assertThrows(
-                EmptyTileDeckException.class,
-                () -> deck.draw(TileDeck.DEFAULT_DRAW_TILE_PREDICATE));
+        assertThrows(EmptyDeckException.class, () -> deck.draw(TileDeck.DEFAULT_DRAW_PREDICATE));
     }
 }

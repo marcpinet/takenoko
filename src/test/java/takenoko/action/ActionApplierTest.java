@@ -15,6 +15,7 @@ import takenoko.game.board.BoardException;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
+import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.bot.DefaultBot;
@@ -43,10 +44,10 @@ class ActionApplierTest {
         logger.addHandler(logHandler);
 
         board = new Board();
-        gameInventory = new GameInventory(1);
         deck = new TileDeck(new Random(0));
+        gameInventory = new GameInventory(1, deck);
 
-        applier = new ActionApplier(board, logger, gameInventory, deck);
+        applier = new ActionApplier(board, logger, gameInventory, new Inventory());
 
         player = new DefaultBot();
     }
@@ -60,7 +61,7 @@ class ActionApplierTest {
 
     @Test
     void placeTile() throws BoardException {
-        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
         int originalDeckSize = deck.size();
         applier.apply(action, player);
 

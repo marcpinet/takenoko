@@ -6,8 +6,11 @@ import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.HarvestingObjective;
+import takenoko.game.objective.Objective;
+import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.Color;
-import takenoko.game.tile.TileDeck;
+import takenoko.game.tile.EmptyDeckException;
+import takenoko.player.Inventory;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.utils.Coord;
@@ -16,13 +19,14 @@ public class ActionApplier {
     private final Board board;
     private final Logger out;
     private final GameInventory gameInventory;
-    private final TileDeck tileDeck;
+    private final Inventory playerInventory;
 
-    public ActionApplier(Board board, Logger out, GameInventory gameInventory, TileDeck tileDeck) {
+    public ActionApplier(
+            Board board, Logger out, GameInventory gameInventory, Inventory playerInventory) {
         this.board = board;
         this.out = out;
         this.gameInventory = gameInventory;
-        this.tileDeck = tileDeck;
+        this.playerInventory = playerInventory;
     }
 
     // S1301: we want pattern matching so switch is necessary
@@ -40,7 +44,24 @@ public class ActionApplier {
                     player, placeIrrigationStick);
             case Action.MoveGardener moveGardener -> apply(
                     MovablePiece.GARDENER, moveGardener.coord());
+            case Action.TakeBambooSizeObjective ignored -> drawObjective(
+                    gameInventory.getBambooSizeObjectiveDeck());
+            case Action.TakeHarvestingObjective ignored -> drawObjective(
+                    gameInventory.getHarvestingObjectiveDeck());
+            case Action.TakeTilePatternObjective ignored -> drawObjective(
+                    gameInventory.getTilePatternObjectiveDeck());
             case Action.MovePanda movePanda -> apply(MovablePiece.PANDA, movePanda.coord());
+        }
+    }
+
+    private <O extends Objective> void drawObjective(ObjectiveDeck<O> objectiveDeck) {
+        try {
+            var obj = objectiveDeck.draw();
+            playerInventory.addObjective(obj);
+        } catch (EmptyDeckException e) {
+            this.out.log(Level.SEVERE, "Objective deck is empty", e);
+        } catch (InventoryException e) {
+            this.out.log(Level.SEVERE, "Player inventory is full", e);
         }
     }
 
@@ -87,7 +108,7 @@ public class ActionApplier {
 
     private void apply(Action.PlaceTile placeTile) {
         try {
-            var tile = tileDeck.draw(placeTile.drawTilePredicate());
+            var tile = gameInventory.getTileDeck().draw(placeTile.drawPredicate());
             board.placeTile(placeTile.coord(), tile);
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());

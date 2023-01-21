@@ -22,22 +22,25 @@ class PossibleActionListerTest {
     @BeforeEach
     void setUp() {
         board = new Board();
-        GameInventory gameInventory = new GameInventory(20);
-        inventory = new Inventory();
         deck = new TileDeck(new Random(0));
-        validator = new ActionValidator(board, deck, gameInventory, inventory);
+        GameInventory gameInventory = new GameInventory(20, deck);
+        inventory = new Inventory();
+        validator = new ActionValidator(board, gameInventory, inventory);
     }
 
     @Test
     void listActionsWhenfirstAction() {
         PossibleActionLister lister = new PossibleActionLister(board, validator, inventory);
 
-        var TILE_PRED = TileDeck.DEFAULT_DRAW_TILE_PREDICATE;
+        var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;
 
         var expected =
                 List.of(
                         Action.NONE,
                         Action.END_TURN,
+                        new Action.TakeBambooSizeObjective(),
+                        new Action.TakeHarvestingObjective(),
+                        new Action.TakeTilePatternObjective(),
 
                         // not possible to move characters on the first turn
 
@@ -61,7 +64,7 @@ class PossibleActionListerTest {
     void listActionsWhenATileWasPlaced() throws IrrigationException, BoardException {
         PossibleActionLister lister = new PossibleActionLister(board, validator, inventory);
 
-        var TILE_PRED = TileDeck.DEFAULT_DRAW_TILE_PREDICATE;
+        var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;
 
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         inventory.incrementIrrigation(); // we assume that the player has an irrigation stick
@@ -70,6 +73,9 @@ class PossibleActionListerTest {
                 List.of(
                         Action.NONE,
                         Action.END_TURN,
+                        new Action.TakeBambooSizeObjective(),
+                        new Action.TakeHarvestingObjective(),
+                        new Action.TakeTilePatternObjective(),
                         new Action.MoveGardener(new Coord(0, 1)),
                         new Action.MovePanda(new Coord(0, 1)),
                         new Action.TakeIrrigationStick(),

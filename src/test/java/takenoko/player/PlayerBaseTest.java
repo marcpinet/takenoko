@@ -33,7 +33,7 @@ class PlayerBaseTest {
 
         player.getInventory().incrementIrrigation();
         var validator =
-                new ActionValidator(board, deck, new GameInventory(20), player.getInventory());
+                new ActionValidator(board, new GameInventory(20, deck), player.getInventory());
         var lister = new PossibleActionLister(board, validator, player.getInventory());
 
         player.chooseAction(board, lister);

@@ -31,9 +31,8 @@ class ActionValidatorTest {
         board = new Board();
         Inventory inventory = new Inventory();
         inventory.incrementIrrigation();
-        gameInventory = new GameInventory(20);
-        validator =
-                new ActionValidator(board, new TileDeck(new Random(0)), gameInventory, inventory);
+        gameInventory = new GameInventory(20, new TileDeck(new Random(0)));
+        validator = new ActionValidator(board, gameInventory, inventory);
     }
 
     @Test
@@ -44,7 +43,7 @@ class ActionValidatorTest {
     @ParameterizedTest
     @MethodSource("placeTileProvider")
     void testPlaceTile(Coord coord, BambooTile tile, boolean expectedResult) {
-        var action = new Action.PlaceTile(coord, TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action = new Action.PlaceTile(coord, TileDeck.DEFAULT_DRAW_PREDICATE);
         assertEquals(expectedResult, validator.isValid(action));
     }
 
@@ -75,9 +74,7 @@ class ActionValidatorTest {
     void testPlaceIrrigationWhenNotEnough() throws IrrigationException, BoardException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         var action = new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_LEFT);
-        validator =
-                new ActionValidator(
-                        board, new TileDeck(new Random(0)), gameInventory, new Inventory());
+        validator = new ActionValidator(board, gameInventory, new Inventory());
         assertFalse(validator.isValid(action));
     }
 
@@ -91,7 +88,7 @@ class ActionValidatorTest {
     void testTakeIrrigationWhenNotEnough() {
         var validator =
                 new ActionValidator(
-                        board, new TileDeck(new Random(0)), new GameInventory(0), new Inventory());
+                        board, new GameInventory(0, new TileDeck(new Random(0))), new Inventory());
         var action = new Action.TakeIrrigationStick();
         assertFalse(validator.isValid(action));
     }
@@ -150,16 +147,12 @@ class ActionValidatorTest {
 
     @Test
     void testTwiceAction() {
-        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertTrue(validator.isValid(action));
         validator =
                 new ActionValidator(
-                        board,
-                        new TileDeck(new Random(0)),
-                        gameInventory,
-                        new Inventory(),
-                        new ArrayList<>(List.of(action)));
-        var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_TILE_PREDICATE);
+                        board, gameInventory, new Inventory(), new ArrayList<>(List.of(action)));
+        var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertFalse(validator.isValid(action2));
     }
 }

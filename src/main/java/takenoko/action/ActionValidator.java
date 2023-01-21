@@ -6,33 +6,30 @@ import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.objective.HarvestingObjective;
+import takenoko.game.objective.Objective;
+import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.Color;
-import takenoko.game.tile.TileDeck;
 import takenoko.player.Inventory;
 
 public class ActionValidator {
     private final Board board;
-    private final TileDeck deck;
     private final GameInventory gameInventory;
     private final Inventory playerInventory;
     private final List<Action> alreadyPlayedActions;
 
     public ActionValidator(
             Board board,
-            TileDeck deck,
             GameInventory gameInventory,
             Inventory playerInventory,
             List<Action> alreadyPlayedActions) {
         this.board = board;
-        this.deck = deck;
         this.gameInventory = gameInventory;
         this.playerInventory = playerInventory;
         this.alreadyPlayedActions = alreadyPlayedActions;
     }
 
-    public ActionValidator(
-            Board board, TileDeck deck, GameInventory gameInventory, Inventory playerInventory) {
-        this(board, deck, gameInventory, playerInventory, new ArrayList<>());
+    public ActionValidator(Board board, GameInventory gameInventory, Inventory playerInventory) {
+        this(board, gameInventory, playerInventory, new ArrayList<>());
     }
 
     public boolean isValid(Action action) {
@@ -43,11 +40,21 @@ public class ActionValidator {
             case Action.PlaceIrrigationStick a -> isValid(a);
             case Action.PlaceTile a -> isValid(a);
             case Action.TakeIrrigationStick a -> isValid(a);
+            case Action.TakeHarvestingObjective ignored -> canTakeObjective(
+                    gameInventory.getHarvestingObjectiveDeck());
+            case Action.TakeBambooSizeObjective ignored -> canTakeObjective(
+                    gameInventory.getBambooSizeObjectiveDeck());
+            case Action.TakeTilePatternObjective ignored -> canTakeObjective(
+                    gameInventory.getTilePatternObjectiveDeck());
             case Action.UnveilObjective a -> isValid(a);
             case Action.MoveGardener a -> isValid(a);
             case Action.MovePanda a -> isValid(a);
             case Action.EndTurn ignored -> true;
         };
+    }
+
+    private <O extends Objective> boolean canTakeObjective(ObjectiveDeck<O> deck) {
+        return deck.size() > 0 && playerInventory.canDrawObjective();
     }
 
     private boolean isValid(Action.PlaceIrrigationStick action) {
@@ -67,7 +74,7 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PlaceTile action) {
-        return deck.size() > 0 && board.isAvailableCoord(action.coord());
+        return gameInventory.getTileDeck().size() > 0 && board.isAvailableCoord(action.coord());
     }
 
     private boolean isValid(Action.TakeIrrigationStick action) {
