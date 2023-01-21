@@ -16,9 +16,9 @@ class HarvestingObjectiveTest {
 
     @BeforeEach
     void setUp() {
-        h1 = new HarvestingObjective(1, 1, 1);
-        h2 = new HarvestingObjective(2, 2, 0);
-        h3 = new HarvestingObjective(3, 0, 0);
+        h1 = new HarvestingObjective(1, 1, 1, 1);
+        h2 = new HarvestingObjective(2, 2, 0, 1);
+        h3 = new HarvestingObjective(3, 0, 0, 1);
         visibleInventory = new VisibleInventory();
     }
 
