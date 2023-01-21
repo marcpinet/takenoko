@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
@@ -156,10 +157,10 @@ class ActionApplierTest {
         var c = new Coord(0, 1);
         board.placeTile(c, new BambooTile(Color.GREEN));
 
-        var action = new Action.MovePanda(c);
+        var action = new Action.MovePiece(MovablePiece.PANDA, c);
         applier.apply(action, player);
 
-        assertEquals(c, board.getPandaCoord());
+        assertEquals(c, board.getPieceCoord(MovablePiece.PANDA));
         assertNoSevereLog();
     }
 
@@ -168,10 +169,10 @@ class ActionApplierTest {
         var c = new Coord(0, 1);
         board.placeTile(c, new BambooTile(Color.GREEN));
 
-        var action = new Action.MoveGardener(c);
+        var action = new Action.MovePiece(MovablePiece.GARDENER, c);
         applier.apply(action, player);
 
-        assertEquals(c, board.getGardenerCoord());
+        assertEquals(c, board.getPieceCoord(MovablePiece.GARDENER));
         assertNoSevereLog();
     }
 }

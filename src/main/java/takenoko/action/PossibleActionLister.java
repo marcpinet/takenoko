@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import takenoko.game.Deck;
 import takenoko.game.board.Board;
+import takenoko.game.board.MovablePiece;
 import takenoko.game.tile.PowerUp;
 import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
@@ -41,8 +42,8 @@ public class PossibleActionLister {
         }
 
         for (var coord : board.getPlacedCoords()) {
-            possibleActions.add(new Action.MoveGardener(coord));
-            possibleActions.add(new Action.MovePanda(coord));
+            possibleActions.add(new Action.MovePiece(MovablePiece.GARDENER, coord));
+            possibleActions.add(new Action.MovePiece(MovablePiece.PANDA, coord));
         }
 
         possibleActions.add(new Action.TakeIrrigationStick());

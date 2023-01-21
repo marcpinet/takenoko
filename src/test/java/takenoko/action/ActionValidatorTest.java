@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.board.MovablePiece;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
@@ -129,7 +130,7 @@ class ActionValidatorTest {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 1), new BambooTile(Color.GREEN));
-        var action = new Action.MoveGardener(coord);
+        var action = new Action.MovePiece(MovablePiece.GARDENER, coord);
         assertEquals(expectedResult, validator.isValid(action));
     }
 
@@ -148,7 +149,7 @@ class ActionValidatorTest {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 1), new BambooTile(Color.GREEN));
-        var action = new Action.MovePanda(coord);
+        var action = new Action.MovePiece(MovablePiece.PANDA, coord);
         assertEquals(expectedResult, validator.isValid(action));
     }
 

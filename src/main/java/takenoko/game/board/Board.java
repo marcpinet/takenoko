@@ -7,13 +7,11 @@ import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
 import takenoko.player.Player;
 import takenoko.utils.Coord;
-import takenoko.utils.Pair;
 
 public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
     private final Map<Coord, Tile> tiles;
-    private Pair<MovablePiece, Coord> gardener = Pair.of(MovablePiece.GARDENER, POND_COORD);
-    private Pair<MovablePiece, Coord> panda = Pair.of(MovablePiece.PANDA, POND_COORD);
+    private final Map<MovablePiece, Coord> movablePieces;
     private final List<Player> players;
 
     public Board() {
@@ -23,6 +21,10 @@ public class Board {
     public Board(List<Player> players) {
         tiles = new HashMap<>();
         tiles.put(POND_COORD, new PondTile());
+
+        movablePieces = new EnumMap<>(MovablePiece.class);
+        movablePieces.put(MovablePiece.GARDENER, POND_COORD);
+        movablePieces.put(MovablePiece.PANDA, POND_COORD);
         this.players = players;
     }
 
@@ -128,43 +130,31 @@ public class Board {
         return tiles.containsKey(coord);
     }
 
+    // S1301: switch is actually more readable here
+    @SuppressWarnings("java:S1301")
     public void move(MovablePiece pieceType, Coord coord, Player player) throws BoardException {
         if (!tiles.containsKey(coord)) {
             throw new BoardException(
                     "Error: the tile with these coordinates is not present on the board.");
         }
 
-        Coord currentCoord = getCurrentCoord(pieceType);
+        Coord currentCoord = getPieceCoord(pieceType);
         if (!coord.isAlignedWith(currentCoord)) {
             throw new BoardException(
                     "Error: the " + pieceType + " can only move on a straight line.");
         }
 
         // Updating piece position
-        if (pieceType == MovablePiece.GARDENER) {
-            gardener = Pair.of(pieceType, coord);
-            growTilesWithGardener(coord);
-        } else if (pieceType == MovablePiece.PANDA) {
-            panda = Pair.of(pieceType, coord);
-            // Making bamboo on the tile grow
-            Tile tile = tiles.get(coord);
-            if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
-                try {
-                    bambooTile.shrinkBamboo();
-                    player.getVisibleInventory().incrementBamboo(bambooTile.getColor());
-                } catch (BambooSizeException e) {
-                    // This should never happen
-                    throw new IllegalStateException(e);
-                }
-            }
+        movablePieces.put(pieceType, coord);
+        // Apply their actions
+        switch (pieceType) {
+            case GARDENER -> growTilesWithGardener(coord);
+            case PANDA -> eatBambooWithPanda(coord, player);
         }
     }
 
-    private Coord getCurrentCoord(MovablePiece pieceType) {
-        return switch (pieceType) {
-            case GARDENER -> gardener.second();
-            case PANDA -> panda.second();
-        };
+    public Coord getPieceCoord(MovablePiece pieceType) {
+        return movablePieces.get(pieceType);
     }
 
     private void growTilesWithGardener(Coord gardenerPos) {
@@ -197,12 +187,17 @@ public class Board {
         }
     }
 
-    public Coord getGardenerCoord() {
-        return gardener.second();
-    }
-
-    public Coord getPandaCoord() {
-        return panda.second();
+    private void eatBambooWithPanda(Coord coord, Player player) {
+        Tile tile = tiles.get(coord);
+        if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
+            try {
+                bambooTile.shrinkBamboo();
+                player.getVisibleInventory().incrementBamboo(bambooTile.getColor());
+            } catch (BambooSizeException e) {
+                // This should never happen
+                throw new IllegalStateException(e);
+            }
+        }
     }
 
     public int getPlayerScore(Player p) {

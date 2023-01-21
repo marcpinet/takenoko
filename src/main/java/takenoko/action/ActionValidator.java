@@ -62,8 +62,7 @@ public class ActionValidator {
             case Action.TakeTilePatternObjective ignored -> canTakeObjective(
                     gameInventory.getTilePatternObjectiveDeck());
             case Action.UnveilObjective a -> isValid(a);
-            case Action.MoveGardener a -> isValid(a);
-            case Action.MovePanda a -> isValid(a);
+            case Action.MovePiece a -> isValid(a);
             case Action.EndTurn ignored -> true;
             case Action.PickPowerUp a -> isValid(a);
             case Action.PlacePowerUp a -> isValid(a);
@@ -109,16 +108,10 @@ public class ActionValidator {
         return true;
     }
 
-    private boolean isValid(Action.MoveGardener action) {
+    private boolean isValid(Action.MovePiece action) {
         return board.getPlacedCoords().contains(action.coord())
-                && board.getGardenerCoord().isAlignedWith(action.coord())
-                && !board.getGardenerCoord().equals(action.coord());
-    }
-
-    private boolean isValid(Action.MovePanda action) {
-        return board.getPlacedCoords().contains(action.coord())
-                && board.getPandaCoord().isAlignedWith(action.coord())
-                && !board.getPandaCoord().equals(action.coord());
+                && board.getPieceCoord(action.piece()).isAlignedWith(action.coord())
+                && !board.getPieceCoord(action.piece()).equals(action.coord());
     }
 
     private boolean isValid(Action.PickPowerUp action) {

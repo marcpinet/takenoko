@@ -13,7 +13,6 @@ import takenoko.game.tile.*;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PrivateInventory;
-import takenoko.utils.Coord;
 
 public class ActionApplier {
     private final Board board;
@@ -45,17 +44,16 @@ public class ActionApplier {
             case Action.TakeIrrigationStick ignored -> apply(player);
             case Action.PlaceIrrigationStick placeIrrigationStick -> apply(
                     player, placeIrrigationStick);
-            case Action.MoveGardener moveGardener -> apply(
-                    MovablePiece.GARDENER, moveGardener.coord(), player);
+            case Action.MovePiece movePiece -> apply(movePiece, player);
             case Action.TakeBambooSizeObjective ignored -> drawObjective(
                     gameInventory.getBambooSizeObjectiveDeck());
             case Action.TakeHarvestingObjective ignored -> drawObjective(
                     gameInventory.getHarvestingObjectiveDeck());
             case Action.TakeTilePatternObjective ignored -> drawObjective(
                     gameInventory.getTilePatternObjectiveDeck());
-            case Action.MovePanda movePanda -> apply(MovablePiece.PANDA, movePanda.coord(), player);
             case Action.PickPowerUp pickPowerUp -> apply(player, pickPowerUp);
             case Action.PlacePowerUp placePowerUp -> apply(player, placePowerUp);
+
         }
     }
 
@@ -69,6 +67,8 @@ public class ActionApplier {
             this.out.log(Level.SEVERE, e.getMessage());
         }
     }
+
+
 
     private void apply(Player player, Action.PickPowerUp pickPowerUp) {
         try {
@@ -90,9 +90,9 @@ public class ActionApplier {
         }
     }
 
-    private void apply(MovablePiece piece, Coord pieceCoord, Player player) {
+    private void apply(Action.MovePiece movePiece, Player player) {
         try {
-            this.board.move(piece, pieceCoord, player);
+            this.board.move(movePiece.piece(), movePiece.coord(), player);
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());
         }

@@ -2,6 +2,7 @@ package takenoko.action;
 
 import java.util.Objects;
 import takenoko.game.Deck;
+import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.PowerUp;
 import takenoko.game.tile.Tile;
@@ -10,8 +11,7 @@ import takenoko.utils.Coord;
 
 public sealed interface Action
         permits Action.EndTurn,
-                Action.MoveGardener,
-                Action.MovePanda,
+                Action.MovePiece,
                 Action.None,
                 Action.PickPowerUp,
                 Action.PlaceIrrigationStick,
@@ -20,8 +20,8 @@ public sealed interface Action
                 Action.TakeBambooSizeObjective,
                 Action.TakeHarvestingObjective,
                 Action.TakeIrrigationStick,
-                Action.TakeTilePatternObjective,
-                Action.UnveilObjective {
+                Action.UnveilObjective,
+                Action.TakeTilePatternObjective {
     Action NONE = new Action.None();
     Action END_TURN = new Action.EndTurn();
 
@@ -134,25 +134,10 @@ public sealed interface Action
         }
     }
 
-    record MoveGardener(Coord coord) implements Action {
+    record MovePiece(MovablePiece piece, Coord coord) implements Action {
         @Override
         public boolean equals(Object o) {
-            if (o instanceof MoveGardener other) {
-                return coord.equals(other.coord);
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(coord);
-        }
-    }
-
-    record MovePanda(Coord coord) implements Action {
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof MovePanda other) {
+            if (o instanceof MovePiece other) {
                 return coord.equals(other.coord);
             }
             return false;

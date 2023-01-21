@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.board.MovablePiece;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.*;
 import takenoko.player.PrivateInventory;
@@ -85,8 +86,8 @@ class PossibleActionListerTest {
                         new Action.PickPowerUp(PowerUp.ENCLOSURE),
                         new Action.PickPowerUp(PowerUp.FERTILIZER),
                         new Action.PickPowerUp(PowerUp.WATERSHED),
-                        new Action.MoveGardener(new Coord(0, 1)),
-                        new Action.MovePanda(new Coord(0, 1)),
+                        new Action.MovePiece(MovablePiece.GARDENER, new Coord(0, 1)),
+                        new Action.MovePiece(MovablePiece.PANDA, new Coord(0, 1)),
                         new Action.TakeIrrigationStick(),
                         new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_RIGHT),
                         new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.DOWN_RIGHT),
