@@ -75,7 +75,7 @@ class BoardTest {
     @Test
     void canNotPlaceIrrigationTest() {
         Coord c = new Coord(1, 2);
-        assertThrows(IrrigationException.class, () -> tileboard.placeIrrigation(c, TileSide.UP));
+        assertThrows(BoardException.class, () -> tileboard.placeIrrigation(c, TileSide.UP));
     }
 
     @Test

@@ -12,6 +12,8 @@ public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
     private final Map<Coord, Tile> tiles;
     private final Map<MovablePiece, Coord> movablePieces;
+    private static final String TILE_EXCEPTION_MESSAGE =
+            "Error: the tile with these coordinates is not present on the board.";
     private final List<Player> players;
 
     public Board() {
@@ -60,10 +62,10 @@ public class Board {
         return intersecWithTiles.size() != 1 || intersecWithTiles.contains(POND_COORD);
     }
 
-    public void placeIrrigation(Coord coord, TileSide side) throws IrrigationException {
+    public void placeIrrigation(Coord coord, TileSide side)
+            throws IrrigationException, BoardException {
         var c = tiles.get(coord);
-        if (c == null)
-            throw new IrrigationException("Error: There is no tile at these coordinates.");
+        if (c == null) throw new BoardException(TILE_EXCEPTION_MESSAGE);
         c.irrigateSide(side);
 
         var c2 = tiles.get(coord.adjacentCoordSide(side));
@@ -72,10 +74,24 @@ public class Board {
 
     public Tile getTile(Coord c) throws BoardException {
         if (!tiles.containsKey(c)) {
-            throw new BoardException(
-                    "Error: the tile with these coordinates is not present on the board.");
+            throw new BoardException(TILE_EXCEPTION_MESSAGE);
         }
         return tiles.get(c);
+    }
+
+    public void removeTile(Coord coord) throws BoardException {
+        if (tiles.remove(coord) == null) {
+            throw new BoardException(TILE_EXCEPTION_MESSAGE);
+        }
+    }
+
+    public void removeIrrigation(Coord coord, TileSide side)
+            throws BoardException, IrrigationException {
+        var c = getTile(coord);
+        c.removeIrrigation(side);
+
+        var c2 = tiles.get(coord.adjacentCoordSide(side));
+        if (c2 != null) c2.removeIrrigation(side.oppositeSide());
     }
 
     public Set<Coord> getAvailableCoords() {
@@ -134,8 +150,7 @@ public class Board {
     @SuppressWarnings("java:S1301")
     public void move(MovablePiece pieceType, Coord coord, Player player) throws BoardException {
         if (!tiles.containsKey(coord)) {
-            throw new BoardException(
-                    "Error: the tile with these coordinates is not present on the board.");
+            throw new BoardException(TILE_EXCEPTION_MESSAGE);
         }
 
         Coord currentCoord = getPieceCoord(pieceType);
