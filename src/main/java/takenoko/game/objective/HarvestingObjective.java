@@ -12,13 +12,7 @@ public class HarvestingObjective implements Objective {
     private boolean achieved = false;
     private final int score;
 
-    public HarvestingObjective(int green, int yellow, int pink) {
-        this.needs = new EnumMap<>(Color.class);
-        this.needs.put(Color.GREEN, green);
-        this.needs.put(Color.YELLOW, yellow);
-        this.needs.put(Color.PINK, pink);
-        this.score = 1;
-    }
+
 
     public HarvestingObjective(int green, int yellow, int pink, int score) {
         this.needs = new EnumMap<>(Color.class);
@@ -27,6 +21,11 @@ public class HarvestingObjective implements Objective {
         this.needs.put(Color.PINK, pink);
         this.score = score;
     }
+
+    public HarvestingObjective(int green, int yellow, int pink) {
+        this(green, yellow, pink, 1);
+    }
+
 
     public boolean computeAchieved(
             Board ignoredB, Action ignoredA, VisibleInventory visibleInventory) {
