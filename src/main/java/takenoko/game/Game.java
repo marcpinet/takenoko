@@ -1,8 +1,6 @@
 package takenoko.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import takenoko.action.Action;
@@ -26,7 +24,11 @@ public class Game {
     private final GameInventory inventory;
 
     public Game(List<Player> players, List<Objective> objectives, Logger out, TileDeck tileDeck) {
-        board = new Board();
+        Map<Player, VisibleInventory> playerInventories = new HashMap<>();
+        for (Player p : players) {
+            playerInventories.put(p, p.getVisibleInventory());
+        }
+        board = new Board(playerInventories);
         this.players = players;
         this.objectives = objectives;
         this.out = out;
