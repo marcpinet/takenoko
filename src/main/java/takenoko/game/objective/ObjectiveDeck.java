@@ -55,6 +55,8 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
     }
 
     public O draw() throws EmptyDeckException {
-        return super.draw(ignored -> 0);
+        // We always draw one element, since that's the only size we support
+        DrawPredicate<O> pickFirstTile = ignored -> 0;
+        return super.draw(pickFirstTile);
     }
 }
