@@ -2,18 +2,33 @@ package takenoko.game.board;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import takenoko.game.objective.BambooSizeObjective;
+import takenoko.game.objective.HarvestingObjective;
+import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.*;
+import takenoko.player.Player;
+import takenoko.player.bot.EasyBot;
 import takenoko.utils.Coord;
 
 class BoardTest {
 
+    Player p1, p2;
     Board tileboard;
+    Map<Player, VisibleInventory> playersInventories;
 
     @BeforeEach
     void setUp() {
-        tileboard = new Board();
+        playersInventories = new HashMap<>();
+        p1 = new EasyBot(new Random());
+        p2 = new EasyBot(new Random());
+        playersInventories.put(p1, new VisibleInventory());
+        playersInventories.put(p2, new VisibleInventory());
+        tileboard = new Board(playersInventories);
     }
 
     @Test
@@ -93,5 +108,21 @@ class BoardTest {
         tileboard.placeTile(c2, new BambooTile(Color.GREEN));
         tileboard.placeTile(c4, t3);
         assertThrows(BoardException.class, () -> tileboard.move(MovablePiece.PANDA, c4));
+    }
+
+    @Test
+    void numberOfPointsTest() throws BambooSizeException {
+        // For this test, we'll just add objective in the finish list, to calculate the score for
+        // each player.
+        assertEquals(tileboard.getPlayerScore(p1), 0);
+        assertEquals(tileboard.getPlayerScore(p2), 0);
+        playersInventories.get(p1).addObjective(new BambooSizeObjective(1, 2, Color.GREEN, 3));
+        playersInventories.get(p1).addObjective(new HarvestingObjective(1, 0, 2, 2));
+        playersInventories
+                .get(p2)
+                .addObjective(
+                        new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2, 6));
+        assertEquals(tileboard.getPlayerScore(p1), 5);
+        assertEquals(tileboard.getPlayerScore(p2), 6);
     }
 }

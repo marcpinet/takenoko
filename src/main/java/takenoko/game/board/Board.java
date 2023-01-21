@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
 import takenoko.player.Player;
 import takenoko.utils.Coord;
@@ -212,5 +213,13 @@ public class Board {
 
     public Map<Player, VisibleInventory> getPlayersInventories() {
         return playersInventories;
+    }
+
+    public int getPlayerScore(Player p) {
+        int score = 0;
+        for (Objective o : playersInventories.get(p).getFinishedObjectives()) {
+            score += o.getScore();
+        }
+        return score;
     }
 }

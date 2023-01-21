@@ -78,6 +78,7 @@ public class Game {
             }
             numPlayer++;
             numAction = 1;
+            // TODO: Call the method that print the score of each player.
         }
     }
 
@@ -100,4 +101,6 @@ public class Game {
                 obj.computeAchieved(board, lastAction, player.getVisibleInventory());
         }
     }
+
+    // TODO: method that print the score of each player.
 }
