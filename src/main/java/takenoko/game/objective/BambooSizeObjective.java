@@ -17,6 +17,21 @@ public class BambooSizeObjective implements Objective {
     private final int score;
     private boolean achieved = false;
 
+    public BambooSizeObjective(int nbOfBamboos, int size, Color c) throws BambooSizeException {
+
+        if (nbOfBamboos < 1 || nbOfBamboos > 4) {
+            throw new BambooSizeException("Error : unreachable number of bamboos.");
+        }
+        if (size < 1 || size > 4) {
+            throw new BambooSizeException("Error : unreachable bamboo size.");
+        }
+
+        this.numberOfBamboos = nbOfBamboos;
+        this.sizeObjective = size;
+        this.color = c;
+        this.score = 1;
+    }
+
     public BambooSizeObjective(int nbOfBamboos, int size, Color c, int score)
             throws BambooSizeException {
 

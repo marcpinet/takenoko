@@ -31,9 +31,9 @@ class BambooSizeObjectiveTest {
 
     @BeforeEach
     void setUp() throws BambooSizeException {
-        b1 = new BambooSizeObjective(2, 1, Color.PINK, 1);
-        b2 = new BambooSizeObjective(3, 3, Color.YELLOW, 1);
-        b3 = new BambooSizeObjective(1, 4, Color.GREEN, 1);
+        b1 = new BambooSizeObjective(2, 1, Color.PINK);
+        b2 = new BambooSizeObjective(3, 3, Color.YELLOW);
+        b3 = new BambooSizeObjective(1, 4, Color.GREEN);
         board = new Board();
     }
 
@@ -42,18 +42,18 @@ class BambooSizeObjectiveTest {
         assertThrows(
                 BambooSizeException.class,
                 () -> {
-                    BambooSizeObjective b5 = new BambooSizeObjective(1, 5, Color.PINK, 1);
+                    BambooSizeObjective b5 = new BambooSizeObjective(1, 5, Color.PINK);
                 });
         assertThrows(
                 BambooSizeException.class,
                 () -> {
-                    BambooSizeObjective b6 = new BambooSizeObjective(0, 3, Color.PINK, 1);
+                    BambooSizeObjective b6 = new BambooSizeObjective(0, 3, Color.PINK);
                 });
 
         assertThrows(
                 BambooSizeException.class,
                 () -> {
-                    BambooSizeObjective b7 = new BambooSizeObjective(1, 0, Color.GREEN, 1);
+                    BambooSizeObjective b7 = new BambooSizeObjective(1, 0, Color.GREEN);
                 });
     }
 

@@ -77,6 +77,10 @@ public class TilePatternObjective implements Objective {
         this(Collections.nCopies(pattern.size(), color), pattern, score);
     }
 
+    public TilePatternObjective(Color color, List<Coord> pattern) {
+        this(Collections.nCopies(pattern.size(), color), pattern, 1);
+    }
+
     /// Generate all possible rotations of a pattern
     private List<List<Element>> generateRotations(List<Element> pattern) {
         var rotations = new ArrayList<List<Element>>();
