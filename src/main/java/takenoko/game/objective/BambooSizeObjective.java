@@ -4,10 +4,7 @@ import takenoko.action.Action;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.VisibleInventory;
-import takenoko.game.tile.BambooSizeException;
-import takenoko.game.tile.BambooTile;
-import takenoko.game.tile.Color;
-import takenoko.game.tile.Tile;
+import takenoko.game.tile.*;
 
 public class BambooSizeObjective implements Objective {
 
@@ -16,8 +13,18 @@ public class BambooSizeObjective implements Objective {
     private final Color color;
     private final int score;
     private boolean achieved = false;
+    private final PowerUpNecessity
+            powerUpNecessity; // MANDATORY if the objective need a PowerUp to be completed,
+    // FORBIDDEN if PowerUps are forbidden, else NO_MATTER.
+    private final PowerUp powerUp;
 
-    public BambooSizeObjective(int nbOfBamboos, int size, Color c, int score)
+    public BambooSizeObjective(
+            int nbOfBamboos,
+            int size,
+            Color c,
+            int score,
+            PowerUpNecessity powerUpNecessity,
+            PowerUp powerUp)
             throws BambooSizeException {
 
         if (nbOfBamboos < 1 || nbOfBamboos > 4) {
@@ -31,15 +38,23 @@ public class BambooSizeObjective implements Objective {
         this.sizeObjective = size;
         this.color = c;
         this.score = score;
+        this.powerUpNecessity = powerUpNecessity;
+        this.powerUp = powerUp;
     }
 
     public BambooSizeObjective(int nbOfBamboos, int size, Color c) throws BambooSizeException {
-        this(nbOfBamboos, size, c, 1);
+        this(nbOfBamboos, size, c, 1, PowerUpNecessity.NO_MATTER, PowerUp.NONE);
+    }
+
+    public BambooSizeObjective(int nbOfBamboos, int size, Color c, int score)
+            throws BambooSizeException {
+        this(nbOfBamboos, size, c, score, PowerUpNecessity.NO_MATTER, PowerUp.NONE);
     }
 
     @Override
     public boolean computeAchieved(Board board, Action lastAction, VisibleInventory ignored) {
         int nbOfBamboos = numberOfBamboos;
+        boolean powerUpCondition = false;
         achieved = false;
         for (var coord : board.getPlacedCoords()) {
             Tile tile = null;
@@ -52,9 +67,33 @@ public class BambooSizeObjective implements Objective {
                     && bambooTile.getBambooSize() == sizeObjective
                     && bambooTile.getColor() == color) {
                 nbOfBamboos--;
+                if (!powerUpCondition) { // Usefull in NO_MATTER case, when we just have to set
+                    // powerUpCondition at true one time.
+                    switch (this
+                            .powerUpNecessity) { // Since FORBIDDEN and MANDATORY are applying only
+                            // in objective with one bamboo, we can use a
+                            // switch here without risk.
+                        case FORBIDDEN -> {
+                            if (bambooTile.getPowerUp().equals(PowerUp.NONE)) {
+                                powerUpCondition = true;
+                                break;
+                            }
+                        }
+                        case MANDATORY -> {
+                            if (bambooTile.getPowerUp().equals(this.powerUp)) {
+                                powerUpCondition = true;
+                                break;
+                            }
+                        }
+                        case NO_MATTER -> {
+                            powerUpCondition = true;
+                            break;
+                        }
+                    }
+                }
             }
         }
-        if (nbOfBamboos <= 0) {
+        if (nbOfBamboos <= 0 && powerUpCondition) {
             achieved = true;
         }
         return achieved;
