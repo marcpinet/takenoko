@@ -18,14 +18,15 @@ public class HarvestingObjective implements Objective {
         this.needs.put(Color.PINK, pink);
     }
 
-    public boolean isAchieved(Board ignoredB, Action ignoredA, VisibleInventory visibleInventory) {
+    public boolean computeAchieved(
+            Board ignoredB, Action ignoredA, VisibleInventory visibleInventory) {
         achieved =
                 Arrays.stream(Color.values())
                         .allMatch(color -> visibleInventory.getBamboo(color) >= needs.get(color));
         return achieved;
     }
 
-    public boolean wasAchievedAfterLastCheck() {
+    public boolean isAchieved() {
         return achieved;
     }
 

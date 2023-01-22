@@ -5,9 +5,9 @@ import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
 
 public interface Objective {
-    boolean isAchieved(Board board, Action lastAction, VisibleInventory visibleInventory);
+    boolean computeAchieved(Board board, Action lastAction, VisibleInventory visibleInventory);
 
-    boolean wasAchievedAfterLastCheck();
+    boolean isAchieved();
 
     int getScore();
 }
