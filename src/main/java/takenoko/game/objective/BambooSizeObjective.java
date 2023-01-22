@@ -31,7 +31,7 @@ public class BambooSizeObjective implements Objective {
     }
 
     @Override
-    public boolean isAchieved(Board board, Action lastAction, VisibleInventory ignored) {
+    public boolean computeAchieved(Board board, Action lastAction, VisibleInventory ignored) {
         int nbOfBamboos = numberOfBamboos;
         achieved = false;
         for (var coord : board.getPlacedCoords()) {
@@ -54,7 +54,7 @@ public class BambooSizeObjective implements Objective {
     }
 
     @Override
-    public boolean wasAchievedAfterLastCheck() {
+    public boolean isAchieved() {
         return achieved;
     }
 

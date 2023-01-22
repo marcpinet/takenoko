@@ -60,9 +60,9 @@ class BambooSizeObjectiveTest {
     @Test
     void testIsAchieved() throws BambooSizeException, BambooIrrigationException, BoardException {
         // Initial verification
-        assertFalse(b1.isAchieved(board, INITIAL_ACTION, null));
-        assertFalse(b2.isAchieved(board, INITIAL_ACTION, null));
-        assertFalse(b3.isAchieved(board, INITIAL_ACTION, null));
+        assertFalse(b1.computeAchieved(board, INITIAL_ACTION, null));
+        assertFalse(b2.computeAchieved(board, INITIAL_ACTION, null));
+        assertFalse(b3.computeAchieved(board, INITIAL_ACTION, null));
 
         // Verification of the 1st objective
         var secondAction = placeBambooTile(board, new Coord(0, 1), Color.PINK);
@@ -79,13 +79,13 @@ class BambooSizeObjectiveTest {
         // First bamboo grow on the 1st tile
         bt1_1.growBamboo();
 
-        assertFalse(b1.isAchieved(board, thirdAction, null));
+        assertFalse(b1.computeAchieved(board, thirdAction, null));
 
         // First bamboo grow on the 2nd tile
         bt2_1.growBamboo();
 
-        assertTrue(b1.isAchieved(board, thirdAction, null));
-        assertTrue(b1.wasAchievedAfterLastCheck());
+        assertTrue(b1.computeAchieved(board, thirdAction, null));
+        assertTrue(b1.isAchieved());
 
         // Verification of the 2nd objective
         var fourthAction = placeBambooTile(board, new Coord(1, 1), Color.YELLOW);
@@ -126,8 +126,8 @@ class BambooSizeObjectiveTest {
         bt5_1.growBamboo();
         bt5_1.growBamboo();
 
-        assertTrue(b2.isAchieved(board, sixthAction, null));
-        assertTrue(b2.wasAchievedAfterLastCheck());
+        assertTrue(b2.computeAchieved(board, sixthAction, null));
+        assertTrue(b2.isAchieved());
 
         // Verification of the 3rd objective
         var seventhAction = placeBambooTile(board, new Coord(2, 1), Color.GREEN);
@@ -147,7 +147,7 @@ class BambooSizeObjectiveTest {
         bt6_1.growBamboo();
         bt6_1.growBamboo();
 
-        assertTrue(b3.isAchieved(board, seventhAction, null));
-        assertTrue(b3.wasAchievedAfterLastCheck());
+        assertTrue(b3.computeAchieved(board, seventhAction, null));
+        assertTrue(b3.isAchieved());
     }
 }

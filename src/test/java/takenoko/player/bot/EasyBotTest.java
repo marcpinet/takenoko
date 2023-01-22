@@ -50,7 +50,7 @@ class EasyBotTest {
         EasyBot bot = new EasyBot(randomSource);
 
         var objMock = mock(Objective.class);
-        when(objMock.wasAchievedAfterLastCheck()).thenReturn(true);
+        when(objMock.isAchieved()).thenReturn(true);
 
         bot.getPrivateInventory().addObjective(objMock);
         var possibleAction =

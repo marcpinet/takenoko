@@ -24,30 +24,30 @@ class HarvestingObjectiveTest {
 
     @Test
     void testIsAchieved() {
-        assertFalse(h1.isAchieved(null, null, visibleInventory));
-        assertFalse(h2.isAchieved(null, null, visibleInventory));
-        assertFalse(h3.isAchieved(null, null, visibleInventory));
+        assertFalse(h1.computeAchieved(null, null, visibleInventory));
+        assertFalse(h2.computeAchieved(null, null, visibleInventory));
+        assertFalse(h3.computeAchieved(null, null, visibleInventory));
 
         for (int i = 0; i < 3; i++) {
             visibleInventory.incrementBamboo(Color.GREEN);
         }
 
-        assertFalse(h1.isAchieved(null, null, visibleInventory));
-        assertFalse(h2.isAchieved(null, null, visibleInventory));
-        assertTrue(h3.isAchieved(null, null, visibleInventory));
+        assertFalse(h1.computeAchieved(null, null, visibleInventory));
+        assertFalse(h2.computeAchieved(null, null, visibleInventory));
+        assertTrue(h3.computeAchieved(null, null, visibleInventory));
 
         for (int i = 0; i < 2; i++) {
             visibleInventory.incrementBamboo(Color.YELLOW);
         }
 
-        assertFalse(h1.isAchieved(null, null, visibleInventory));
-        assertTrue(h2.isAchieved(null, null, visibleInventory));
-        assertTrue(h3.isAchieved(null, null, visibleInventory));
+        assertFalse(h1.computeAchieved(null, null, visibleInventory));
+        assertTrue(h2.computeAchieved(null, null, visibleInventory));
+        assertTrue(h3.computeAchieved(null, null, visibleInventory));
 
         visibleInventory.incrementBamboo(Color.PINK);
 
-        assertTrue(h1.isAchieved(null, null, visibleInventory));
-        assertTrue(h2.isAchieved(null, null, visibleInventory));
-        assertTrue(h3.isAchieved(null, null, visibleInventory));
+        assertTrue(h1.computeAchieved(null, null, visibleInventory));
+        assertTrue(h2.computeAchieved(null, null, visibleInventory));
+        assertTrue(h3.computeAchieved(null, null, visibleInventory));
     }
 }

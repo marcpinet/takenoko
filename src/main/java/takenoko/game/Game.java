@@ -97,7 +97,7 @@ public class Game {
     private void checkObjectives(Action lastAction) {
         for (var player : players) {
             for (var obj : player.getPrivateInventory().getObjectives())
-                obj.isAchieved(board, lastAction, player.getVisibleInventory());
+                obj.computeAchieved(board, lastAction, player.getVisibleInventory());
         }
     }
 }

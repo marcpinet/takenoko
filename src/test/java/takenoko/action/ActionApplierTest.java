@@ -74,8 +74,8 @@ class ActionApplierTest {
     @Test
     void unveilObjective() throws InventoryException {
         var mockObj = mock(Objective.class);
-        when(mockObj.isAchieved(any(), any(), any())).thenReturn(true);
-        when(mockObj.wasAchievedAfterLastCheck()).thenReturn(true);
+        when(mockObj.computeAchieved(any(), any(), any())).thenReturn(true);
+        when(mockObj.isAchieved()).thenReturn(true);
         when(mockObj.getScore()).thenReturn(1);
 
         player.getPrivateInventory().addObjective(mockObj);
@@ -101,8 +101,8 @@ class ActionApplierTest {
         visibleInv.incrementBamboo(Color.YELLOW);
 
         var mockObj = mock(HarvestingObjective.class);
-        when(mockObj.isAchieved(any(), any(), any())).thenReturn(true);
-        when(mockObj.wasAchievedAfterLastCheck()).thenReturn(true);
+        when(mockObj.computeAchieved(any(), any(), any())).thenReturn(true);
+        when(mockObj.isAchieved()).thenReturn(true);
         when(mockObj.getGreen()).thenReturn(1);
         when(mockObj.getPink()).thenReturn(1);
         when(mockObj.getYellow()).thenReturn(1);

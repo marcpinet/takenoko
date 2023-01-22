@@ -120,7 +120,7 @@ public class TilePatternObjective implements Objective {
     }
 
     @Override
-    public boolean isAchieved(Board board, Action lastAction, VisibleInventory ignored) {
+    public boolean computeAchieved(Board board, Action lastAction, VisibleInventory ignored) {
         // Once the objective is achieved, it stays achieved
         if (achieved) {
             return true;
@@ -137,7 +137,7 @@ public class TilePatternObjective implements Objective {
     }
 
     @Override
-    public boolean wasAchievedAfterLastCheck() {
+    public boolean isAchieved() {
         return achieved;
     }
 
