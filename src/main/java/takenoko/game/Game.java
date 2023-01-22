@@ -79,6 +79,7 @@ public class Game {
             numPlayer++;
             numAction = 1;
         }
+        displayInventories();
     }
 
     private PossibleActionLister makeActionLister(
@@ -98,6 +99,15 @@ public class Game {
         for (var player : players) {
             for (var obj : player.getPrivateInventory().getObjectives())
                 obj.computeAchieved(board, lastAction, player.getVisibleInventory());
+        }
+    }
+
+    private void displayInventories() {
+        int numPlayer = 1;
+        for (Player p : players) {
+            this.out.log(Level.INFO, "Player number {0} informations :", numPlayer);
+            this.out.log(Level.INFO, "Score : {0}", board.getPlayerScore(p));
+            numPlayer++;
         }
     }
 }

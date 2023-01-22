@@ -11,7 +11,7 @@ import takenoko.game.tile.Color;
 
 class HarvestingObjectiveTest {
 
-    HarvestingObjective h1, h2, h3, h4;
+    HarvestingObjective h1, h2, h3;
     VisibleInventory visibleInventory;
 
     @BeforeEach

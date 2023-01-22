@@ -44,10 +44,11 @@ public class TilePatternObjective implements Objective {
 
     private final Set<List<Element>> patternVariations;
     private boolean achieved = false;
+    private final int score;
 
     /// pattern is an array of deltas from one edge of the pattern to the next, expected to start
     /// with (0, 0)
-    public TilePatternObjective(List<Color> color, List<Coord> pattern) {
+    public TilePatternObjective(List<Color> color, List<Coord> pattern, int score) {
         if (pattern.size() != color.size()) {
             throw new IllegalArgumentException("Pattern and color must have the same size");
         }
@@ -68,11 +69,16 @@ public class TilePatternObjective implements Objective {
                         .flatMap(pat -> generateReversed(pat).stream())
                         // remove duplicates
                         .collect(Collectors.toSet());
+        this.score = score;
     }
 
     /// alternative constructor for a pattern with only one color
+    public TilePatternObjective(Color color, List<Coord> pattern, int score) {
+        this(Collections.nCopies(pattern.size(), color), pattern, score);
+    }
+
     public TilePatternObjective(Color color, List<Coord> pattern) {
-        this(Collections.nCopies(pattern.size(), color), pattern);
+        this(Collections.nCopies(pattern.size(), color), pattern, 1);
     }
 
     /// Generate all possible rotations of a pattern
@@ -143,7 +149,7 @@ public class TilePatternObjective implements Objective {
 
     @Override
     public int getScore() {
-        return 1;
+        return score;
     }
 
     // A tile is part of the pattern if it is the right color and if it's irrigated
