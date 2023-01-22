@@ -46,14 +46,14 @@ public class ActionApplier {
             case Action.PlaceIrrigationStick placeIrrigationStick -> apply(
                     player, placeIrrigationStick);
             case Action.MoveGardener moveGardener -> apply(
-                    MovablePiece.GARDENER, moveGardener.coord());
+                    MovablePiece.GARDENER, moveGardener.coord(), player);
             case Action.TakeBambooSizeObjective ignored -> drawObjective(
                     gameInventory.getBambooSizeObjectiveDeck());
             case Action.TakeHarvestingObjective ignored -> drawObjective(
                     gameInventory.getHarvestingObjectiveDeck());
             case Action.TakeTilePatternObjective ignored -> drawObjective(
                     gameInventory.getTilePatternObjectiveDeck());
-            case Action.MovePanda movePanda -> apply(MovablePiece.PANDA, movePanda.coord());
+            case Action.MovePanda movePanda -> apply(MovablePiece.PANDA, movePanda.coord(), player);
         }
     }
 
@@ -68,9 +68,9 @@ public class ActionApplier {
         }
     }
 
-    private void apply(MovablePiece piece, Coord pieceCoord) {
+    private void apply(MovablePiece piece, Coord pieceCoord, Player player) {
         try {
-            this.board.move(piece, pieceCoord);
+            this.board.move(piece, pieceCoord, player);
         } catch (Exception e) {
             this.out.log(Level.SEVERE, e.getMessage());
         }

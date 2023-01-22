@@ -1,7 +1,6 @@
 package takenoko.game.board;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import takenoko.game.objective.Objective;
@@ -15,16 +14,16 @@ public class Board {
     private final Map<Coord, Tile> tiles;
     private Pair<MovablePiece, Coord> gardener = Pair.of(MovablePiece.GARDENER, POND_COORD);
     private Pair<MovablePiece, Coord> panda = Pair.of(MovablePiece.PANDA, POND_COORD);
-    private final Map<Player, VisibleInventory> playersInventories;
+    private final List<Player> players;
 
     public Board() {
-        this(new HashMap<>());
+        this(Collections.emptyList());
     }
 
-    public Board(Map<Player, VisibleInventory> playersInventories) {
+    public Board(List<Player> players) {
         tiles = new HashMap<>();
         tiles.put(POND_COORD, new PondTile());
-        this.playersInventories = playersInventories;
+        this.players = players;
     }
 
     public void placeTile(Coord c, Tile t) throws BoardException, IrrigationException {
@@ -88,12 +87,6 @@ public class Board {
         return tiles.keySet();
     }
 
-    public void applyOnEachTile(Function<Tile, Void> f) {
-        for (Map.Entry<Coord, Tile> entry : tiles.entrySet()) {
-            f.apply(entry.getValue());
-        }
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -135,7 +128,7 @@ public class Board {
         return tiles.containsKey(coord);
     }
 
-    public void move(MovablePiece pieceType, Coord coord) throws BoardException {
+    public void move(MovablePiece pieceType, Coord coord, Player player) throws BoardException {
         if (!tiles.containsKey(coord)) {
             throw new BoardException(
                     "Error: the tile with these coordinates is not present on the board.");
@@ -158,6 +151,7 @@ public class Board {
             if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
                 try {
                     bambooTile.shrinkBamboo();
+                    player.getVisibleInventory().incrementBamboo(bambooTile.getColor());
                 } catch (BambooSizeException e) {
                     // This should never happen
                     throw new IllegalStateException(e);
@@ -211,15 +205,15 @@ public class Board {
         return panda.second();
     }
 
-    public Map<Player, VisibleInventory> getPlayersInventories() {
-        return playersInventories;
-    }
-
     public int getPlayerScore(Player p) {
         int score = 0;
-        for (Objective o : playersInventories.get(p).getFinishedObjectives()) {
+        for (Objective o : p.getVisibleInventory().getFinishedObjectives()) {
             score += o.getScore();
         }
         return score;
+    }
+
+    public List<Player> getPlayers() {
+        return Collections.unmodifiableList(players);
     }
 }
