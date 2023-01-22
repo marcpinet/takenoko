@@ -1,7 +1,6 @@
 package takenoko.game.board;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import takenoko.game.objective.Objective;
@@ -86,12 +85,6 @@ public class Board {
 
     public Set<Coord> getPlacedCoords() {
         return tiles.keySet();
-    }
-
-    public void applyOnEachTile(Function<Tile, Void> f) {
-        for (Map.Entry<Coord, Tile> entry : tiles.entrySet()) {
-            f.apply(entry.getValue());
-        }
     }
 
     @Override
@@ -211,10 +204,6 @@ public class Board {
 
     public Coord getPandaCoord() {
         return panda.second();
-    }
-
-    public Map<Player, VisibleInventory> getPlayersInventories() {
-        return playersInventories;
     }
 
     public int getPlayerScore(Player p) {
