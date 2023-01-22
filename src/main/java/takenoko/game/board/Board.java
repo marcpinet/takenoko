@@ -14,16 +14,16 @@ public class Board {
     private final Map<Coord, Tile> tiles;
     private Pair<MovablePiece, Coord> gardener = Pair.of(MovablePiece.GARDENER, POND_COORD);
     private Pair<MovablePiece, Coord> panda = Pair.of(MovablePiece.PANDA, POND_COORD);
-    private final Map<Player, VisibleInventory> playersInventories;
+    private final List<Player> players;
 
     public Board() {
-        this(new HashMap<>());
+        this(Collections.emptyList());
     }
 
-    public Board(Map<Player, VisibleInventory> playersInventories) {
+    public Board(List<Player> players) {
         tiles = new HashMap<>();
         tiles.put(POND_COORD, new PondTile());
-        this.playersInventories = playersInventories;
+        this.players = players;
     }
 
     public void placeTile(Coord c, Tile t) throws BoardException, IrrigationException {
@@ -148,11 +148,10 @@ public class Board {
             panda = Pair.of(pieceType, coord);
             // Making bamboo on the tile grow
             Tile tile = tiles.get(coord);
-            var playerInventory = playersInventories.get(player);
             if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
                 try {
                     bambooTile.shrinkBamboo();
-                    playerInventory.incrementBamboo(bambooTile.getColor());
+                    player.getVisibleInventory().incrementBamboo(bambooTile.getColor());
                 } catch (BambooSizeException e) {
                     // This should never happen
                     throw new IllegalStateException(e);
@@ -208,9 +207,13 @@ public class Board {
 
     public int getPlayerScore(Player p) {
         int score = 0;
-        for (Objective o : playersInventories.get(p).getFinishedObjectives()) {
+        for (Objective o : p.getVisibleInventory().getFinishedObjectives()) {
             score += o.getScore();
         }
         return score;
+    }
+
+    public List<Player> getPlayers() {
+        return Collections.unmodifiableList(players);
     }
 }

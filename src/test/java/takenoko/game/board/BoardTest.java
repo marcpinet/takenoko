@@ -2,7 +2,7 @@ package takenoko.game.board;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,12 +21,9 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        var playersInventories = new HashMap<Player, VisibleInventory>();
         p1 = new EasyBot(new Random());
         p2 = new EasyBot(new Random());
-        playersInventories.put(p1, p1.getVisibleInventory());
-        playersInventories.put(p2, p2.getVisibleInventory());
-        tileboard = new Board(playersInventories);
+        tileboard = new Board(List.of(p1, p2));
     }
 
     @Test

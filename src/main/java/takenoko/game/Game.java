@@ -8,7 +8,6 @@ import takenoko.action.ActionApplier;
 import takenoko.action.ActionValidator;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
-import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
@@ -22,11 +21,7 @@ public class Game {
     private final GameInventory inventory;
 
     public Game(List<Player> players, Logger out, TileDeck tileDeck) {
-        Map<Player, VisibleInventory> playerInventories = new HashMap<>();
-        for (Player p : players) {
-            playerInventories.put(p, p.getVisibleInventory());
-        }
-        board = new Board(playerInventories);
+        board = new Board(players);
         this.players = players;
         this.out = out;
         inventory = new GameInventory(20, tileDeck);
