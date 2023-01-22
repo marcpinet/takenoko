@@ -135,7 +135,7 @@ public class Board {
         return tiles.containsKey(coord);
     }
 
-    public void move(MovablePiece pieceType, Coord coord) throws BoardException {
+    public void move(MovablePiece pieceType, Coord coord, Player player) throws BoardException {
         if (!tiles.containsKey(coord)) {
             throw new BoardException(
                     "Error: the tile with these coordinates is not present on the board.");
@@ -155,9 +155,11 @@ public class Board {
             panda = Pair.of(pieceType, coord);
             // Making bamboo on the tile grow
             Tile tile = tiles.get(coord);
+            var playerInventory = playersInventories.get(player);
             if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
                 try {
                     bambooTile.shrinkBamboo();
+                    playerInventory.incrementBamboo(bambooTile.getColor());
                 } catch (BambooSizeException e) {
                     // This should never happen
                     throw new IllegalStateException(e);
