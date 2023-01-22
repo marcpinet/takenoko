@@ -49,7 +49,6 @@ class GameTest {
 
     @Test
     void testGetWinner() throws PlayerException {
-        // Don't forget that unveil an objective is an action, just like place a tile
         var p1 = mock(Player.class);
         when(p1.getPrivateInventory()).thenReturn(new PrivateInventory());
         when(p1.getScore()).thenReturn(1);
