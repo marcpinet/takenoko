@@ -82,11 +82,16 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
 
     public static ObjectiveDeck<HarvestingObjective> makeHarvestingObjectiveDeck() {
         var list = new ArrayList<HarvestingObjective>();
-
-        list.add(new HarvestingObjective(1, 1, 1));
-        list.add(new HarvestingObjective(1, 0, 2));
-        list.add(new HarvestingObjective(0, 0, 3));
-        list.add(new HarvestingObjective(0, 1, 4));
+        for (int i = 0; i < 5; i++) {
+            list.add(new HarvestingObjective(2, 0, 0, 3));
+        }
+        for (int i = 0; i < 4; i++) {
+            list.add(new HarvestingObjective(0, 2, 0, 4));
+        }
+        for (int i = 0; i < 3; i++) {
+            list.add(new HarvestingObjective(0, 0, 2, 5));
+            list.add(new HarvestingObjective(1, 1, 1, 6));
+        }
 
         return new ObjectiveDeck<>(new ArrayDeque<>(list));
     }
