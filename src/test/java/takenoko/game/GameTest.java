@@ -14,9 +14,6 @@ import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.action.Action;
-import takenoko.game.objective.Objective;
-import takenoko.game.objective.TilePatternObjective;
-import takenoko.game.tile.Color;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
@@ -64,10 +61,7 @@ class GameTest {
         when(p2.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 
         var players = List.of(p1, p2);
-        List<Objective> objectives =
-                List.of(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
-
-        var game = new Game(players, objectives, logger, tileDeck);
+        var game = new Game(players, logger, tileDeck);
 
         assertEquals(Optional.of(p2), game.play());
         assertNoSevereLog();
@@ -80,10 +74,7 @@ class GameTest {
 
         for (int i = 0; i < 10; i++) {
             List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
-            List<Objective> objectives =
-                    List.of(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
-
-            var game = new Game(players, objectives, logger, tileDeck);
+            var game = new Game(players, logger, tileDeck);
             game.play();
             assertNoSevereLog();
         }

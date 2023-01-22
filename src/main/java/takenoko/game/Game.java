@@ -9,7 +9,6 @@ import takenoko.action.ActionValidator;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
-import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
@@ -19,18 +18,16 @@ public class Game {
     private final Board board;
     private final List<Player> players;
     private final Logger out;
-    private final List<Objective> objectives;
     private int numTurn = 1;
     private final GameInventory inventory;
 
-    public Game(List<Player> players, List<Objective> objectives, Logger out, TileDeck tileDeck) {
+    public Game(List<Player> players, Logger out, TileDeck tileDeck) {
         Map<Player, VisibleInventory> playerInventories = new HashMap<>();
         for (Player p : players) {
             playerInventories.put(p, p.getVisibleInventory());
         }
         board = new Board(playerInventories);
         this.players = players;
-        this.objectives = objectives;
         this.out = out;
         inventory = new GameInventory(20, tileDeck);
     }
@@ -73,7 +70,7 @@ public class Game {
                             new ActionApplier(board, out, inventory, player.getPrivateInventory());
                     applier.apply(action, player);
                     alreadyPlayedActions.add(action);
-                    checkObjectives(action, player.getVisibleInventory());
+                    checkObjectives(action);
                 } catch (PlayerException e) {
                     this.out.log(Level.SEVERE, "Player exception: {0}", e.getMessage());
                 }
@@ -97,9 +94,10 @@ public class Game {
         return new PossibleActionLister(board, validator, player.getPrivateInventory());
     }
 
-    private void checkObjectives(Action lastAction, VisibleInventory visibleInventory) {
-        for (Objective objective : objectives) {
-            objective.isAchieved(board, lastAction, visibleInventory);
+    private void checkObjectives(Action lastAction) {
+        for (var player : players) {
+            for (var obj : player.getPrivateInventory().getObjectives())
+                obj.isAchieved(board, lastAction, player.getVisibleInventory());
         }
     }
 }
