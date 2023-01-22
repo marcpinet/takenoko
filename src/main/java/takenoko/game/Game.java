@@ -78,8 +78,8 @@ public class Game {
             }
             numPlayer++;
             numAction = 1;
-            // TODO: Call the method that print the score of each player.
         }
+        displayInventories();
     }
 
     private PossibleActionLister makeActionLister(
@@ -102,5 +102,12 @@ public class Game {
         }
     }
 
-    // TODO: method that print the score of each player.
+    private void displayInventories() {
+        int numPlayer = 1;
+        for (Player p : players) {
+            this.out.log(Level.INFO, "Player number {0} informations :", numPlayer);
+            this.out.log(Level.INFO, "Score : {0}", board.getPlayerScore(p));
+            numPlayer++;
+        }
+    }
 }
