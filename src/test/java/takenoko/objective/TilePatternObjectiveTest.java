@@ -46,12 +46,29 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testLineOfTwo() {
-        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2);
+    void testTriangle() {
+        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE);
 
-        var board = prepareBoard(objective, new Coord(-1, 0));
+        var board = prepareBoard(objective, new Coord(0, 1), new Coord(-1, 1));
 
-        var lastAction = placeBambooTile(board, new Coord(0, -1));
+        var lastAction = placeBambooTile(board, new Coord(-1, 2));
+        assertTrue(objective.computeAchieved(board, lastAction, null));
+    }
+
+    @Test
+    void testDiamondWithoutRightPart() throws IrrigationException, BoardException {
+        var objective =
+                new TilePatternObjective(
+                        Color.GREEN, TilePatternObjective.DIAMOND_WITHOUT_RIGHT_PART);
+
+        var board = new Board();
+        board.placeTile(new Coord(-1, 1), new BambooTile(Color.GREEN));
+        // this tile should be pink
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        board.placeTile(new Coord(-1, 2), new BambooTile(Color.GREEN));
+
+        var lastAction = placeBambooTile(board, new Coord(0, 2));
+        System.out.println(board);
         assertTrue(objective.computeAchieved(board, lastAction, null));
     }
 
@@ -67,28 +84,12 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testSquareOfTwo() {
-        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND_4);
+    void testDiamond() {
+        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND);
 
-        var board =
-                prepareBoard(
-                        objective,
-                        new Coord(-1, 0),
-                        new Coord(0, -1),
-                        new Coord(-1, 1),
-                        new Coord(-2, 1));
+        var board = prepareBoard(objective, new Coord(0, 1), new Coord(-1, 1), new Coord(-1, 2));
 
-        var lastAction = placeBambooTile(board, new Coord(-2, 0));
-        assertTrue(objective.computeAchieved(board, lastAction, null));
-    }
-
-    @Test
-    void testTriangleOfTwo() {
-        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE_3);
-
-        var board = prepareBoard(objective, new Coord(0, -1), new Coord(1, -1));
-
-        var lastAction = placeBambooTile(board, new Coord(1, -2));
+        var lastAction = placeBambooTile(board, new Coord(0, 2));
         assertTrue(objective.computeAchieved(board, lastAction, null));
     }
 

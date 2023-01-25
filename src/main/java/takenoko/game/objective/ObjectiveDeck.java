@@ -15,10 +15,25 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
     public static ObjectiveDeck<TilePatternObjective> makeTilePatternObjectiveDeck() {
         var list = new ArrayList<TilePatternObjective>();
 
-        list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND_4));
-        list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2));
-        list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3));
-        list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE_3));
+        list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE, 2));
+        list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND, 3));
+        // TODO: add bicolour pattern
+        list.add(new TilePatternObjective(Color.YELLOW, TilePatternObjective.LINE_3, 3));
+        list.add(new TilePatternObjective(Color.YELLOW, TilePatternObjective.DIAMOND, 4));
+        list.add(
+                new TilePatternObjective(
+                        Color.YELLOW, TilePatternObjective.DIAMOND_WITHOUT_RIGHT_PART, 3));
+        list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3, 2));
+        list.add(
+                new TilePatternObjective(
+                        Color.GREEN, TilePatternObjective.DIAMOND_WITHOUT_RIGHT_PART, 2));
+        list.add(
+                new TilePatternObjective(
+                        Color.PINK, TilePatternObjective.DIAMOND_WITHOUT_RIGHT_PART, 4));
+        list.add(new TilePatternObjective(Color.PINK, TilePatternObjective.TRIANGLE, 4));
+        list.add(new TilePatternObjective(Color.PINK, TilePatternObjective.DIAMOND, 5));
+        list.add(new TilePatternObjective(Color.PINK, TilePatternObjective.LINE_3, 4));
+        list.add(new TilePatternObjective(Color.YELLOW, TilePatternObjective.TRIANGLE, 3));
 
         return new ObjectiveDeck<>(new ArrayDeque<>(list));
     }
