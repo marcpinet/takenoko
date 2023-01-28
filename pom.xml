@@ -126,6 +126,7 @@
                         </format>
                     </formats>
                     <java>
+                        <toggleOffOn/>
                         <googleJavaFormat>
                             <style>AOSP</style>
                             <version>1.15.0</version>

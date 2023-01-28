@@ -36,7 +36,7 @@ public record Coord(int x, int y) {
         return new Coord(x + other.x, y + other.y);
     }
 
-    public Coord reversed() {
+    public Coord negated() {
         return new Coord(-x, -y);
     }
 
