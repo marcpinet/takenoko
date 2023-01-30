@@ -63,12 +63,10 @@ class TilePatternObjectiveTest {
 
         var board = new Board();
         board.placeTile(new Coord(-1, 1), new BambooTile(Color.GREEN));
-        // this tile should be pink
-        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.PINK));
         board.placeTile(new Coord(-1, 2), new BambooTile(Color.GREEN));
 
         var lastAction = placeBambooTile(board, new Coord(0, 2));
-        System.out.println(board);
         assertTrue(objective.computeAchieved(board, lastAction, null));
     }
 
