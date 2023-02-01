@@ -15,6 +15,7 @@ public sealed interface Action
                 Action.None,
                 Action.PickPowerUp,
                 Action.PlaceIrrigationStick,
+                Action.PlacePowerUp,
                 Action.PlaceTile,
                 Action.TakeBambooSizeObjective,
                 Action.TakeHarvestingObjective,
@@ -180,6 +181,26 @@ public sealed interface Action
         @Override
         public int hashCode() {
             return Objects.hash(powerUp);
+        }
+    }
+
+    record PlacePowerUp(Coord coord, PowerUp powerUp) implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof PlacePowerUp other) {
+                return coord.equals(other.coord) && powerUp.equals(other.powerUp);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(coord, powerUp);
         }
     }
 }

@@ -34,6 +34,9 @@ public class PossibleActionLister {
         for (var powerUp : PowerUp.values()) {
             if (powerUp != PowerUp.NONE) {
                 possibleActions.add(new Action.PickPowerUp(powerUp));
+                for (var coord : board.getPlacedCoords()) {
+                    possibleActions.add(new Action.PlacePowerUp(coord, powerUp));
+                }
             }
         }
 

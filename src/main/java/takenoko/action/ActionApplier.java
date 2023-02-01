@@ -4,13 +4,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
+import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.objective.ObjectiveDeck;
-import takenoko.game.tile.Color;
-import takenoko.game.tile.EmptyDeckException;
-import takenoko.game.tile.PowerUpNotAvailableException;
+import takenoko.game.tile.*;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PrivateInventory;
@@ -56,6 +55,18 @@ public class ActionApplier {
                     gameInventory.getTilePatternObjectiveDeck());
             case Action.MovePanda movePanda -> apply(MovablePiece.PANDA, movePanda.coord(), player);
             case Action.PickPowerUp pickPowerUp -> apply(player, pickPowerUp);
+            case Action.PlacePowerUp placePowerUp -> apply(player, placePowerUp);
+        }
+    }
+
+    private void apply(Player player, Action.PlacePowerUp placePowerUp) {
+        try {
+            player.getVisibleInventory().decrementPowerUp(placePowerUp.powerUp());
+
+            var tile = (BambooTile) board.getTile(placePowerUp.coord());
+            tile.setPowerUp(placePowerUp.powerUp());
+        } catch (PowerUpException | InventoryException | BoardException e) {
+            this.out.log(Level.SEVERE, e.getMessage());
         }
     }
 

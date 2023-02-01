@@ -9,7 +9,9 @@ import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.objective.ObjectiveDeck;
+import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.Color;
+import takenoko.game.tile.PowerUp;
 import takenoko.player.PrivateInventory;
 
 public class ActionValidator {
@@ -64,6 +66,7 @@ public class ActionValidator {
             case Action.MovePanda a -> isValid(a);
             case Action.EndTurn ignored -> true;
             case Action.PickPowerUp a -> isValid(a);
+            case Action.PlacePowerUp a -> isValid(a);
         };
     }
 
@@ -120,5 +123,15 @@ public class ActionValidator {
 
     private boolean isValid(Action.PickPowerUp action) {
         return gameInventory.getPowerUpReserve().canPick(action.powerUp());
+    }
+
+    private boolean isValid(Action.PlacePowerUp action) {
+        try {
+            return board.getTile(action.coord()) instanceof BambooTile bambooTile
+                    && bambooTile.getPowerUp().equals(PowerUp.NONE)
+                    && playerVisibleInventory.hasPowerUp(action.powerUp());
+        } catch (BoardException ignored) {
+        }
+        return false;
     }
 }
