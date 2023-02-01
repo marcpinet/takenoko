@@ -179,12 +179,7 @@ public class TilePatternObjective implements Objective {
         }
     }
 
-    public static final List<Coord> DIAMOND_4 =
-            List.of(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0), new Coord(1, 1));
     public static final List<Coord> LINE_2 = List.of(new Coord(0, 0), new Coord(0, 1));
-
-    public static final List<Coord> TRIANGLE_3 =
-            List.of(new Coord(0, 0), new Coord(0, 1), new Coord(1, 0));
 
     // Officials objectives
     public static final List<Coord> TRIANGLE =

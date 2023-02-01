@@ -17,9 +17,9 @@ class TilePatternObjectiveTest {
     static final Action.PlaceTile INITIAL_ACTION =
             new Action.PlaceTile(new Coord(0, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
 
-    Action.PlaceTile placeBambooTile(Board board, Coord c) {
+    Action.PlaceTile placeBambooTile(Board board, Coord c, Color color) {
         try {
-            board.placeTile(c, new BambooTile(Color.GREEN));
+            board.placeTile(c, new BambooTile(color));
             // irrigate all sides if possible
             for (var side : TileSide.values()) {
                 try {
@@ -32,6 +32,10 @@ class TilePatternObjectiveTest {
             fail(e);
         }
         return new Action.PlaceTile(c, TileDeck.DEFAULT_DRAW_PREDICATE);
+    }
+
+    Action.PlaceTile placeBambooTile(Board board, Coord c) {
+        return placeBambooTile(board, c, Color.GREEN);
     }
 
     Board prepareBoard(Objective obj, Coord... coords) {
@@ -88,6 +92,21 @@ class TilePatternObjectiveTest {
         var board = prepareBoard(objective, new Coord(0, 1), new Coord(-1, 1), new Coord(-1, 2));
 
         var lastAction = placeBambooTile(board, new Coord(0, 2));
+        assertTrue(objective.computeAchieved(board, lastAction, null));
+    }
+
+    @Test
+    void testBicolourObjectives() throws IrrigationException, BoardException {
+        List<Color> colors = List.of(Color.YELLOW, Color.YELLOW, Color.PINK, Color.PINK);
+        var objective = new TilePatternObjective(colors, TilePatternObjective.DIAMOND, 1);
+
+        var board = new Board();
+
+        placeBambooTile(board, new Coord(0, 1), Color.YELLOW);
+        placeBambooTile(board, new Coord(-1, 1), Color.YELLOW);
+        placeBambooTile(board, new Coord(-1, 2), Color.PINK);
+        var lastAction = placeBambooTile(board, new Coord(0, 2), Color.PINK);
+
         assertTrue(objective.computeAchieved(board, lastAction, null));
     }
 

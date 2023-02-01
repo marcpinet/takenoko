@@ -2,6 +2,7 @@ package takenoko.game.objective;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import takenoko.game.Deck;
 import takenoko.game.tile.BambooSizeException;
@@ -17,7 +18,21 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
 
         list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE, 2));
         list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND, 3));
-        // TODO: add bicolour pattern
+        list.add(
+                new TilePatternObjective(
+                        List.of(Color.PINK, Color.YELLOW, Color.YELLOW, Color.PINK),
+                        TilePatternObjective.DIAMOND,
+                        5));
+        list.add(
+                new TilePatternObjective(
+                        List.of(Color.GREEN, Color.PINK, Color.PINK, Color.GREEN),
+                        TilePatternObjective.DIAMOND,
+                        4));
+        list.add(
+                new TilePatternObjective(
+                        List.of(Color.GREEN, Color.YELLOW, Color.YELLOW, Color.PINK),
+                        TilePatternObjective.DIAMOND,
+                        3));
         list.add(new TilePatternObjective(Color.YELLOW, TilePatternObjective.LINE_3, 3));
         list.add(new TilePatternObjective(Color.YELLOW, TilePatternObjective.DIAMOND, 4));
         list.add(
