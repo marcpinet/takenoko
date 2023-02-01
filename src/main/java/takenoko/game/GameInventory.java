@@ -65,6 +65,10 @@ public class GameInventory {
         return harvestingObjectiveDeck;
     }
 
+    public PowerUpReserve getPowerUpReserve() {
+        return powerUpReserve;
+    }
+
     public boolean hasIrrigation() {
         return irrigationSticks > 0;
     }

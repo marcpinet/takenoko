@@ -10,6 +10,7 @@ import takenoko.game.objective.Objective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.EmptyDeckException;
+import takenoko.game.tile.PowerUpNotAvailableException;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PrivateInventory;
@@ -54,6 +55,16 @@ public class ActionApplier {
             case Action.TakeTilePatternObjective ignored -> drawObjective(
                     gameInventory.getTilePatternObjectiveDeck());
             case Action.MovePanda movePanda -> apply(MovablePiece.PANDA, movePanda.coord(), player);
+            case Action.PickPowerUp pickPowerUp -> apply(player, pickPowerUp);
+        }
+    }
+
+    private void apply(Player player, Action.PickPowerUp pickPowerUp) {
+        try {
+            player.getVisibleInventory().incrementPowerUp(pickPowerUp.powerUp());
+            gameInventory.getPowerUpReserve().pick(pickPowerUp.powerUp());
+        } catch (PowerUpNotAvailableException e) {
+            this.out.log(Level.SEVERE, e.getMessage());
         }
     }
 

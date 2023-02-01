@@ -63,6 +63,7 @@ public class ActionValidator {
             case Action.MoveGardener a -> isValid(a);
             case Action.MovePanda a -> isValid(a);
             case Action.EndTurn ignored -> true;
+            case Action.PickPowerUp a -> isValid(a);
         };
     }
 
@@ -115,5 +116,9 @@ public class ActionValidator {
         return board.getPlacedCoords().contains(action.coord())
                 && board.getPandaCoord().isAlignedWith(action.coord())
                 && !board.getPandaCoord().equals(action.coord());
+    }
+
+    private boolean isValid(Action.PickPowerUp action) {
+        return gameInventory.getPowerUpReserve().canPick(action.powerUp());
     }
 }

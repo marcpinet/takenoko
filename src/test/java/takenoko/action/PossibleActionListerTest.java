@@ -44,6 +44,9 @@ class PossibleActionListerTest {
                         new Action.TakeBambooSizeObjective(),
                         new Action.TakeHarvestingObjective(),
                         new Action.TakeTilePatternObjective(),
+                        new Action.PickPowerUp(PowerUp.ENCLOSURE),
+                        new Action.PickPowerUp(PowerUp.FERTILIZER),
+                        new Action.PickPowerUp(PowerUp.WATERSHED),
 
                         // not possible to move characters on the first turn
 
@@ -79,6 +82,9 @@ class PossibleActionListerTest {
                         new Action.TakeBambooSizeObjective(),
                         new Action.TakeHarvestingObjective(),
                         new Action.TakeTilePatternObjective(),
+                        new Action.PickPowerUp(PowerUp.ENCLOSURE),
+                        new Action.PickPowerUp(PowerUp.FERTILIZER),
+                        new Action.PickPowerUp(PowerUp.WATERSHED),
                         new Action.MoveGardener(new Coord(0, 1)),
                         new Action.MovePanda(new Coord(0, 1)),
                         new Action.TakeIrrigationStick(),
