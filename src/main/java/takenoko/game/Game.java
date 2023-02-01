@@ -11,6 +11,7 @@ import takenoko.action.ActionApplier;
 import takenoko.action.ActionValidator;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
+import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
@@ -46,9 +47,14 @@ public class Game {
 
     public Optional<Player> play() {
         this.out.log(Level.INFO, "Beginning of the game!");
-        while (numTurn < 200) {
+        while (numTurn < 200) { // Ideally, we should replace this with a while(true), but we can't
+            // actually due to the level of our bots.
             this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!");
             playTurn();
+            if (endOfGame()) {
+                playTurn(); // we need to play a last turn before ending
+                break;
+            }
             numTurn++;
         }
         return getWinner();
@@ -116,10 +122,34 @@ public class Game {
 
     private void displayInventories() {
         int numPlayer = 1;
+        VisibleInventory vi;
         for (Player p : players) {
+            vi = p.getVisibleInventory();
             this.out.log(Level.INFO, "Player number {0} informations :", numPlayer);
             this.out.log(Level.INFO, "Score : {0}", board.getPlayerScore(p));
+            this.out.log(
+                    Level.INFO,
+                    "Number of objectives achieved : {0}",
+                    vi.getFinishedObjectives().size());
             numPlayer++;
         }
+    }
+
+    public boolean endOfGame() {
+        VisibleInventory vi;
+        int objectivesUnveiled =
+                switch (players.size()) {
+                    case 2 -> 9;
+                    case 3 -> 8;
+                    case 4 -> 7;
+                    default -> -1;
+                };
+        for (Player p : players) {
+            vi = p.getVisibleInventory();
+            if (objectivesUnveiled == vi.getFinishedObjectives().size()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
