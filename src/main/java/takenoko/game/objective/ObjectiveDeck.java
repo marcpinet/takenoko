@@ -20,17 +20,17 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
         list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND, 3));
         list.add(
                 new TilePatternObjective(
-                        List.of(Color.PINK, Color.YELLOW, Color.YELLOW, Color.PINK),
+                        List.of(Color.YELLOW, Color.YELLOW, Color.PINK, Color.PINK),
                         TilePatternObjective.DIAMOND,
                         5));
         list.add(
                 new TilePatternObjective(
-                        List.of(Color.GREEN, Color.PINK, Color.PINK, Color.GREEN),
+                        List.of(Color.PINK, Color.PINK, Color.GREEN, Color.GREEN),
                         TilePatternObjective.DIAMOND,
                         4));
         list.add(
                 new TilePatternObjective(
-                        List.of(Color.GREEN, Color.YELLOW, Color.YELLOW, Color.PINK),
+                        List.of(Color.YELLOW, Color.YELLOW, Color.GREEN, Color.GREEN),
                         TilePatternObjective.DIAMOND,
                         3));
         list.add(new TilePatternObjective(Color.YELLOW, TilePatternObjective.LINE_3, 3));
