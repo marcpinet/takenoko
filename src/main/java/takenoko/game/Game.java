@@ -13,6 +13,8 @@ import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.EmptyDeckException;
+import takenoko.game.board.VisibleInventory;
+import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
