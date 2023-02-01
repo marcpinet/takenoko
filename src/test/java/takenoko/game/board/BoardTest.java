@@ -119,7 +119,7 @@ class BoardTest {
         p1.getVisibleInventory().addObjective(new HarvestingObjective(1, 0, 2, 2));
         p2.getVisibleInventory()
                 .addObjective(
-                        new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2, 6));
+                        new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3, 6));
         assertEquals(5, tileboard.getPlayerScore(p1));
         assertEquals(6, tileboard.getPlayerScore(p2));
     }

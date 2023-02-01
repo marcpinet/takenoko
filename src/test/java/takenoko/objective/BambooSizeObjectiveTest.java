@@ -8,12 +8,13 @@ import takenoko.action.Action;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.objective.BambooSizeObjective;
+import takenoko.game.objective.PowerUpNecessity;
 import takenoko.game.tile.*;
 import takenoko.utils.Coord;
 
 class BambooSizeObjectiveTest {
 
-    BambooSizeObjective b1, b2, b3;
+    BambooSizeObjective b1, b2, b3, b4, b5, b6;
     Board board;
 
     // The board always apply this action first
@@ -34,6 +35,11 @@ class BambooSizeObjectiveTest {
         b1 = new BambooSizeObjective(2, 1, Color.PINK);
         b2 = new BambooSizeObjective(3, 3, Color.YELLOW);
         b3 = new BambooSizeObjective(1, 4, Color.GREEN);
+        b4 =
+                new BambooSizeObjective(
+                        1, 2, Color.PINK, 1, PowerUpNecessity.MANDATORY, PowerUp.FERTILIZER);
+        b5 = new BambooSizeObjective(1, 2, Color.PINK, 1, PowerUpNecessity.FORBIDDEN, PowerUp.NONE);
+        b6 = new BambooSizeObjective(1, 2, Color.PINK);
         board = new Board();
     }
 
@@ -149,5 +155,37 @@ class BambooSizeObjectiveTest {
 
         assertTrue(b3.computeAchieved(board, seventhAction, null));
         assertTrue(b3.isAchieved());
+    }
+
+    @Test
+    void testIsAchievedWithPowerUpConstraints()
+            throws BoardException, BambooSizeException, BambooIrrigationException,
+                    PowerUpException {
+        var secondAction = placeBambooTile(board, new Coord(0, 1), Color.PINK);
+
+        var bt1 = board.getTile(new Coord(0, 1));
+
+        assertTrue(bt1 instanceof BambooTile);
+        BambooTile bt1_1 = (BambooTile) bt1;
+
+        // First bamboo grow on the 1st tile
+        bt1_1.growBamboo();
+        // Second bamboo grow on the 1st tile
+        bt1_1.growBamboo();
+
+        // The objective b4 is not achieved because a fertilizer power-up is mandatory.
+        assertFalse(b4.computeAchieved(board, secondAction, null));
+        // But the b5 does, because no power-up are on the tile.
+        assertTrue(b5.computeAchieved(board, secondAction, null));
+        // And the b6 will be finished all the time, regardless of power-up changes, because it
+        // hasn't constraint on power-ups.
+        assertTrue(b6.computeAchieved(board, secondAction, null));
+
+        bt1_1.setPowerUp(PowerUp.FERTILIZER);
+        assertTrue(b6.computeAchieved(board, secondAction, null));
+        // Now the objective b4 is achieved.
+        assertTrue(b4.computeAchieved(board, secondAction, null));
+        // But the b5 is not anymore.
+        assertFalse(b5.computeAchieved(board, secondAction, null));
     }
 }

@@ -17,9 +17,9 @@ class TilePatternObjectiveTest {
     static final Action.PlaceTile INITIAL_ACTION =
             new Action.PlaceTile(new Coord(0, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
 
-    Action.PlaceTile placeBambooTile(Board board, Coord c) {
+    Action.PlaceTile placeBambooTile(Board board, Coord c, Color color) {
         try {
-            board.placeTile(c, new BambooTile(Color.GREEN));
+            board.placeTile(c, new BambooTile(color));
             // irrigate all sides if possible
             for (var side : TileSide.values()) {
                 try {
@@ -34,6 +34,10 @@ class TilePatternObjectiveTest {
         return new Action.PlaceTile(c, TileDeck.DEFAULT_DRAW_PREDICATE);
     }
 
+    Action.PlaceTile placeBambooTile(Board board, Coord c) {
+        return placeBambooTile(board, c, Color.GREEN);
+    }
+
     Board prepareBoard(Objective obj, Coord... coords) {
         var board = new Board();
         assertFalse(obj.computeAchieved(board, INITIAL_ACTION, null));
@@ -46,12 +50,27 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testLineOfTwo() {
-        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2);
+    void testTriangle() {
+        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE);
 
-        var board = prepareBoard(objective, new Coord(-1, 0));
+        var board = prepareBoard(objective, new Coord(0, 1), new Coord(-1, 1));
 
-        var lastAction = placeBambooTile(board, new Coord(0, -1));
+        var lastAction = placeBambooTile(board, new Coord(-1, 2));
+        assertTrue(objective.computeAchieved(board, lastAction, null));
+    }
+
+    @Test
+    void testDiamondWithoutRightPart() throws IrrigationException, BoardException {
+        var objective =
+                new TilePatternObjective(
+                        Color.GREEN, TilePatternObjective.DIAMOND_WITHOUT_RIGHT_PART);
+
+        var board = new Board();
+        board.placeTile(new Coord(-1, 1), new BambooTile(Color.GREEN));
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.PINK));
+        board.placeTile(new Coord(-1, 2), new BambooTile(Color.GREEN));
+
+        var lastAction = placeBambooTile(board, new Coord(0, 2));
         assertTrue(objective.computeAchieved(board, lastAction, null));
     }
 
@@ -67,28 +86,27 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testSquareOfTwo() {
-        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND_4);
+    void testDiamond() {
+        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND);
 
-        var board =
-                prepareBoard(
-                        objective,
-                        new Coord(-1, 0),
-                        new Coord(0, -1),
-                        new Coord(-1, 1),
-                        new Coord(-2, 1));
+        var board = prepareBoard(objective, new Coord(0, 1), new Coord(-1, 1), new Coord(-1, 2));
 
-        var lastAction = placeBambooTile(board, new Coord(-2, 0));
+        var lastAction = placeBambooTile(board, new Coord(0, 2));
         assertTrue(objective.computeAchieved(board, lastAction, null));
     }
 
     @Test
-    void testTriangleOfTwo() {
-        var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE_3);
+    void testBicolourObjectives() throws IrrigationException, BoardException {
+        List<Color> colors = List.of(Color.YELLOW, Color.YELLOW, Color.PINK, Color.PINK);
+        var objective = new TilePatternObjective(colors, TilePatternObjective.DIAMOND, 1);
 
-        var board = prepareBoard(objective, new Coord(0, -1), new Coord(1, -1));
+        var board = new Board();
 
-        var lastAction = placeBambooTile(board, new Coord(1, -2));
+        placeBambooTile(board, new Coord(0, 1), Color.YELLOW);
+        placeBambooTile(board, new Coord(-1, 1), Color.YELLOW);
+        placeBambooTile(board, new Coord(-1, 2), Color.PINK);
+        var lastAction = placeBambooTile(board, new Coord(0, 2), Color.PINK);
+
         assertTrue(objective.computeAchieved(board, lastAction, null));
     }
 
