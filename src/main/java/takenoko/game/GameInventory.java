@@ -4,6 +4,7 @@ import takenoko.game.objective.BambooSizeObjective;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.objective.TilePatternObjective;
+import takenoko.game.tile.PowerUpReserve;
 import takenoko.game.tile.TileDeck;
 
 public class GameInventory {
@@ -13,13 +14,16 @@ public class GameInventory {
     private final ObjectiveDeck<BambooSizeObjective> bambooSizeObjectiveDeck;
     private final ObjectiveDeck<HarvestingObjective> harvestingObjectiveDeck;
 
+    private final PowerUpReserve powerUpReserve;
+
     public GameInventory(int irrigationSticks, TileDeck tileDeck) {
         this(
                 irrigationSticks,
                 tileDeck,
                 ObjectiveDeck.makeTilePatternObjectiveDeck(),
                 ObjectiveDeck.makeBambooSizeObjectiveDeck(),
-                ObjectiveDeck.makeHarvestingObjectiveDeck());
+                ObjectiveDeck.makeHarvestingObjectiveDeck(),
+                new PowerUpReserve());
     }
 
     public GameInventory(
@@ -27,12 +31,14 @@ public class GameInventory {
             TileDeck tileDeck,
             ObjectiveDeck<TilePatternObjective> tilePatternObjectiveDeck,
             ObjectiveDeck<BambooSizeObjective> bambooSizeObjectiveDeck,
-            ObjectiveDeck<HarvestingObjective> harvestingObjectiveDeck) {
+            ObjectiveDeck<HarvestingObjective> harvestingObjectiveDeck,
+            PowerUpReserve powerUpReserve) {
         this.irrigationSticks = irrigationSticks;
         this.tileDeck = tileDeck;
         this.tilePatternObjectiveDeck = tilePatternObjectiveDeck;
         this.bambooSizeObjectiveDeck = bambooSizeObjectiveDeck;
         this.harvestingObjectiveDeck = harvestingObjectiveDeck;
+        this.powerUpReserve = powerUpReserve;
     }
 
     public void decrementIrrigation() throws GameInventoryException {
@@ -57,6 +63,10 @@ public class GameInventory {
 
     public ObjectiveDeck<HarvestingObjective> getHarvestingObjectiveDeck() {
         return harvestingObjectiveDeck;
+    }
+
+    public PowerUpReserve getPowerUpReserve() {
+        return powerUpReserve;
     }
 
     public boolean hasIrrigation() {

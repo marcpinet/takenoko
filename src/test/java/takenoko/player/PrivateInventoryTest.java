@@ -8,7 +8,7 @@ import takenoko.game.objective.BambooSizeObjective;
 import takenoko.game.tile.BambooSizeException;
 import takenoko.game.tile.Color;
 
-public class PrivateInventoryTest {
+class PrivateInventoryTest {
 
     PrivateInventory privateInventory;
 

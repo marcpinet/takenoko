@@ -9,7 +9,6 @@ import takenoko.game.tile.PowerUp;
 import takenoko.player.InventoryException;
 
 public class VisibleInventory {
-
     private final EnumMap<Color, Integer> bamboos;
     private int irrigations;
     private final EnumMap<PowerUp, Integer> powerUps;

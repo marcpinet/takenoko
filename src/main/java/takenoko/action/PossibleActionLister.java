@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import takenoko.game.Deck;
 import takenoko.game.board.Board;
+import takenoko.game.tile.PowerUp;
 import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
 import takenoko.player.PrivateInventory;
@@ -29,6 +30,15 @@ public class PossibleActionLister {
         possibleActions.add(new Action.TakeBambooSizeObjective());
         possibleActions.add(new Action.TakeHarvestingObjective());
         possibleActions.add(new Action.TakeTilePatternObjective());
+
+        for (var powerUp : PowerUp.values()) {
+            if (powerUp != PowerUp.NONE) {
+                possibleActions.add(new Action.PickPowerUp(powerUp));
+                for (var coord : board.getPlacedCoords()) {
+                    possibleActions.add(new Action.PlacePowerUp(coord, powerUp));
+                }
+            }
+        }
 
         for (var coord : board.getPlacedCoords()) {
             possibleActions.add(new Action.MoveGardener(coord));

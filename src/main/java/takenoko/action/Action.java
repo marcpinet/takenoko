@@ -3,6 +3,7 @@ package takenoko.action;
 import java.util.Objects;
 import takenoko.game.Deck;
 import takenoko.game.objective.Objective;
+import takenoko.game.tile.PowerUp;
 import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
@@ -12,10 +13,12 @@ public sealed interface Action
                 Action.MoveGardener,
                 Action.MovePanda,
                 Action.None,
+                Action.PickPowerUp,
                 Action.PlaceIrrigationStick,
+                Action.PlacePowerUp,
                 Action.PlaceTile,
-                Action.TakeHarvestingObjective,
                 Action.TakeBambooSizeObjective,
+                Action.TakeHarvestingObjective,
                 Action.TakeIrrigationStick,
                 Action.TakeTilePatternObjective,
                 Action.UnveilObjective {
@@ -158,6 +161,46 @@ public sealed interface Action
         @Override
         public int hashCode() {
             return Objects.hash(coord);
+        }
+    }
+
+    record PickPowerUp(PowerUp powerUp) implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof PickPowerUp other) {
+                return powerUp.equals(other.powerUp);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(powerUp);
+        }
+    }
+
+    record PlacePowerUp(Coord coord, PowerUp powerUp) implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof PlacePowerUp other) {
+                return coord.equals(other.coord) && powerUp.equals(other.powerUp);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(coord, powerUp);
         }
     }
 }
