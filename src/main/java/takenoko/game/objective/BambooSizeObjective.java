@@ -67,30 +67,12 @@ public class BambooSizeObjective implements Objective {
                     && bambooTile.getBambooSize() == sizeObjective
                     && bambooTile.getColor() == color) {
                 nbOfBamboos--;
-                if (!powerUpCondition) { // Usefull in NO_MATTER case, when we just have to set
-                    // powerUpCondition at true one time.
-                    switch (this
-                            .powerUpNecessity) { // Since FORBIDDEN and MANDATORY are applying only
-                            // in objective with one bamboo, we can use a
-                            // switch here without risk.
-                        case FORBIDDEN -> {
-                            if (bambooTile.getPowerUp().equals(PowerUp.NONE)) {
-                                powerUpCondition = true;
-                                break;
-                            }
-                        }
-                        case MANDATORY -> {
-                            if (bambooTile.getPowerUp().equals(this.powerUp)) {
-                                powerUpCondition = true;
-                                break;
-                            }
-                        }
-                        case NO_MATTER -> {
-                            powerUpCondition = true;
-                            break;
-                        }
-                    }
-                }
+                powerUpCondition =
+                        switch (this.powerUpNecessity) {
+                            case FORBIDDEN -> bambooTile.getPowerUp().equals(PowerUp.NONE);
+                            case MANDATORY -> bambooTile.getPowerUp().equals(this.powerUp);
+                            case NO_MATTER -> true;
+                        };
             }
         }
         if (nbOfBamboos <= 0 && powerUpCondition) {
