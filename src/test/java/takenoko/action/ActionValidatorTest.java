@@ -33,7 +33,7 @@ class ActionValidatorTest {
         PrivateInventory privateInventory = new PrivateInventory();
         VisibleInventory visibleInventory = new VisibleInventory();
         visibleInventory.incrementIrrigation();
-        gameInventory = new GameInventory(20, new TileDeck(new Random(0)));
+        gameInventory = new GameInventory(20, new TileDeck(new Random(0)), new Random(0));
         validator = new ActionValidator(board, gameInventory, privateInventory, visibleInventory);
     }
 
@@ -93,7 +93,7 @@ class ActionValidatorTest {
         var validator =
                 new ActionValidator(
                         board,
-                        new GameInventory(0, new TileDeck(new Random(0))),
+                        new GameInventory(0, new TileDeck(new Random(0)), new Random(0)),
                         new PrivateInventory(),
                         new VisibleInventory());
         var action = new Action.TakeIrrigationStick();

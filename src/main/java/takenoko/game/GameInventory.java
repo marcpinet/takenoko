@@ -1,5 +1,6 @@
 package takenoko.game;
 
+import java.util.Random;
 import takenoko.game.objective.BambooSizeObjective;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.ObjectiveDeck;
@@ -16,13 +17,13 @@ public class GameInventory {
 
     private final PowerUpReserve powerUpReserve;
 
-    public GameInventory(int irrigationSticks, TileDeck tileDeck) {
+    public GameInventory(int irrigationSticks, TileDeck tileDeck, Random random) {
         this(
                 irrigationSticks,
                 tileDeck,
-                ObjectiveDeck.makeTilePatternObjectiveDeck(),
-                ObjectiveDeck.makeBambooSizeObjectiveDeck(),
-                ObjectiveDeck.makeHarvestingObjectiveDeck(),
+                ObjectiveDeck.makeTilePatternObjectiveDeck(random),
+                ObjectiveDeck.makeBambooSizeObjectiveDeck(random),
+                ObjectiveDeck.makeHarvestingObjectiveDeck(random),
                 new PowerUpReserve());
     }
 

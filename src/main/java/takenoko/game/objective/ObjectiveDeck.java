@@ -1,9 +1,6 @@
 package takenoko.game.objective;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import takenoko.game.Deck;
 import takenoko.game.tile.BambooSizeException;
 import takenoko.game.tile.Color;
@@ -13,7 +10,7 @@ import takenoko.game.tile.PowerUp;
 public class ObjectiveDeck<O extends Objective> extends Deck<O> {
     static final int DRAW_SIZE = 1;
 
-    public static ObjectiveDeck<TilePatternObjective> makeTilePatternObjectiveDeck() {
+    public static ObjectiveDeck<TilePatternObjective> makeTilePatternObjectiveDeck(Random random) {
         var list = new ArrayList<TilePatternObjective>();
 
         list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE, 2));
@@ -50,10 +47,12 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
         list.add(new TilePatternObjective(Color.PINK, TilePatternObjective.LINE_3, 4));
         list.add(new TilePatternObjective(Color.YELLOW, TilePatternObjective.TRIANGLE, 3));
 
+        Collections.shuffle(list, random);
+
         return new ObjectiveDeck<>(new ArrayDeque<>(list));
     }
 
-    public static ObjectiveDeck<BambooSizeObjective> makeBambooSizeObjectiveDeck() {
+    public static ObjectiveDeck<BambooSizeObjective> makeBambooSizeObjectiveDeck(Random random) {
         var list = new ArrayList<BambooSizeObjective>();
 
         try {
@@ -107,10 +106,12 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
             throw new IllegalStateException(e);
         }
 
+        Collections.shuffle(list, random);
+
         return new ObjectiveDeck<>(new ArrayDeque<>(list));
     }
 
-    public static ObjectiveDeck<HarvestingObjective> makeHarvestingObjectiveDeck() {
+    public static ObjectiveDeck<HarvestingObjective> makeHarvestingObjectiveDeck(Random random) {
         var list = new ArrayList<HarvestingObjective>();
         for (int i = 0; i < 5; i++) {
             list.add(new HarvestingObjective(2, 0, 0, 3));
@@ -122,6 +123,8 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
             list.add(new HarvestingObjective(0, 0, 2, 5));
             list.add(new HarvestingObjective(1, 1, 1, 6));
         }
+
+        Collections.shuffle(list, random);
 
         return new ObjectiveDeck<>(new ArrayDeque<>(list));
     }
