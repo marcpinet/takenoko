@@ -19,6 +19,7 @@ import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
+import takenoko.player.PrivateInventory;
 import takenoko.player.bot.EasyBot;
 import utils.TestLogHandler;
 
@@ -51,11 +52,13 @@ class GameTest {
     void testGetWinner() throws PlayerException {
         var p1 = mock(Player.class);
         when(p1.getVisibleInventory()).thenReturn(new VisibleInventory());
+        when(p1.getPrivateInventory()).thenReturn(new PrivateInventory());
         when(p1.getScore()).thenReturn(1);
         when(p1.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 
         var p2 = mock(Player.class);
         when(p2.getVisibleInventory()).thenReturn(new VisibleInventory());
+        when(p2.getPrivateInventory()).thenReturn(new PrivateInventory());
         when(p2.getScore()).thenReturn(2);
         when(p2.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 
@@ -64,6 +67,16 @@ class GameTest {
 
         assertEquals(Optional.of(p2), game.play());
         assertNoSevereLog();
+    }
+
+    @Test
+    void testInitialDrawAtStart() {
+        var p1 = new EasyBot(new Random(0));
+        var p2 = new EasyBot(new Random(0));
+
+        var game = new Game(List.of(p1, p2), logger, tileDeck, new Random(0));
+
+        assertEquals(3, p1.getPrivateInventory().getObjectives().size());
     }
 
     @Test
