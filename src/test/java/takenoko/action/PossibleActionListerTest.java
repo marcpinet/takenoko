@@ -1,6 +1,6 @@
 package takenoko.action;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Random;
@@ -25,7 +25,7 @@ class PossibleActionListerTest {
     void setUp() {
         board = new Board();
         deck = new TileDeck(new Random(0));
-        GameInventory gameInventory = new GameInventory(20, deck);
+        GameInventory gameInventory = new GameInventory(20, deck, new Random(0));
         privateInventory = new PrivateInventory();
         visibleInventory = new VisibleInventory();
         validator = new ActionValidator(board, gameInventory, privateInventory, visibleInventory);

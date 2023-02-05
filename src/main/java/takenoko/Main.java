@@ -13,7 +13,7 @@ public class Main {
         List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
         var tileDeck = new TileDeck(new Random());
         var logger = Logger.getGlobal();
-        var game = new Game(players, logger, tileDeck);
+        var game = new Game(players, logger, tileDeck, new Random());
         var winner = game.play();
 
         if (winner.isPresent()) {

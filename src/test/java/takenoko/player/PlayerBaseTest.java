@@ -35,7 +35,7 @@ class PlayerBaseTest {
         var validator =
                 new ActionValidator(
                         board,
-                        new GameInventory(20, deck),
+                        new GameInventory(20, deck, new Random(0)),
                         player.getPrivateInventory(),
                         player.getVisibleInventory());
         var lister = new PossibleActionLister(board, validator, player.getPrivateInventory());

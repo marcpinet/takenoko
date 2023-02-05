@@ -1,6 +1,9 @@
 package takenoko.game;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import takenoko.action.Action;
@@ -20,11 +23,11 @@ public class Game {
     private int numTurn = 1;
     private final GameInventory inventory;
 
-    public Game(List<Player> players, Logger out, TileDeck tileDeck) {
+    public Game(List<Player> players, Logger out, TileDeck tileDeck, Random random) {
         board = new Board(players);
         this.players = players;
         this.out = out;
-        inventory = new GameInventory(20, tileDeck);
+        inventory = new GameInventory(20, tileDeck, random);
     }
 
     public Optional<Player> play() {

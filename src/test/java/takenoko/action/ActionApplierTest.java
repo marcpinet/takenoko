@@ -45,7 +45,7 @@ class ActionApplierTest {
 
         board = new Board();
         deck = new TileDeck(new Random(0));
-        gameInventory = new GameInventory(1, deck);
+        gameInventory = new GameInventory(1, deck, new Random(0));
 
         applier = new ActionApplier(board, logger, gameInventory, new PrivateInventory());
 

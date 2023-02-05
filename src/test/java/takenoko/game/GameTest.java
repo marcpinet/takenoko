@@ -1,6 +1,6 @@
 package takenoko.game;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -60,7 +60,7 @@ class GameTest {
         when(p2.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 
         var players = List.of(p1, p2);
-        var game = new Game(players, logger, tileDeck);
+        var game = new Game(players, logger, tileDeck, new Random(0));
 
         assertEquals(Optional.of(p2), game.play());
         assertNoSevereLog();
@@ -73,7 +73,7 @@ class GameTest {
 
         for (int i = 0; i < 10; i++) {
             List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
-            var game = new Game(players, logger, tileDeck);
+            var game = new Game(players, logger, tileDeck, new Random());
             game.play();
             assertNoSevereLog();
         }
