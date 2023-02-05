@@ -70,6 +70,16 @@ class GameTest {
     }
 
     @Test
+    void testInitialDrawAtStart() {
+        var p1 = new EasyBot(new Random(0));
+        var p2 = new EasyBot(new Random(0));
+
+        var game = new Game(List.of(p1, p2), logger, tileDeck);
+
+        assertEquals(3, p1.getPrivateInventory().getObjectives().size());
+    }
+
+    @Test
     void randomGame() {
         // We just want to check that the game is not crashing
         // So we run some games
