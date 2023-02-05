@@ -7,7 +7,6 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
-import takenoko.game.objective.Objective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.Color;
@@ -64,12 +63,14 @@ public class ActionValidator {
             case Action.UnveilObjective a -> isValid(a);
             case Action.MovePiece a -> isValid(a);
             case Action.EndTurn ignored -> true;
+            case Action.BeginSimulation ignored -> true;
+            case Action.EndSimulation ignored -> true;
             case Action.PickPowerUp a -> isValid(a);
             case Action.PlacePowerUp a -> isValid(a);
         };
     }
 
-    private <O extends Objective> boolean canTakeObjective(ObjectiveDeck<O> deck) {
+    private boolean canTakeObjective(ObjectiveDeck deck) {
         return deck.size() > 0 && playerPrivateInventory.canDrawObjective();
     }
 
@@ -93,7 +94,7 @@ public class ActionValidator {
         return gameInventory.getTileDeck().size() > 0 && board.isAvailableCoord(action.coord());
     }
 
-    private boolean isValid(Action.TakeIrrigationStick action) {
+    private boolean isValid(Action.TakeIrrigationStick ignored) {
         return gameInventory.hasIrrigation();
     }
 
@@ -109,9 +110,10 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.MovePiece action) {
-        return board.getPlacedCoords().contains(action.coord())
-                && board.getPieceCoord(action.piece()).isAlignedWith(action.coord())
-                && !board.getPieceCoord(action.piece()).equals(action.coord());
+        var currentCoord = board.getPieceCoord(action.piece());
+        return board.getPlacedCoords().contains(action.to())
+                && !currentCoord.equals(action.to())
+                && currentCoord.isAlignedWith(action.to());
     }
 
     private boolean isValid(Action.PickPowerUp action) {

@@ -30,6 +30,21 @@ public class Board {
         this.players = players;
     }
 
+    public Board(Board other) {
+        this(other.players);
+        restore(other);
+    }
+
+    public void restore(Board other) {
+        for (var entry : other.tiles.entrySet()) {
+            if (entry.getValue() instanceof BambooTile tile) {
+                tiles.put(entry.getKey(), new BambooTile(tile));
+            }
+        }
+
+        movablePieces.putAll(other.movablePieces);
+    }
+
     public void placeTile(Coord c, Tile t) throws BoardException, IrrigationException {
         if (!isAvailableCoord(c)) {
             throw new BoardException("Coord " + c + " is not available");
@@ -83,15 +98,6 @@ public class Board {
         if (tiles.remove(coord) == null) {
             throw new BoardException(TILE_EXCEPTION_MESSAGE);
         }
-    }
-
-    public void removeIrrigation(Coord coord, TileSide side)
-            throws BoardException, IrrigationException {
-        var c = getTile(coord);
-        c.removeIrrigation(side);
-
-        var c2 = tiles.get(coord.adjacentCoordSide(side));
-        if (c2 != null) c2.removeIrrigation(side.oppositeSide());
     }
 
     public Set<Coord> getAvailableCoords() {

@@ -10,7 +10,7 @@ public class TileDeck extends takenoko.game.Deck<Tile> {
         this(generateOfficialTiles(random));
     }
 
-    private static Queue<Tile> generateOfficialTiles(Random random) {
+    private static Deque<Tile> generateOfficialTiles(Random random) {
         List<Tile> tempTiles = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             tempTiles.add(new BambooTile(Color.GREEN, PowerUp.NONE));
@@ -41,7 +41,7 @@ public class TileDeck extends takenoko.game.Deck<Tile> {
         return new ArrayDeque<>(tempTiles);
     }
 
-    public TileDeck(Queue<Tile> tiles) {
+    public TileDeck(Deque<Tile> tiles) {
         super(tiles, DRAW_SIZE);
     }
 }

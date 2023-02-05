@@ -10,7 +10,9 @@ import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
 
 public sealed interface Action
-        permits Action.EndTurn,
+        permits Action.BeginSimulation,
+                Action.EndSimulation,
+                Action.EndTurn,
                 Action.MovePiece,
                 Action.None,
                 Action.PickPowerUp,
@@ -24,6 +26,8 @@ public sealed interface Action
                 Action.TakeTilePatternObjective {
     Action NONE = new Action.None();
     Action END_TURN = new Action.EndTurn();
+    Action.BeginSimulation BEGIN_SIMULATION = new Action.BeginSimulation();
+    Action.EndSimulation END_SIMULATION = new Action.EndSimulation();
 
     default boolean hasCost() {
         return true;
@@ -134,18 +138,42 @@ public sealed interface Action
         }
     }
 
-    record MovePiece(MovablePiece piece, Coord coord) implements Action {
+    record MovePiece(MovablePiece piece, Coord to) implements Action {
         @Override
         public boolean equals(Object o) {
             if (o instanceof MovePiece other) {
-                return coord.equals(other.coord);
+                return piece.equals(other.piece) && to.equals(other.to);
             }
             return false;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(coord);
+            return Objects.hash(piece, to);
+        }
+    }
+
+    record BeginSimulation() implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof BeginSimulation;
+        }
+    }
+
+    record EndSimulation() implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof EndSimulation;
         }
     }
 

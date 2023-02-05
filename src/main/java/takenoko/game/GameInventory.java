@@ -1,19 +1,16 @@
 package takenoko.game;
 
 import java.util.Random;
-import takenoko.game.objective.BambooSizeObjective;
-import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.ObjectiveDeck;
-import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.PowerUpReserve;
 import takenoko.game.tile.TileDeck;
 
 public class GameInventory {
     int irrigationSticks;
     TileDeck tileDeck;
-    private final ObjectiveDeck<TilePatternObjective> tilePatternObjectiveDeck;
-    private final ObjectiveDeck<BambooSizeObjective> bambooSizeObjectiveDeck;
-    private final ObjectiveDeck<HarvestingObjective> harvestingObjectiveDeck;
+    private final ObjectiveDeck tilePatternObjectiveDeck;
+    private final ObjectiveDeck bambooSizeObjectiveDeck;
+    private final ObjectiveDeck harvestingObjectiveDeck;
 
     private final PowerUpReserve powerUpReserve;
 
@@ -30,9 +27,9 @@ public class GameInventory {
     public GameInventory(
             int irrigationSticks,
             TileDeck tileDeck,
-            ObjectiveDeck<TilePatternObjective> tilePatternObjectiveDeck,
-            ObjectiveDeck<BambooSizeObjective> bambooSizeObjectiveDeck,
-            ObjectiveDeck<HarvestingObjective> harvestingObjectiveDeck,
+            ObjectiveDeck tilePatternObjectiveDeck,
+            ObjectiveDeck bambooSizeObjectiveDeck,
+            ObjectiveDeck harvestingObjectiveDeck,
             PowerUpReserve powerUpReserve) {
         this.irrigationSticks = irrigationSticks;
         this.tileDeck = tileDeck;
@@ -50,19 +47,23 @@ public class GameInventory {
         irrigationSticks--;
     }
 
+    public void incrementIrrigation() {
+        irrigationSticks++;
+    }
+
     public TileDeck getTileDeck() {
         return tileDeck;
     }
 
-    public ObjectiveDeck<TilePatternObjective> getTilePatternObjectiveDeck() {
+    public ObjectiveDeck getTilePatternObjectiveDeck() {
         return tilePatternObjectiveDeck;
     }
 
-    public ObjectiveDeck<BambooSizeObjective> getBambooSizeObjectiveDeck() {
+    public ObjectiveDeck getBambooSizeObjectiveDeck() {
         return bambooSizeObjectiveDeck;
     }
 
-    public ObjectiveDeck<HarvestingObjective> getHarvestingObjectiveDeck() {
+    public ObjectiveDeck getHarvestingObjectiveDeck() {
         return harvestingObjectiveDeck;
     }
 

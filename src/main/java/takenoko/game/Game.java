@@ -6,10 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import takenoko.action.Action;
-import takenoko.action.ActionApplier;
-import takenoko.action.ActionValidator;
-import takenoko.action.PossibleActionLister;
+import takenoko.action.*;
 import takenoko.game.board.Board;
 import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.TileDeck;
@@ -24,12 +21,14 @@ public class Game {
     private final Logger out;
     private int numTurn = 1;
     private final GameInventory inventory;
+    private final UndoStack state;
 
     public Game(List<Player> players, Logger out, TileDeck tileDeck, Random random) {
         board = new Board(players);
         this.players = players;
         this.out = out;
         inventory = new GameInventory(20, tileDeck, random);
+        this.state = new UndoStack();
         try {
             for (Player player : players) {
                 player.getPrivateInventory()
@@ -78,9 +77,8 @@ public class Game {
                     var action = player.chooseAction(board, actionLister);
                     this.out.log(Level.INFO, "Action: {0}", action);
                     if (action == Action.END_TURN) break;
-                    var applier =
-                            new ActionApplier(board, out, inventory, player.getPrivateInventory());
-                    applier.apply(action, player);
+                    var applier = new ActionApplier(board, out, inventory, player);
+                    applier.apply(state, action);
                     alreadyPlayedActions.add(action);
                     checkObjectives(action);
                 } catch (PlayerException e) {

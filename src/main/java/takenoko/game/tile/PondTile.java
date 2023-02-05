@@ -15,6 +15,11 @@ public class PondTile implements Tile {
     }
 
     @Override
+    public void removeIrrigation(TileSide side) throws IrrigationException {
+        throw new IrrigationException("Cannot irrigate a pond");
+    }
+
+    @Override
     public boolean equals(Object o) {
         return o instanceof PondTile;
     }

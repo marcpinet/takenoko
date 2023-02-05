@@ -19,4 +19,6 @@ public interface Player {
     void increaseScore(int delta);
 
     int getScore();
+
+    void decreaseScore(int score);
 }

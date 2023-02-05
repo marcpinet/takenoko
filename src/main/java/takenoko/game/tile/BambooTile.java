@@ -27,8 +27,23 @@ public class BambooTile implements Tile {
         this.powerUp = powerUp;
     }
 
+    public BambooTile(BambooTile other) {
+        this.bambooSize = other.bambooSize;
+        this.powerUp = other.powerUp;
+        this.irrigatedSides = new EnumMap<>(other.irrigatedSides);
+        this.color = other.color;
+    }
+
     public void irrigateSide(TileSide side) {
         irrigatedSides.put(side, true);
+    }
+
+    @Override
+    public void removeIrrigation(TileSide side) throws IrrigationException {
+        if (Boolean.FALSE.equals(irrigatedSides.get(side))) {
+            throw new IrrigationException("Error: This side is not irrigated.");
+        }
+        irrigatedSides.put(side, false);
     }
 
     public boolean isIrrigated() {
