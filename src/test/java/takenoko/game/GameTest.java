@@ -74,7 +74,7 @@ class GameTest {
         var p1 = new EasyBot(new Random(0));
         var p2 = new EasyBot(new Random(0));
 
-        var game = new Game(List.of(p1, p2), logger, tileDeck);
+        var game = new Game(List.of(p1, p2), logger, tileDeck, new Random(0));
 
         assertEquals(3, p1.getPrivateInventory().getObjectives().size());
     }
