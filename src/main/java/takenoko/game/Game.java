@@ -11,7 +11,9 @@ import takenoko.action.ActionApplier;
 import takenoko.action.ActionValidator;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
+import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.TileDeck;
+import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.player.PlayerException;
 
@@ -28,6 +30,18 @@ public class Game {
         this.players = players;
         this.out = out;
         inventory = new GameInventory(20, tileDeck, random);
+        try {
+            for (Player player : players) {
+                player.getPrivateInventory()
+                        .addObjective(inventory.getTilePatternObjectiveDeck().draw());
+                player.getPrivateInventory()
+                        .addObjective(inventory.getBambooSizeObjectiveDeck().draw());
+                player.getPrivateInventory()
+                        .addObjective(inventory.getHarvestingObjectiveDeck().draw());
+            }
+        } catch (EmptyDeckException | InventoryException e) {
+            out.log(Level.SEVERE, "Error while initializing the game", e);
+        }
     }
 
     public Optional<Player> play() {
