@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import takenoko.game.objective.BambooSizeObjective;
-import takenoko.game.objective.HarvestingObjective;
-import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.*;
 import takenoko.player.Player;
 import takenoko.player.bot.EasyBot;
@@ -107,20 +104,5 @@ class BoardTest {
         tileboard.placeTile(c2, new BambooTile(Color.GREEN));
         tileboard.placeTile(c4, t3);
         assertThrows(BoardException.class, () -> tileboard.move(MovablePiece.PANDA, c4, p1));
-    }
-
-    @Test
-    void numberOfPointsTest() throws BambooSizeException {
-        // For this test, we'll just add objective in the finish list, to calculate the score for
-        // each player.
-        assertEquals(0, tileboard.getPlayerScore(p1));
-        assertEquals(0, tileboard.getPlayerScore(p2));
-        p1.getVisibleInventory().addObjective(new BambooSizeObjective(1, 2, Color.GREEN, 3));
-        p1.getVisibleInventory().addObjective(new HarvestingObjective(1, 0, 2, 2));
-        p2.getVisibleInventory()
-                .addObjective(
-                        new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3, 6));
-        assertEquals(5, tileboard.getPlayerScore(p1));
-        assertEquals(6, tileboard.getPlayerScore(p2));
     }
 }

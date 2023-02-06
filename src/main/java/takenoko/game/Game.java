@@ -147,7 +147,9 @@ public class Game {
         for (Player p : players) {
             vi = p.getVisibleInventory();
             if (objectivesUnveiled == vi.getFinishedObjectives().size()) {
+                this.out.log(Level.INFO, "Old score : {0}", board.getPlayerScore(p));
                 p.increaseScore(2);
+                this.out.log(Level.INFO, "New score : {0}", board.getPlayerScore(p));
                 return true;
             }
         }
