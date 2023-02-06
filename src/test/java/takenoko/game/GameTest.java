@@ -5,16 +5,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.action.Action;
 import takenoko.game.board.VisibleInventory;
+import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
@@ -90,5 +88,32 @@ class GameTest {
             game.play();
             assertNoSevereLog();
         }
+    }
+
+    @Test
+    void testEndOfGame() {
+
+        Player p1 = mock(Player.class);
+        VisibleInventory vi = mock(VisibleInventory.class);
+        List<Objective> li = mock(ArrayList.class);
+        when(p1.getVisibleInventory()).thenReturn(vi);
+        when(vi.getFinishedObjectives()).thenReturn(li);
+        when(li.size()).thenReturn(9);
+        Player p2 = new EasyBot(new Random());
+        var players = List.of(p1, p2);
+        var game = new Game(players, logger, tileDeck);
+        assertTrue(game.endOfGame());
+
+        Player p3 = new EasyBot(new Random());
+        players = List.of(p1, p2, p3);
+        game = new Game(players, logger, tileDeck);
+        when(li.size()).thenReturn(8);
+        assertTrue(game.endOfGame());
+
+        Player p4 = new EasyBot(new Random());
+        players = List.of(p1, p2, p3, p4);
+        game = new Game(players, logger, tileDeck);
+        when(li.size()).thenReturn(7);
+        assertTrue(game.endOfGame());
     }
 }
