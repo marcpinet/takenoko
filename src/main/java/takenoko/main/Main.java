@@ -1,4 +1,4 @@
-package takenoko;
+package takenoko.main;
 
 import java.util.List;
 import java.util.Random;
