@@ -7,10 +7,10 @@ import takenoko.game.tile.Color;
 import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.PowerUp;
 
-public class ObjectiveDeck<O extends Objective> extends Deck<O> {
+public class ObjectiveDeck extends Deck<Objective> {
     static final int DRAW_SIZE = 1;
 
-    public static ObjectiveDeck<TilePatternObjective> makeTilePatternObjectiveDeck(Random random) {
+    public static ObjectiveDeck makeTilePatternObjectiveDeck(Random random) {
         var list = new ArrayList<TilePatternObjective>();
 
         list.add(new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE, 2));
@@ -49,10 +49,10 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
 
         Collections.shuffle(list, random);
 
-        return new ObjectiveDeck<>(new ArrayDeque<>(list));
+        return new ObjectiveDeck(new ArrayDeque<>(list));
     }
 
-    public static ObjectiveDeck<BambooSizeObjective> makeBambooSizeObjectiveDeck(Random random) {
+    public static ObjectiveDeck makeBambooSizeObjectiveDeck(Random random) {
         var list = new ArrayList<BambooSizeObjective>();
 
         try {
@@ -108,10 +108,10 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
 
         Collections.shuffle(list, random);
 
-        return new ObjectiveDeck<>(new ArrayDeque<>(list));
+        return new ObjectiveDeck(new ArrayDeque<>(list));
     }
 
-    public static ObjectiveDeck<HarvestingObjective> makeHarvestingObjectiveDeck(Random random) {
+    public static ObjectiveDeck makeHarvestingObjectiveDeck(Random random) {
         var list = new ArrayList<HarvestingObjective>();
         for (int i = 0; i < 5; i++) {
             list.add(new HarvestingObjective(2, 0, 0, 3));
@@ -126,16 +126,16 @@ public class ObjectiveDeck<O extends Objective> extends Deck<O> {
 
         Collections.shuffle(list, random);
 
-        return new ObjectiveDeck<>(new ArrayDeque<>(list));
+        return new ObjectiveDeck(new ArrayDeque<>(list));
     }
 
-    public ObjectiveDeck(Queue<O> elements) {
+    public ObjectiveDeck(Deque<Objective> elements) {
         super(elements, DRAW_SIZE);
     }
 
-    public O draw() throws EmptyDeckException {
+    public Objective draw() throws EmptyDeckException {
         // We always draw one element, since that's the only size we support
-        DrawPredicate<O> pickFirstTile = ignored -> 0;
+        DrawPredicate<Objective> pickFirstTile = ignored -> 0;
         return super.draw(pickFirstTile);
     }
 }

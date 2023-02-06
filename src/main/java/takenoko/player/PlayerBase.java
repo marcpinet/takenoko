@@ -57,6 +57,11 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     @Override
+    public void decreaseScore(int delta) {
+        score -= delta;
+    }
+
+    @Override
     public int getScore() {
         return score;
     }

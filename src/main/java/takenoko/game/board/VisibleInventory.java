@@ -21,6 +21,23 @@ public class VisibleInventory {
         finishedObjectives = new ArrayList<>();
     }
 
+    public VisibleInventory(VisibleInventory other) {
+        bamboos = new EnumMap<>(other.bamboos);
+        irrigations = other.irrigations;
+        powerUps = new EnumMap<>(other.powerUps);
+        finishedObjectives = new ArrayList<>(other.finishedObjectives);
+    }
+
+    public void restore(VisibleInventory other) {
+        bamboos.clear();
+        bamboos.putAll(other.bamboos);
+        irrigations = other.irrigations;
+        powerUps.clear();
+        powerUps.putAll(other.powerUps);
+        finishedObjectives.clear();
+        finishedObjectives.addAll(other.finishedObjectives);
+    }
+
     public int getBamboo(Color color) {
         return bamboos.getOrDefault(color, 0);
     }
@@ -72,5 +89,9 @@ public class VisibleInventory {
 
     public List<Objective> getFinishedObjectives() {
         return finishedObjectives;
+    }
+
+    public void removeObjective(Objective objective) {
+        finishedObjectives.remove(objective);
     }
 }

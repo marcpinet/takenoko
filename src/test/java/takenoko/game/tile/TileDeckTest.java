@@ -15,7 +15,7 @@ class TileDeckTest {
 
     @BeforeEach
     void setUp() {
-        var tiles = new ArrayDeque<Tile>();
+        ArrayDeque<Tile> tiles = new ArrayDeque<>();
         for (int i = 0; i < DECK_SIZE; i++) {
             if (i % 2 != 0) {
                 tiles.add(new PondTile());

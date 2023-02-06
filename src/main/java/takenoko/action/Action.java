@@ -2,6 +2,7 @@ package takenoko.action;
 
 import java.util.Objects;
 import takenoko.game.Deck;
+import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.PowerUp;
 import takenoko.game.tile.Tile;
@@ -9,9 +10,10 @@ import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
 
 public sealed interface Action
-        permits Action.EndTurn,
-                Action.MoveGardener,
-                Action.MovePanda,
+        permits Action.BeginSimulation,
+                Action.EndSimulation,
+                Action.EndTurn,
+                Action.MovePiece,
                 Action.None,
                 Action.PickPowerUp,
                 Action.PlaceIrrigationStick,
@@ -20,10 +22,12 @@ public sealed interface Action
                 Action.TakeBambooSizeObjective,
                 Action.TakeHarvestingObjective,
                 Action.TakeIrrigationStick,
-                Action.TakeTilePatternObjective,
-                Action.UnveilObjective {
+                Action.UnveilObjective,
+                Action.TakeTilePatternObjective {
     Action NONE = new Action.None();
     Action END_TURN = new Action.EndTurn();
+    Action.BeginSimulation BEGIN_SIMULATION = new Action.BeginSimulation();
+    Action.EndSimulation END_SIMULATION = new Action.EndSimulation();
 
     default boolean hasCost() {
         return true;
@@ -134,33 +138,42 @@ public sealed interface Action
         }
     }
 
-    record MoveGardener(Coord coord) implements Action {
+    record MovePiece(MovablePiece piece, Coord to) implements Action {
         @Override
         public boolean equals(Object o) {
-            if (o instanceof MoveGardener other) {
-                return coord.equals(other.coord);
+            if (o instanceof MovePiece other) {
+                return piece.equals(other.piece) && to.equals(other.to);
             }
             return false;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(coord);
+            return Objects.hash(piece, to);
         }
     }
 
-    record MovePanda(Coord coord) implements Action {
+    record BeginSimulation() implements Action {
         @Override
-        public boolean equals(Object o) {
-            if (o instanceof MovePanda other) {
-                return coord.equals(other.coord);
-            }
+        public boolean hasCost() {
             return false;
         }
 
         @Override
-        public int hashCode() {
-            return Objects.hash(coord);
+        public boolean equals(Object o) {
+            return o instanceof BeginSimulation;
+        }
+    }
+
+    record EndSimulation() implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof EndSimulation;
         }
     }
 

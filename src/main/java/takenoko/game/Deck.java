@@ -1,18 +1,18 @@
 package takenoko.game;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
-import java.util.Queue;
 import java.util.function.Function;
 import takenoko.game.tile.EmptyDeckException;
 
 public abstract class Deck<T> {
-    private final Queue<T> elements;
+    private final Deque<T> elements;
     private final int drawSize;
 
     public interface DrawPredicate<T> extends Function<List<T>, Integer> {}
 
-    protected Deck(Queue<T> elements, int drawSize) {
+    protected Deck(Deque<T> elements, int drawSize) {
         this.elements = elements;
         this.drawSize = drawSize;
     }
@@ -37,6 +37,10 @@ public abstract class Deck<T> {
         elements.addAll(availableTiles);
 
         return res;
+    }
+
+    public void addFirst(T element) {
+        elements.addFirst(element);
     }
 
     public int size() {

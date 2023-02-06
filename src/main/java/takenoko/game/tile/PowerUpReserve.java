@@ -29,4 +29,8 @@ public class PowerUpReserve {
     public boolean canPick(PowerUp powerUp) {
         return reserve.get(powerUp) > 0;
     }
+
+    public void putBack(PowerUp powerUp) {
+        reserve.put(powerUp, reserve.get(powerUp) + 1);
+    }
 }

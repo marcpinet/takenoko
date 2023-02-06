@@ -6,13 +6,13 @@ import java.util.stream.Stream;
 import takenoko.game.tile.*;
 import takenoko.player.Player;
 import takenoko.utils.Coord;
-import takenoko.utils.Pair;
 
 public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
     private final Map<Coord, Tile> tiles;
-    private Pair<MovablePiece, Coord> gardener = Pair.of(MovablePiece.GARDENER, POND_COORD);
-    private Pair<MovablePiece, Coord> panda = Pair.of(MovablePiece.PANDA, POND_COORD);
+    private final Map<MovablePiece, Coord> movablePieces;
+    private static final String TILE_EXCEPTION_MESSAGE =
+            "Error: the tile with these coordinates is not present on the board.";
     private final List<Player> players;
 
     public Board() {
@@ -22,7 +22,26 @@ public class Board {
     public Board(List<Player> players) {
         tiles = new HashMap<>();
         tiles.put(POND_COORD, new PondTile());
+
+        movablePieces = new EnumMap<>(MovablePiece.class);
+        movablePieces.put(MovablePiece.GARDENER, POND_COORD);
+        movablePieces.put(MovablePiece.PANDA, POND_COORD);
         this.players = players;
+    }
+
+    public Board(Board other) {
+        this(other.players);
+        restore(other);
+    }
+
+    public void restore(Board other) {
+        for (var entry : other.tiles.entrySet()) {
+            if (entry.getValue() instanceof BambooTile tile) {
+                tiles.put(entry.getKey(), new BambooTile(tile));
+            }
+        }
+
+        movablePieces.putAll(other.movablePieces);
     }
 
     public void placeTile(Coord c, Tile t) throws BoardException, IrrigationException {
@@ -57,10 +76,10 @@ public class Board {
         return intersecWithTiles.size() != 1 || intersecWithTiles.contains(POND_COORD);
     }
 
-    public void placeIrrigation(Coord coord, TileSide side) throws IrrigationException {
+    public void placeIrrigation(Coord coord, TileSide side)
+            throws IrrigationException, BoardException {
         var c = tiles.get(coord);
-        if (c == null)
-            throw new IrrigationException("Error: There is no tile at these coordinates.");
+        if (c == null) throw new BoardException(TILE_EXCEPTION_MESSAGE);
         c.irrigateSide(side);
 
         var c2 = tiles.get(coord.adjacentCoordSide(side));
@@ -69,10 +88,15 @@ public class Board {
 
     public Tile getTile(Coord c) throws BoardException {
         if (!tiles.containsKey(c)) {
-            throw new BoardException(
-                    "Error: the tile with these coordinates is not present on the board.");
+            throw new BoardException(TILE_EXCEPTION_MESSAGE);
         }
         return tiles.get(c);
+    }
+
+    public void removeTile(Coord coord) throws BoardException {
+        if (tiles.remove(coord) == null) {
+            throw new BoardException(TILE_EXCEPTION_MESSAGE);
+        }
     }
 
     public Set<Coord> getAvailableCoords() {
@@ -127,43 +151,30 @@ public class Board {
         return tiles.containsKey(coord);
     }
 
+    // S1301: switch is actually more readable here
+    @SuppressWarnings("java:S1301")
     public void move(MovablePiece pieceType, Coord coord, Player player) throws BoardException {
         if (!tiles.containsKey(coord)) {
-            throw new BoardException(
-                    "Error: the tile with these coordinates is not present on the board.");
+            throw new BoardException(TILE_EXCEPTION_MESSAGE);
         }
 
-        Coord currentCoord = getCurrentCoord(pieceType);
+        Coord currentCoord = getPieceCoord(pieceType);
         if (!coord.isAlignedWith(currentCoord)) {
             throw new BoardException(
                     "Error: the " + pieceType + " can only move on a straight line.");
         }
 
         // Updating piece position
-        if (pieceType == MovablePiece.GARDENER) {
-            gardener = Pair.of(pieceType, coord);
-            growTilesWithGardener(coord);
-        } else if (pieceType == MovablePiece.PANDA) {
-            panda = Pair.of(pieceType, coord);
-            // Making bamboo on the tile grow
-            Tile tile = tiles.get(coord);
-            if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
-                try {
-                    bambooTile.shrinkBamboo();
-                    player.getVisibleInventory().incrementBamboo(bambooTile.getColor());
-                } catch (BambooSizeException e) {
-                    // This should never happen
-                    throw new IllegalStateException(e);
-                }
-            }
+        movablePieces.put(pieceType, coord);
+        // Apply their actions
+        switch (pieceType) {
+            case GARDENER -> growTilesWithGardener(coord);
+            case PANDA -> eatBambooWithPanda(coord, player);
         }
     }
 
-    private Coord getCurrentCoord(MovablePiece pieceType) {
-        return switch (pieceType) {
-            case GARDENER -> gardener.second();
-            case PANDA -> panda.second();
-        };
+    public Coord getPieceCoord(MovablePiece pieceType) {
+        return movablePieces.get(pieceType);
     }
 
     private void growTilesWithGardener(Coord gardenerPos) {
@@ -196,12 +207,17 @@ public class Board {
         }
     }
 
-    public Coord getGardenerCoord() {
-        return gardener.second();
-    }
-
-    public Coord getPandaCoord() {
-        return panda.second();
+    private void eatBambooWithPanda(Coord coord, Player player) {
+        Tile tile = tiles.get(coord);
+        if (tile instanceof BambooTile bambooTile && bambooTile.getBambooSize() > 0) {
+            try {
+                bambooTile.shrinkBamboo();
+                player.getVisibleInventory().incrementBamboo(bambooTile.getColor());
+            } catch (BambooSizeException e) {
+                // This should never happen
+                throw new IllegalStateException(e);
+            }
+        }
     }
 
     public List<Player> getPlayers() {
