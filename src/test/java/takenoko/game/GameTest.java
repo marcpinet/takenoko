@@ -1,7 +1,6 @@
 package takenoko.game;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -110,12 +109,14 @@ class GameTest {
         Player p3 = new EasyBot(new Random());
         players = List.of(p1, p2, p3);
         game = new Game(players, logger, tileDeck, r);
+        assertFalse(game.endOfGame());
         when(li.size()).thenReturn(8);
         assertTrue(game.endOfGame());
 
         Player p4 = new EasyBot(new Random());
         players = List.of(p1, p2, p3, p4);
         game = new Game(players, logger, tileDeck, r);
+        assertFalse(game.endOfGame());
         when(li.size()).thenReturn(7);
         assertTrue(game.endOfGame());
     }
