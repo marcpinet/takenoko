@@ -13,8 +13,6 @@ import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.EmptyDeckException;
-import takenoko.game.board.VisibleInventory;
-import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
@@ -124,9 +122,8 @@ public class Game {
 
     private void displayInventories() {
         int numPlayer = 1;
-        VisibleInventory vi;
         for (Player p : players) {
-            vi = p.getVisibleInventory();
+            VisibleInventory vi = p.getVisibleInventory();
             this.out.log(Level.INFO, "Player number {0} informations :", numPlayer);
             this.out.log(Level.INFO, "Score : {0}", board.getPlayerScore(p));
             this.out.log(
@@ -138,20 +135,17 @@ public class Game {
     }
 
     public boolean endOfGame() {
-        VisibleInventory vi;
-        int objectivesUnveiled =
+        int objectivesToUnveiled =
                 switch (players.size()) {
                     case 2 -> 9;
                     case 3 -> 8;
                     case 4 -> 7;
-                    default -> -1;
+                    default -> 7;
                 };
         for (Player p : players) {
-            vi = p.getVisibleInventory();
-            if (objectivesUnveiled == vi.getFinishedObjectives().size()) {
-                this.out.log(Level.INFO, "Old score : {0}", board.getPlayerScore(p));
+            VisibleInventory vi = p.getVisibleInventory();
+            if (objectivesToUnveiled == vi.getFinishedObjectives().size()) {
                 p.increaseScore(2);
-                this.out.log(Level.INFO, "New score : {0}", board.getPlayerScore(p));
                 return true;
             }
         }
