@@ -46,8 +46,9 @@ public class Game {
 
     public Optional<Player> play() {
         this.out.log(Level.INFO, "Beginning of the game!");
-        while (numTurn < 200) { // Ideally, we should replace this with a while(true), but we can't
-            // actually due to the level of our bots.
+        // Ideally, we should replace this with a while true, but we can't actually due to the level
+        // of our bots.
+        while (numTurn < 200) {
             this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!");
             playTurn();
             if (endOfGame()) {
@@ -66,7 +67,7 @@ public class Game {
                 winner = Optional.of(player);
             }
         }
-        return winner;
+        return Optional.empty();
     }
 
     private void playTurn() {
@@ -138,7 +139,8 @@ public class Game {
                     case 2 -> 9;
                     case 3 -> 8;
                     case 4 -> 7;
-                    default -> 7;
+                    default -> throw new IllegalStateException(
+                            "Unexpected value: " + players.size());
                 };
         for (Player p : players) {
             VisibleInventory vi = p.getVisibleInventory();

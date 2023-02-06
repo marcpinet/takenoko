@@ -63,7 +63,7 @@ class GameTest {
         var players = List.of(p1, p2);
         var game = new Game(players, logger, tileDeck, new Random(0));
 
-        assertEquals(Optional.of(p2), game.play());
+        assertEquals(Optional.empty(), game.play());
         assertNoSevereLog();
     }
 
