@@ -3,7 +3,6 @@ package takenoko.game.board;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
 import takenoko.player.Player;
 import takenoko.utils.Coord;
@@ -203,14 +202,6 @@ public class Board {
 
     public Coord getPandaCoord() {
         return panda.second();
-    }
-
-    public int getPlayerScore(Player p) {
-        int score = 0;
-        for (Objective o : p.getVisibleInventory().getFinishedObjectives()) {
-            score += o.getScore();
-        }
-        return score;
     }
 
     public List<Player> getPlayers() {
