@@ -204,10 +204,6 @@ public class Board {
         return panda.second();
     }
 
-    public int getPlayerScore(Player p) {
-        return p.getScore();
-    }
-
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
     }

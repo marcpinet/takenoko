@@ -125,7 +125,7 @@ public class Game {
         for (Player p : players) {
             VisibleInventory vi = p.getVisibleInventory();
             this.out.log(Level.INFO, "Player number {0} informations :", numPlayer);
-            this.out.log(Level.INFO, "Score : {0}", board.getPlayerScore(p));
+            this.out.log(Level.INFO, "Score : {0}", p.getScore());
             this.out.log(
                     Level.INFO,
                     "Number of objectives achieved : {0}",
@@ -135,7 +135,7 @@ public class Game {
     }
 
     public boolean endOfGame() {
-        int objectivesToUnveiled =
+        int objectivesToUnveil =
                 switch (players.size()) {
                     case 2 -> 9;
                     case 3 -> 8;
@@ -144,7 +144,7 @@ public class Game {
                 };
         for (Player p : players) {
             VisibleInventory vi = p.getVisibleInventory();
-            if (objectivesToUnveiled == vi.getFinishedObjectives().size()) {
+            if (objectivesToUnveil == vi.getFinishedObjectives().size()) {
                 p.increaseScore(2);
                 return true;
             }
