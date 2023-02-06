@@ -1,6 +1,7 @@
 package takenoko.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -92,27 +93,29 @@ class GameTest {
 
     @Test
     void testEndOfGame() {
-
+        Random r = new Random(0);
         Player p1 = mock(Player.class);
+        Player p2 = new EasyBot(new Random());
         VisibleInventory vi = mock(VisibleInventory.class);
         List<Objective> li = mock(ArrayList.class);
         when(p1.getVisibleInventory()).thenReturn(vi);
+        when(p1.getPrivateInventory()).thenReturn(new PrivateInventory());
         when(vi.getFinishedObjectives()).thenReturn(li);
         when(li.size()).thenReturn(9);
-        Player p2 = new EasyBot(new Random());
+
         var players = List.of(p1, p2);
-        var game = new Game(players, logger, tileDeck);
+        var game = new Game(players, logger, tileDeck, r);
         assertTrue(game.endOfGame());
 
         Player p3 = new EasyBot(new Random());
         players = List.of(p1, p2, p3);
-        game = new Game(players, logger, tileDeck);
+        game = new Game(players, logger, tileDeck, r);
         when(li.size()).thenReturn(8);
         assertTrue(game.endOfGame());
 
         Player p4 = new EasyBot(new Random());
         players = List.of(p1, p2, p3, p4);
-        game = new Game(players, logger, tileDeck);
+        game = new Game(players, logger, tileDeck, r);
         when(li.size()).thenReturn(7);
         assertTrue(game.endOfGame());
     }
