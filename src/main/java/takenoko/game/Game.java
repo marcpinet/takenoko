@@ -147,6 +147,7 @@ public class Game {
         for (Player p : players) {
             vi = p.getVisibleInventory();
             if (objectivesUnveiled == vi.getFinishedObjectives().size()) {
+                p.increaseScore(2);
                 return true;
             }
         }
