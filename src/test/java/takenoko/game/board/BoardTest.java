@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.game.tile.*;
 import takenoko.player.Player;
-import takenoko.player.bot.EasyBot;
+import takenoko.player.bot.RandomBot;
 import takenoko.utils.Coord;
 
 class BoardTest {
@@ -18,8 +18,8 @@ class BoardTest {
 
     @BeforeEach
     void setUp() {
-        p1 = new EasyBot(new Random());
-        p2 = new EasyBot(new Random());
+        p1 = new RandomBot(new Random(), "edgar");
+        p2 = new RandomBot(new Random(), "marc");
         board = new Board(List.of(p1, p2));
     }
 

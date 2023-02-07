@@ -10,14 +10,10 @@ import takenoko.player.PlayerBase;
 import takenoko.utils.Utils;
 
 /** A bot that chooses actions randomly. */
-public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBaseInterface {
+public class RandomBot extends PlayerBase<RandomBot> implements PlayerBase.PlayerBaseInterface {
     private final Random randomSource;
 
-    public EasyBot(Random randomSource) {
-        this.randomSource = randomSource;
-    }
-
-    public EasyBot(Random randomSource, String name) {
+    public RandomBot(Random randomSource, String name) {
         super(name);
         this.randomSource = randomSource;
     }

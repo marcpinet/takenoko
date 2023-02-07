@@ -11,7 +11,8 @@ import takenoko.game.WeatherDice;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.PlayerType;
-import takenoko.player.bot.EasyBot;
+import takenoko.player.bot.PlotRushBot;
+import takenoko.player.bot.RandomBot;
 import takenoko.utils.LogFormatter;
 
 public class Main {
@@ -28,7 +29,10 @@ public class Main {
     }
 
     public static void demo() {
-        List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
+        List<Player> players =
+                List.of(
+                        new RandomBot(new Random(), "edgar"),
+                        new PlotRushBot(new Random(), "marc"));
         var tileDeck = new TileDeck(new Random());
         var logger = Logger.getGlobal();
         ConsoleHandler handler = new ConsoleHandler();
