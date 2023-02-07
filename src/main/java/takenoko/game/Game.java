@@ -46,9 +46,7 @@ public class Game {
 
     public Optional<Player> play() {
         this.out.log(Level.INFO, "Beginning of the game!");
-        // Ideally, we should replace this with a while true, but we can't actually due to the level
-        // of our bots.
-        while (true) {
+        while (numTurn < 1000) {
             this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!");
             playTurn();
             if (endOfGame()) {
@@ -57,6 +55,7 @@ public class Game {
             }
             numTurn++;
         }
+        return Optional.empty();
     }
 
     private Optional<Player> getWinner() {
