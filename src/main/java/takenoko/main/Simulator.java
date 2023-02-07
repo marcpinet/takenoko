@@ -22,8 +22,7 @@ public class Simulator {
     private static final List<String> NAMES =
             List.of("Philippe", "Mireille", "Anne-Marie", "Nassim");
 
-    public Simulator(int nbGames, List<PlayerType> botTypes, Logger logger)
-            throws IllegalArgumentException {
+    public Simulator(int nbGames, List<PlayerType> botTypes, Logger logger) {
         this.nbGames = nbGames;
         this.botTypes = botTypes;
         this.logger = logger;
