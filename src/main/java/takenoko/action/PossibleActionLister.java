@@ -44,6 +44,9 @@ public class PossibleActionLister {
         for (var coord : board.getPlacedCoords()) {
             possibleActions.add(new Action.MovePiece(MovablePiece.GARDENER, coord));
             possibleActions.add(new Action.MovePiece(MovablePiece.PANDA, coord));
+
+            possibleActions.add(new Action.GrowOneTile(coord));
+            possibleActions.add(new Action.MovePandaAnywhere(coord));
         }
 
         possibleActions.add(new Action.TakeIrrigationStick());

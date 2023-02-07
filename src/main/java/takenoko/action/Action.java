@@ -11,20 +11,22 @@ import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
 
 public sealed interface Action
-        permits Action.PickPowerUp,
-                Action.BeginSimulation,
+        permits Action.BeginSimulation,
                 Action.EndSimulation,
                 Action.EndTurn,
                 Action.MovePiece,
                 Action.None,
+                Action.PickPowerUp,
                 Action.PlaceIrrigationStick,
                 Action.PlacePowerUp,
                 Action.PlaceTile,
+                Action.GrowOneTile,
                 Action.SimulateActions,
                 Action.TakeBambooSizeObjective,
                 Action.TakeHarvestingObjective,
                 Action.TakeIrrigationStick,
                 Action.TakeTilePatternObjective,
+                Action.MovePandaAnywhere,
                 Action.UnveilObjective {
     Action NONE = new Action.None();
     Action END_TURN = new Action.EndTurn();
@@ -119,6 +121,36 @@ public sealed interface Action
     record PlacePowerUp(Coord coord, PowerUp powerUp) implements Action {
         @Override
         public boolean hasCost() {
+            return false;
+        }
+    }
+
+    record GrowOneTile(Coord at) implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof GrowOneTile other) {
+                return at.equals(other.at);
+            }
+            return false;
+        }
+    }
+
+    record MovePandaAnywhere(Coord to) implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof MovePandaAnywhere other) {
+                return to.equals(other.to);
+            }
             return false;
         }
     }

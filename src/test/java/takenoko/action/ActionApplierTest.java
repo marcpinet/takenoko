@@ -286,4 +286,46 @@ class ActionApplierTest {
                 originalStatus,
                 objective.computeAchieved(board, innerAction, player.getVisibleInventory()));
     }
+
+    @Test
+    void growOneTile() throws IrrigationException, BoardException {
+        var tile = new BambooTile(Color.GREEN);
+        board.placeTile(new Coord(0, 1), tile);
+        var action = new Action.GrowOneTile(new Coord(0, 1));
+        applier.apply(undoStack, action);
+
+        assertEquals(1, tile.getBambooSize());
+
+        applier.apply(undoStack, Action.END_SIMULATION);
+
+        assertEquals(0, tile.getBambooSize());
+
+        assertNoSevereLog();
+    }
+
+    @Test
+    void movePandaAnywhere()
+            throws IrrigationException, BoardException, BambooSizeException,
+                    BambooIrrigationException {
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        board.move(MovablePiece.PANDA, new Coord(0, 1), player);
+
+        var tile = new BambooTile(Color.GREEN);
+        board.placeTile(new Coord(1, -1), tile);
+        tile.growBamboo();
+
+        var action = new Action.MovePandaAnywhere(new Coord(1, -1)); // not in straight line
+
+        applier.apply(undoStack, action);
+
+        assertEquals(new Coord(1, -1), board.getPieceCoord(MovablePiece.PANDA));
+        assertEquals(1, player.getVisibleInventory().getBamboo(Color.GREEN));
+
+        applier.apply(undoStack, Action.END_SIMULATION);
+
+        assertEquals(new Coord(0, 1), board.getPieceCoord(MovablePiece.PANDA));
+        assertEquals(0, player.getVisibleInventory().getBamboo(Color.GREEN));
+
+        assertNoSevereLog();
+    }
 }

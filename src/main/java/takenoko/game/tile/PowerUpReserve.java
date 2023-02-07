@@ -30,6 +30,10 @@ public class PowerUpReserve {
         return reserve.get(powerUp) > 0;
     }
 
+    public boolean isEmpty() {
+        return reserve.values().stream().allMatch(i -> i == 0);
+    }
+
     public void putBack(PowerUp powerUp) {
         reserve.put(powerUp, reserve.get(powerUp) + 1);
     }

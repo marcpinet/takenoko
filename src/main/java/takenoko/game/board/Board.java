@@ -116,13 +116,15 @@ public class Board {
 
     // S1301: switch is actually more readable here
     @SuppressWarnings("java:S1301")
-    public void move(MovablePiece pieceType, Coord coord, Player player) throws BoardException {
+    public void move(
+            MovablePiece pieceType, Coord coord, Player player, boolean overrideStraightLineLimit)
+            throws BoardException {
         if (!tiles.containsKey(coord)) {
             throw new BoardException(TILE_EXCEPTION_MESSAGE);
         }
 
         Coord currentCoord = getPieceCoord(pieceType);
-        if (!coord.isAlignedWith(currentCoord)) {
+        if (!overrideStraightLineLimit && !coord.isAlignedWith(currentCoord)) {
             throw new BoardException(
                     "Error: the " + pieceType + " can only move on a straight line.");
         }
@@ -134,6 +136,10 @@ public class Board {
             case GARDENER -> growTilesWithGardener(coord);
             case PANDA -> eatBambooWithPanda(coord, player);
         }
+    }
+
+    public void move(MovablePiece pieceType, Coord coord, Player player) throws BoardException {
+        move(pieceType, coord, player, false);
     }
 
     public Coord getPieceCoord(MovablePiece pieceType) {

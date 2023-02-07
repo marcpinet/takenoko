@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.board.MovablePiece;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.ObjectiveDeck;
@@ -57,6 +58,8 @@ public class ActionApplier {
                             gameInventory.getTilePatternObjectiveDeck());
                     case Action.PickPowerUp pickPowerUp -> apply(pickPowerUp);
                     case Action.PlacePowerUp placePowerUp -> apply(placePowerUp);
+                    case Action.GrowOneTile growOneTile -> apply(growOneTile);
+                    case Action.MovePandaAnywhere movePandaAnywhere -> apply(movePandaAnywhere);
                 };
 
         if (undo == UndoAction.END_TURN) {
@@ -122,6 +125,37 @@ public class ActionApplier {
             case UndoAction.TakeObjective takeObjective -> undo(takeObjective);
             case UndoAction.PickPowerUp pickPowerUp -> undo(pickPowerUp);
             case UndoAction.PlacePowerUp placePowerUp -> undo(placePowerUp);
+            case UndoAction.GrowOneTile growOneTile -> undo(growOneTile);
+        }
+    }
+
+    private UndoAction apply(Action.MovePandaAnywhere movePandaAnywhere) {
+        try {
+            var boardCopy = new Board(board);
+            var inventoryCopy = new VisibleInventory(player.getVisibleInventory());
+            board.move(MovablePiece.PANDA, movePandaAnywhere.to(), player, true);
+            return new UndoAction.MovePiece(boardCopy, inventoryCopy);
+        } catch (BoardException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private UndoAction apply(Action.GrowOneTile growOneTile) {
+        try {
+            var bambooTile = (BambooTile) board.getTile(growOneTile.at());
+            bambooTile.growBamboo();
+            return new UndoAction.GrowOneTile(growOneTile.at());
+        } catch (BoardException | BambooSizeException | BambooIrrigationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void undo(UndoAction.GrowOneTile growOneTile) {
+        try {
+            var bambooTile = (BambooTile) board.getTile(growOneTile.at());
+            bambooTile.shrinkBamboo();
+        } catch (BoardException | BambooSizeException e) {
+            throw new RuntimeException(e);
         }
     }
 

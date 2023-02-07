@@ -120,4 +120,24 @@ class GameTest {
         when(li.size()).thenReturn(7);
         assertTrue(game.endOfGame());
     }
+
+    @Test
+    void weatherSun() {
+        Random r = new Random(0);
+        Player p1 = spy(new EasyBot(new Random(0)));
+        Player p2 = new EasyBot(new Random(0));
+
+        var players = List.of(p1, p2);
+
+        var dice = mock(WeatherDice.class);
+        when(dice.throwDice()).thenReturn(WeatherDice.Face.SUN);
+
+        var game = new Game(players, logger, tileDeck, dice, r);
+        game.play(1);
+
+        verify(dice, times(2)).throwDice();
+        verify(p1).beginTurn(intThat(i -> i == 3));
+
+        assertNoSevereLog();
+    }
 }

@@ -57,9 +57,6 @@ class PossibleActionListerTest {
                         new Action.TakeBambooSizeObjective(),
                         new Action.TakeHarvestingObjective(),
                         new Action.TakeTilePatternObjective(),
-                        new Action.PickPowerUp(PowerUp.ENCLOSURE),
-                        new Action.PickPowerUp(PowerUp.FERTILIZER),
-                        new Action.PickPowerUp(PowerUp.WATERSHED),
 
                         // not possible to move characters on the first turn
 
@@ -80,7 +77,8 @@ class PossibleActionListerTest {
     }
 
     @Test
-    void listActionsWhenATileWasPlaced() throws IrrigationException, BoardException {
+    void listActionsWhenATileWasPlacedWithCloud() throws IrrigationException, BoardException {
+        resetValidator(WeatherDice.Face.CLOUDY);
         PossibleActionLister lister = new PossibleActionLister(board, validator, privateInventory);
 
         var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;

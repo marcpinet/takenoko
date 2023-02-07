@@ -1,7 +1,9 @@
 package takenoko.player;
 
+import java.util.List;
 import takenoko.action.Action;
 import takenoko.action.PossibleActionLister;
+import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
 
@@ -51,6 +53,15 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     @Override
+    public WeatherDice.Face chooseWeather(List<WeatherDice.Face> allowedWeathers) {
+        var weather = self.chooseWeatherImpl(allowedWeathers);
+        if (!allowedWeathers.contains(weather)) {
+            throw new IllegalStateException("Not allowed weather");
+        }
+        return weather;
+    }
+
+    @Override
     public void increaseScore(int delta) {
         score += delta;
     }
@@ -67,5 +78,7 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
 
     public interface PlayerBaseInterface {
         Action chooseActionImpl(Board board, PossibleActionLister actionLister);
+
+        WeatherDice.Face chooseWeatherImpl(List<WeatherDice.Face> allowedWeathers);
     }
 }

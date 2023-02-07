@@ -3,6 +3,7 @@ package takenoko.action;
 import java.util.ArrayList;
 import java.util.List;
 import takenoko.game.GameInventory;
+import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.VisibleInventory;
@@ -21,35 +22,42 @@ public class ActionValidator {
     private final PrivateInventory playerPrivateInventory;
     private final VisibleInventory playerVisibleInventory;
     private final List<Action> alreadyPlayedActions;
+    private final WeatherDice.Face weather;
 
     public ActionValidator(
             Board board,
             GameInventory gameInventory,
             PrivateInventory playerPrivateInventory,
             VisibleInventory playerVisibleInventory,
+            WeatherDice.Face weather,
             List<Action> alreadyPlayedActions) {
         this.board = board;
         this.gameInventory = gameInventory;
         this.playerPrivateInventory = playerPrivateInventory;
         this.playerVisibleInventory = playerVisibleInventory;
         this.alreadyPlayedActions = alreadyPlayedActions;
+        this.weather = weather;
     }
 
     public ActionValidator(
             Board board,
             GameInventory gameInventory,
             PrivateInventory playerPrivateInventory,
-            VisibleInventory playerVisibleInventory) {
+            VisibleInventory playerVisibleInventory,
+            WeatherDice.Face weather) {
         this(
                 board,
                 gameInventory,
                 playerPrivateInventory,
                 playerVisibleInventory,
+                weather,
                 new ArrayList<>());
     }
 
     public boolean isValid(Action action) {
-        for (Action a : alreadyPlayedActions) if (a.isSameTypeAs(action)) return false;
+        if (weather != WeatherDice.Face.WIND
+                && alreadyPlayedActions.stream().anyMatch(a -> a.isSameTypeAs(action)))
+            return false;
 
         return switch (action) {
             case Action.None ignored -> true;
@@ -70,7 +78,26 @@ public class ActionValidator {
             case Action.EndSimulation ignored -> true;
             case Action.PickPowerUp a -> isValid(a);
             case Action.PlacePowerUp a -> isValid(a);
+            case Action.GrowOneTile growOneTile -> isValid(growOneTile);
+            case Action.MovePandaAnywhere movePandaAnywhere -> isValid(movePandaAnywhere);
         };
+    }
+
+    private boolean isValid(Action.GrowOneTile growOneTile) {
+        if (weather != WeatherDice.Face.RAIN) return false;
+
+        try {
+            return board.getTile(growOneTile.at()) instanceof BambooTile bambooTile
+                    && bambooTile.isCultivable()
+                    && bambooTile.isIrrigated();
+        } catch (BoardException e) {
+            return false;
+        }
+    }
+
+    private boolean isValid(Action.MovePandaAnywhere movePandaAnywhere) {
+        return weather == WeatherDice.Face.THUNDERSTORM
+                && board.getPlacedCoords().contains(movePandaAnywhere.to());
     }
 
     private boolean canTakeObjective(ObjectiveDeck deck) {
@@ -129,7 +156,8 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PickPowerUp action) {
-        return gameInventory.getPowerUpReserve().canPick(action.powerUp());
+        return weather == WeatherDice.Face.CLOUDY
+                && gameInventory.getPowerUpReserve().canPick(action.powerUp());
     }
 
     private boolean isValid(Action.PlacePowerUp action) {

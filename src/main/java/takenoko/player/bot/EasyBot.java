@@ -1,8 +1,10 @@
 package takenoko.player.bot;
 
+import java.util.List;
 import java.util.Random;
 import takenoko.action.Action;
 import takenoko.action.PossibleActionLister;
+import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.player.PlayerBase;
 import takenoko.utils.Utils;
@@ -29,5 +31,11 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
 
         return Utils.randomPick(possibleActions, randomSource)
                 .orElseThrow(() -> new IllegalStateException("No possible action"));
+    }
+
+    @Override
+    public WeatherDice.Face chooseWeatherImpl(List<WeatherDice.Face> allowedWeathers) {
+        return Utils.randomPick(allowedWeathers, randomSource)
+                .orElseThrow(() -> new IllegalStateException("No possible weather"));
     }
 }

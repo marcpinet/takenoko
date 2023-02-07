@@ -72,40 +72,84 @@ public class Game {
         return winner;
     }
 
+
     private void playTurn() {
         int numPlayer = 1;
         int numAction = 1;
         for (Player player : players) {
             this.out.log(Level.INFO, "Turn of player number {0} to play!\n", numPlayer);
-            player.beginTurn(DEFAULT_ACTION_CREDIT);
-            ArrayList<Action> alreadyPlayedActions = new ArrayList<>();
-            while (true) {
-                this.out.log(Level.INFO, "Action number {0}:", numAction);
-                var actionLister = makeActionLister(player, alreadyPlayedActions);
-                var action = player.chooseAction(board, actionLister);
-                this.out.log(Level.INFO, "Action: {0}\n", action);
-                if (action == Action.END_TURN) break;
-                var applier = new ActionApplier(board, out, inventory, player);
-                applier.apply(state, action);
-                alreadyPlayedActions.add(action);
-                checkObjectives(action);
 
+            ArrayList<Action> alreadyPlayedActions = new ArrayList<>();
+
+            var weather = pickWeather(player);
+
+            var actionCredit = DEFAULT_ACTION_CREDIT;
+            if (weather == WeatherDice.Face.SUN) {
+                actionCredit++;
+            }
+            player.beginTurn(actionCredit);
+
+            while (!playAction(numAction, player, alreadyPlayedActions, weather)) {
                 numAction++;
             }
+
             numPlayer++;
             numAction = 1;
         }
         displayInventories();
     }
 
+    private boolean playAction(
+            int numAction,
+            Player player,
+            ArrayList<Action> alreadyPlayedActions,
+            WeatherDice.Face weather) {
+        this.out.log(Level.INFO, "Action number {0}:", numAction);
+        var actionLister = makeActionLister(player, alreadyPlayedActions, weather);
+        var action = player.chooseAction(board, actionLister);
+        this.out.log(Level.INFO, "Action: {0}\n", action);
+        if (action == Action.END_TURN) return true;
+        var applier = new ActionApplier(board, out, inventory, player);
+        applier.apply(state, action);
+        alreadyPlayedActions.add(action);
+        checkObjectives(action);
+        return false;
+    }
+
+    private WeatherDice.Face pickWeather(Player player) {
+        WeatherDice.Face weather = inventory.getWeatherDice().throwDice();
+
+        if (weather == WeatherDice.Face.ANY) {
+            weather =
+                    player.chooseWeather(
+                            List.of(
+                                    WeatherDice.Face.SUN,
+                                    WeatherDice.Face.CLOUDY,
+                                    WeatherDice.Face.RAIN,
+                                    WeatherDice.Face.WIND,
+                                    WeatherDice.Face.THUNDERSTORM));
+        }
+        if (weather == WeatherDice.Face.CLOUDY && inventory.getPowerUpReserve().isEmpty()) {
+            weather =
+                    player.chooseWeather(
+                            List.of(
+                                    WeatherDice.Face.SUN,
+                                    WeatherDice.Face.RAIN,
+                                    WeatherDice.Face.WIND,
+                                    WeatherDice.Face.THUNDERSTORM));
+        }
+        this.out.log(Level.INFO, "Weather: {0}", weather);
+        return weather;
+    }
     private PossibleActionLister makeActionLister(
-            Player player, List<Action> alreadyPlayedActions) {
+            Player player, List<Action> alreadyPlayedActions, WeatherDice.Face weather) {
         var validator =
                 new ActionValidator(
                         board,
                         inventory,
                         player.getPrivateInventory(),
                         player.getVisibleInventory(),
+                        weather,
                         alreadyPlayedActions);
 
         return new PossibleActionLister(board, validator, player.getPrivateInventory());

@@ -10,6 +10,7 @@ import takenoko.utils.Coord;
 public sealed interface UndoAction
         permits UndoAction.BeginSimulation,
                 UndoAction.EndTurn,
+                UndoAction.GrowOneTile,
                 UndoAction.MovePiece,
                 UndoAction.None,
                 UndoAction.PickPowerUp,
@@ -45,4 +46,6 @@ public sealed interface UndoAction
     record PlacePowerUp(Coord coord, PowerUp powerUp) implements UndoAction {}
 
     record PickPowerUp(PowerUp powerUp) implements UndoAction {}
+
+    record GrowOneTile(Coord at) implements UndoAction {}
 }
