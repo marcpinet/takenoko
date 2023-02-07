@@ -1,12 +1,15 @@
 package takenoko.action;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.game.GameInventory;
+import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
@@ -26,10 +29,19 @@ class PossibleActionListerTest {
     void setUp() {
         board = new Board();
         deck = new TileDeck(new Random(0));
-        GameInventory gameInventory = new GameInventory(20, deck, new Random(0));
+
         privateInventory = new PrivateInventory();
         visibleInventory = new VisibleInventory();
-        validator = new ActionValidator(board, gameInventory, privateInventory, visibleInventory);
+        resetValidator(WeatherDice.Face.SUN);
+    }
+
+    void resetValidator(WeatherDice.Face weather) {
+        WeatherDice dice = mock(WeatherDice.class);
+        when(dice.throwDice()).thenReturn(weather);
+        GameInventory gameInventory = new GameInventory(20, deck, new Random(0), dice);
+        validator =
+                new ActionValidator(
+                        board, gameInventory, privateInventory, visibleInventory, weather);
     }
 
     @Test

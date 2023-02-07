@@ -2,8 +2,7 @@ package takenoko.game;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.*;
 import java.util.logging.LogRecord;
@@ -59,7 +58,8 @@ class GameTest {
         when(p2.chooseAction(any(), any())).thenReturn(Action.END_TURN);
 
         var players = List.of(p1, p2);
-        var game = new Game(players, logger, tileDeck, new Random(0));
+        var game =
+                new Game(players, logger, tileDeck, new WeatherDice(new Random(0)), new Random(0));
 
         assertEquals(Optional.empty(), game.play());
         assertNoSevereLog();
@@ -70,8 +70,7 @@ class GameTest {
         var p1 = new EasyBot(new Random(0));
         var p2 = new EasyBot(new Random(0));
 
-        new Game(List.of(p1, p2), logger, tileDeck, new Random(0));
-
+        new Game(List.of(p1, p2), logger, tileDeck, new WeatherDice(new Random(0)), new Random(0));
         assertEquals(3, p1.getPrivateInventory().getObjectives().size());
     }
 
@@ -82,7 +81,9 @@ class GameTest {
 
         for (int i = 0; i < 10; i++) {
             List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
-            var game = new Game(players, logger, tileDeck, new Random());
+            var game =
+                    new Game(
+                            players, logger, tileDeck, new WeatherDice(new Random()), new Random());
             game.play();
             assertNoSevereLog();
         }
@@ -102,19 +103,19 @@ class GameTest {
         when(li.size()).thenReturn(9);
 
         var players = List.of(p1, p2);
-        var game = new Game(players, logger, tileDeck, r);
+        var game = new Game(players, logger, tileDeck, new WeatherDice(new Random(0)), r);
         assertTrue(game.endOfGame());
 
         Player p3 = new EasyBot(new Random());
         players = List.of(p1, p2, p3);
-        game = new Game(players, logger, tileDeck, r);
+        game = new Game(players, logger, tileDeck, new WeatherDice(new Random(0)), r);
         assertFalse(game.endOfGame());
         when(li.size()).thenReturn(8);
         assertTrue(game.endOfGame());
 
         Player p4 = new EasyBot(new Random());
         players = List.of(p1, p2, p3, p4);
-        game = new Game(players, logger, tileDeck, r);
+        game = new Game(players, logger, tileDeck, new WeatherDice(new Random(0)), r);
         assertFalse(game.endOfGame());
         when(li.size()).thenReturn(7);
         assertTrue(game.endOfGame());

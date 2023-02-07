@@ -23,11 +23,12 @@ public class Game {
     private final UndoStack state;
     private int numTurn = 1;
 
-    public Game(List<Player> players, Logger out, TileDeck tileDeck, Random random) {
+    public Game(
+            List<Player> players, Logger out, TileDeck tileDeck, WeatherDice dice, Random random) {
         board = new Board(players);
         this.players = players;
         this.out = out;
-        inventory = new GameInventory(20, tileDeck, random);
+        inventory = new GameInventory(20, tileDeck, random, dice);
         this.state = new UndoStack();
         try {
             for (Player player : players) {

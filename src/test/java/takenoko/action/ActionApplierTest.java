@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.game.GameInventory;
+import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
@@ -53,7 +54,7 @@ class ActionApplierTest {
 
         board = new Board();
         deck = new TileDeck(new Random(0));
-        gameInventory = new GameInventory(1, deck, new Random(0));
+        gameInventory = new GameInventory(1, deck, new Random(0), new WeatherDice(new Random(0)));
 
         player = new DefaultBot();
 
