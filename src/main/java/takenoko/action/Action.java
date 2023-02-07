@@ -1,5 +1,7 @@
 package takenoko.action;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import takenoko.game.Deck;
 import takenoko.game.board.MovablePiece;
@@ -10,20 +12,21 @@ import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
 
 public sealed interface Action
-        permits Action.BeginSimulation,
+        permits Action.PickPowerUp,
+                Action.BeginSimulation,
                 Action.EndSimulation,
                 Action.EndTurn,
                 Action.MovePiece,
                 Action.None,
-                Action.PickPowerUp,
                 Action.PlaceIrrigationStick,
                 Action.PlacePowerUp,
                 Action.PlaceTile,
+                Action.SimulateActions,
                 Action.TakeBambooSizeObjective,
                 Action.TakeHarvestingObjective,
                 Action.TakeIrrigationStick,
-                Action.UnveilObjective,
-                Action.TakeTilePatternObjective {
+                Action.TakeTilePatternObjective,
+                Action.UnveilObjective {
     Action NONE = new Action.None();
     Action END_TURN = new Action.EndTurn();
     Action.BeginSimulation BEGIN_SIMULATION = new Action.BeginSimulation();
@@ -174,6 +177,17 @@ public sealed interface Action
         @Override
         public boolean equals(Object o) {
             return o instanceof EndSimulation;
+        }
+    }
+
+    /// Simulates a list of actions. They will be tried alternatively, not sequentially
+    record SimulateActions(
+            List<Action> alternativeActions,
+            Map<Action, Map<Objective, Objective.Status>> outObjectiveStatus)
+            implements Action {
+        @Override
+        public boolean hasCost() {
+            return false;
         }
     }
 

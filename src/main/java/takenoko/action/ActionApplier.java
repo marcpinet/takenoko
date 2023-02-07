@@ -2,11 +2,11 @@ package takenoko.action;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import takenoko.game.GameInventory;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.VisibleInventory;
-import takenoko.game.objective.*;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.*;
@@ -14,6 +14,7 @@ import takenoko.game.tile.Color;
 import takenoko.game.tile.EmptyDeckException;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
+import takenoko.utils.Pair;
 
 public class ActionApplier {
     private final Board board;
@@ -49,6 +50,7 @@ public class ActionApplier {
                         undoUntilSimulationStart(undoStack);
                         yield UndoAction.NONE;
                     }
+                    case Action.SimulateActions simulateAction -> apply(undoStack, simulateAction);
                     case Action.TakeBambooSizeObjective ignored -> drawObjective(
                             gameInventory.getBambooSizeObjectiveDeck());
                     case Action.TakeHarvestingObjective ignored -> drawObjective(
@@ -64,6 +66,32 @@ public class ActionApplier {
         } else {
             undoStack.push(undo);
         }
+    }
+
+    private UndoAction apply(UndoStack undoStack, Action.SimulateActions simulateActions) {
+        for (var action : simulateActions.alternativeActions()) {
+            apply(undoStack, Action.BEGIN_SIMULATION);
+
+            apply(undoStack, action);
+
+            var newObjectiveStatuses =
+                    player.getPrivateInventory().getObjectives().stream()
+                            .map(
+                                    objective ->
+                                            Pair.of(
+                                                    objective,
+                                                    objective.computeAchieved(
+                                                            board,
+                                                            action,
+                                                            player.getVisibleInventory())))
+                            .collect(Collectors.toMap(Pair::first, Pair::second));
+
+            simulateActions.outObjectiveStatus().put(action, newObjectiveStatuses);
+
+            apply(undoStack, Action.END_SIMULATION);
+        }
+
+        return UndoAction.NONE;
     }
 
     private void undoUntilSimulationStart(UndoStack undoStack) {

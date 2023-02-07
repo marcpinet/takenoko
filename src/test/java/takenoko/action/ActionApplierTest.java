@@ -5,6 +5,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +19,7 @@ import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.BambooSizeObjective;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.Objective;
+import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.*;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
@@ -31,6 +35,7 @@ class ActionApplierTest {
     private GameInventory gameInventory;
     private TileDeck deck;
     private Player player;
+    private TilePatternObjective objective;
 
     private UndoStack undoStack;
 
@@ -41,7 +46,7 @@ class ActionApplierTest {
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InventoryException {
         Logger logger = Logger.getGlobal();
         logHandler = new TestLogHandler();
         logger.addHandler(logHandler);
@@ -51,6 +56,10 @@ class ActionApplierTest {
         gameInventory = new GameInventory(1, deck, new Random(0));
 
         player = new DefaultBot();
+
+        objective = new TilePatternObjective(Color.PINK, TilePatternObjective.LINE_2);
+        player.getPrivateInventory().addObjective(objective);
+
         applier = new ActionApplier(board, logger, gameInventory, player);
 
         undoStack = new UndoStack();
@@ -233,13 +242,13 @@ class ActionApplierTest {
 
         applier.apply(undoStack, action);
 
-        assertEquals(1, player.getPrivateInventory().getObjectives().size());
+        assertEquals(2, player.getPrivateInventory().getObjectives().size());
         assertTrue(
-                player.getPrivateInventory().getObjectives().get(0) instanceof BambooSizeObjective);
+                player.getPrivateInventory().getObjectives().get(1) instanceof BambooSizeObjective);
 
         applier.apply(undoStack, Action.END_SIMULATION);
 
-        assertEquals(0, player.getPrivateInventory().getObjectives().size());
+        assertEquals(1, player.getPrivateInventory().getObjectives().size());
 
         assertNoSevereLog();
     }
@@ -250,5 +259,30 @@ class ActionApplierTest {
         assertEquals(2, undoStack.size());
         applier.apply(undoStack, Action.END_TURN);
         assertEquals(0, undoStack.size());
+    }
+
+    @Test
+    void simulateActions() {
+        var originalStatus = objective.status();
+        HashMap<Action, Map<Objective, Objective.Status>> outStatuses = new HashMap<>();
+
+        var innerAction = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
+
+        var action = new Action.SimulateActions(List.of(innerAction), outStatuses);
+        applier.apply(undoStack, action);
+
+        assertEquals(1, outStatuses.size());
+
+        var resultForInnerAction = outStatuses.get(innerAction);
+        assertEquals(1, resultForInnerAction.size());
+
+        var resultForObjective = resultForInnerAction.get(objective);
+        // this action should have an impact on the objective
+        assertNotEquals(originalStatus, resultForObjective);
+
+        // the objective should be back to its original status
+        assertEquals(
+                originalStatus,
+                objective.computeAchieved(board, innerAction, player.getVisibleInventory()));
     }
 }
