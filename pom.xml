@@ -11,6 +11,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <junit.bom.version>5.9.1</junit.bom.version>
         <mockito.bom.version>4.8.1</mockito.bom.version>
+        <sonar.exclusions>**/BoardDisplayer.java</sonar.exclusions>
     </properties>
     <dependencyManagement>
         <!-- helps maven to resolve conflicting transitive dependencies -->
@@ -40,7 +41,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
-            <!-- use mockito-line insted of mockito-core to be able to mock static methods -->
+            <!-- use mockito-line instead of mockito-core to be able to mock static methods -->
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -75,6 +76,7 @@
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>3.9.1.2184</version>
+
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
