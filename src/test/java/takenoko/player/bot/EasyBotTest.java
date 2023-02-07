@@ -1,7 +1,6 @@
 package takenoko.player.bot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +37,7 @@ class EasyBotTest {
 
         var expectedAction =
                 new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
-        when(actionLister.getPossibleActions(any())).thenReturn(List.of(expectedAction));
+        when(actionLister.getPossibleActions()).thenReturn(List.of(expectedAction));
 
         Action chosenAction = bot.chooseAction(board, actionLister);
         assertEquals(expectedAction, chosenAction);
@@ -56,8 +55,7 @@ class EasyBotTest {
         var possibleAction =
                 new Action.PlaceTile(new Coord(-1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         var expectedAction = new Action.UnveilObjective(objMock);
-        when(actionLister.getPossibleActions(any()))
-                .thenReturn(List.of(possibleAction, expectedAction));
+        when(actionLister.getPossibleActions()).thenReturn(List.of(possibleAction, expectedAction));
 
         bot.beginTurn(1);
         Action chosenAction = bot.chooseAction(board, actionLister);

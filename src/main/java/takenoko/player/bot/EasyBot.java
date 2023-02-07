@@ -4,7 +4,6 @@ import java.util.Random;
 import takenoko.action.Action;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
-import takenoko.game.tile.TileDeck;
 import takenoko.player.PlayerBase;
 import takenoko.utils.Utils;
 
@@ -17,7 +16,7 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
     }
 
     public Action chooseActionImpl(Board board, PossibleActionLister actionLister) {
-        var possibleActions = actionLister.getPossibleActions(TileDeck.DEFAULT_DRAW_PREDICATE);
+        var possibleActions = actionLister.getPossibleActions();
         // If an objective is achieved, unveil it
         for (var action : possibleActions) {
             if (action instanceof Action.UnveilObjective) {
