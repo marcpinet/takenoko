@@ -95,23 +95,21 @@ public class Simulator {
 
         @Override
         public String toString() {
-            String sb =
-                    "Number of games: "
-                            + nbGames
-                            + "\n"
-                            + "Number of players: "
-                            + players.size()
-                            + "\n"
-                            + "Players: "
-                            + players
-                            + "\n"
-                            + "Bot types: "
-                            + botTypes
-                            + "\n"
-                            + "Number of wins: "
-                            + getNumWins()
-                            + "\n";
-            return sb;
+            return "Number of games: "
+                    + nbGames
+                    + "\n"
+                    + "Number of players: "
+                    + players.size()
+                    + "\n"
+                    + "Players: "
+                    + players
+                    + "\n"
+                    + "Bot types: "
+                    + botTypes
+                    + "\n"
+                    + "Number of wins: "
+                    + getNumWins()
+                    + "\n";
         }
     }
 
