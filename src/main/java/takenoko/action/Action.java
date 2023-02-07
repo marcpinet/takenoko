@@ -42,10 +42,20 @@ public sealed interface Action
 
     final class None implements Action {
         private None() {}
+
+        @Override
+        public String toString() {
+            return "Nothing happened.";
+        }
     }
 
     final class EndTurn implements Action {
         private EndTurn() {}
+
+        @Override
+        public String toString() {
+            return "End of the current turn.";
+        }
 
         @Override
         public boolean hasCost() {

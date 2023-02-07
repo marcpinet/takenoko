@@ -45,9 +45,9 @@ public class Game {
     }
 
     public Optional<Player> play() {
-        this.out.log(Level.INFO, "Beginning of the game!");
+        this.out.log(Level.INFO, "Beginning of the game!\n\n");
         while (numTurn < 1000) {
-            this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!");
+            this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!\n");
             playTurn();
             if (endOfGame()) {
                 playTurn(); // we need to play a last turn before ending
@@ -72,7 +72,7 @@ public class Game {
         int numPlayer = 1;
         int numAction = 1;
         for (Player player : players) {
-            this.out.log(Level.INFO, "Turn of player number {0} to play!", numPlayer);
+            this.out.log(Level.INFO, "Turn of player number {0} to play!\n", numPlayer);
             player.beginTurn(DEFAULT_ACTION_CREDIT);
             ArrayList<Action> alreadyPlayedActions = new ArrayList<>();
             while (true) {
@@ -80,7 +80,7 @@ public class Game {
                 try {
                     var actionLister = makeActionLister(player, alreadyPlayedActions);
                     var action = player.chooseAction(board, actionLister);
-                    this.out.log(Level.INFO, "Action: {0}", action);
+                    this.out.log(Level.INFO, "Action: {0}\n", action);
                     if (action == Action.END_TURN) break;
                     var applier = new ActionApplier(board, out, inventory, player);
                     applier.apply(state, action);
@@ -125,7 +125,7 @@ public class Game {
             this.out.log(Level.INFO, "Score : {0}", p.getScore());
             this.out.log(
                     Level.INFO,
-                    "Number of objectives achieved : {0}",
+                    "Number of objectives achieved : {0}\n\n",
                     vi.getFinishedObjectives().size());
             numPlayer++;
         }
