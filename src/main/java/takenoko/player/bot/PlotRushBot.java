@@ -60,6 +60,14 @@ public class PlotRushBot extends PlayerBase<PlotRushBot> implements PlayerBase.P
             }
         }
 
+        // else if we have no advantageous tile to place, take an irrigation stick (or place one)
+        for (var action : possibleActions) {
+            if (action instanceof Action.PlaceIrrigationStick
+                    || action instanceof Action.TakeIrrigationStick) {
+                return action;
+            }
+        }
+
         // else, just place a tile
         for (var action : possibleActions) {
             if (action instanceof Action.PlaceTile) {
