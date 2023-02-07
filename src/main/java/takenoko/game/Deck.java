@@ -21,7 +21,6 @@ public abstract class Deck<T> {
         if (elements.isEmpty()) {
             throw new EmptyDeckException("Deck is empty.");
         }
-        // picking a tile in Takenoko means choosing between the first three tiles
         int drawCount = Math.min(drawSize, elements.size());
 
         var availableTiles = new ArrayList<T>(drawCount);
@@ -37,6 +36,19 @@ public abstract class Deck<T> {
         elements.addAll(availableTiles);
 
         return res;
+    }
+
+    public int simulateDraw(DrawPredicate<T> predicate) throws EmptyDeckException {
+        if (elements.isEmpty()) {
+            throw new EmptyDeckException("Deck is empty.");
+        }
+        int drawCount = Math.min(drawSize, elements.size());
+
+        var availableTiles = new ArrayList<T>(drawCount);
+        for (int i = 0; i < drawCount; ++i) {
+            availableTiles.add(elements.peek());
+        }
+        return predicate.apply(availableTiles);
     }
 
     public void addFirst(T element) {
