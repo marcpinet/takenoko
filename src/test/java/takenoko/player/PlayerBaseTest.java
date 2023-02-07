@@ -3,6 +3,7 @@ package takenoko.player;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import takenoko.action.Action;
 import takenoko.action.ActionValidator;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.GameInventory;
+import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.tile.TileDeck;
 
@@ -35,9 +37,10 @@ class PlayerBaseTest {
         var validator =
                 new ActionValidator(
                         board,
-                        new GameInventory(20, deck, new Random(0)),
+                        new GameInventory(20, deck, new Random(0), new WeatherDice(new Random(0))),
                         player.getPrivateInventory(),
-                        player.getVisibleInventory());
+                        player.getVisibleInventory(),
+                        WeatherDice.Face.SUN);
         var lister = new PossibleActionLister(board, validator, player.getPrivateInventory());
 
         player.chooseAction(board, lister);
@@ -58,6 +61,11 @@ class PlayerBaseTest {
         @Override
         public Action chooseActionImpl(Board board, PossibleActionLister actionLister) {
             return Action.NONE;
+        }
+
+        @Override
+        public WeatherDice.Face chooseWeatherImpl(List<WeatherDice.Face> allowedWeathers) {
+            return WeatherDice.Face.SUN;
         }
     }
 }

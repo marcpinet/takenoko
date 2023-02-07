@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 import takenoko.game.Game;
+import takenoko.game.WeatherDice;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.bot.EasyBot;
@@ -20,7 +21,7 @@ public class Main {
         LogFormatter formatter = new LogFormatter();
         logger.setUseParentHandlers(false);
         handler.setFormatter(formatter);
-        var game = new Game(players, logger, tileDeck, new Random());
+        var game = new Game(players, logger, tileDeck, new WeatherDice(new Random()), new Random());
         var winner = game.play();
 
         if (winner.isPresent()) {

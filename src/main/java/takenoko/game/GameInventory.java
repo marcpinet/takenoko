@@ -10,17 +10,19 @@ public class GameInventory {
     private final ObjectiveDeck bambooSizeObjectiveDeck;
     private final ObjectiveDeck harvestingObjectiveDeck;
     private final PowerUpReserve powerUpReserve;
+    private final WeatherDice weatherDice;
     private int irrigationSticks;
     private final TileDeck tileDeck;
 
-    public GameInventory(int irrigationSticks, TileDeck tileDeck, Random random) {
+    public GameInventory(int irrigationSticks, TileDeck tileDeck, Random random, WeatherDice dice) {
         this(
                 irrigationSticks,
                 tileDeck,
                 ObjectiveDeck.makeTilePatternObjectiveDeck(random),
                 ObjectiveDeck.makeBambooSizeObjectiveDeck(random),
                 ObjectiveDeck.makeHarvestingObjectiveDeck(random),
-                new PowerUpReserve());
+                new PowerUpReserve(),
+                dice);
     }
 
     public GameInventory(
@@ -29,13 +31,15 @@ public class GameInventory {
             ObjectiveDeck tilePatternObjectiveDeck,
             ObjectiveDeck bambooSizeObjectiveDeck,
             ObjectiveDeck harvestingObjectiveDeck,
-            PowerUpReserve powerUpReserve) {
+            PowerUpReserve powerUpReserve,
+            WeatherDice dice) {
         this.irrigationSticks = irrigationSticks;
         this.tileDeck = tileDeck;
         this.tilePatternObjectiveDeck = tilePatternObjectiveDeck;
         this.bambooSizeObjectiveDeck = bambooSizeObjectiveDeck;
         this.harvestingObjectiveDeck = harvestingObjectiveDeck;
         this.powerUpReserve = powerUpReserve;
+        this.weatherDice = dice;
     }
 
     public void decrementIrrigation() throws GameInventoryException {
@@ -72,5 +76,9 @@ public class GameInventory {
 
     public boolean hasIrrigation() {
         return irrigationSticks > 0;
+    }
+
+    public WeatherDice getWeatherDice() {
+        return weatherDice;
     }
 }

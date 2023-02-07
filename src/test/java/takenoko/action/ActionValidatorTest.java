@@ -14,6 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import takenoko.game.GameInventory;
+import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
@@ -34,8 +35,19 @@ class ActionValidatorTest {
         PrivateInventory privateInventory = new PrivateInventory();
         VisibleInventory visibleInventory = new VisibleInventory();
         visibleInventory.incrementIrrigation();
-        gameInventory = new GameInventory(20, new TileDeck(new Random(0)), new Random(0));
-        validator = new ActionValidator(board, gameInventory, privateInventory, visibleInventory);
+        gameInventory =
+                new GameInventory(
+                        20,
+                        new TileDeck(new Random(0)),
+                        new Random(0),
+                        new WeatherDice(new Random(0)));
+        validator =
+                new ActionValidator(
+                        board,
+                        gameInventory,
+                        privateInventory,
+                        visibleInventory,
+                        WeatherDice.Face.SUN);
     }
 
     @Test
@@ -79,7 +91,11 @@ class ActionValidatorTest {
         var action = new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_LEFT);
         validator =
                 new ActionValidator(
-                        board, gameInventory, new PrivateInventory(), new VisibleInventory());
+                        board,
+                        gameInventory,
+                        new PrivateInventory(),
+                        new VisibleInventory(),
+                        WeatherDice.Face.SUN);
         assertFalse(validator.isValid(action));
     }
 
@@ -94,9 +110,14 @@ class ActionValidatorTest {
         var validator =
                 new ActionValidator(
                         board,
-                        new GameInventory(0, new TileDeck(new Random(0)), new Random(0)),
+                        new GameInventory(
+                                0,
+                                new TileDeck(new Random(0)),
+                                new Random(0),
+                                new WeatherDice(new Random(0))),
                         new PrivateInventory(),
-                        new VisibleInventory());
+                        new VisibleInventory(),
+                        WeatherDice.Face.SUN);
         var action = new Action.TakeIrrigationStick();
         assertFalse(validator.isValid(action));
     }
@@ -163,8 +184,25 @@ class ActionValidatorTest {
                         gameInventory,
                         new PrivateInventory(),
                         new VisibleInventory(),
+                        WeatherDice.Face.SUN,
                         new ArrayList<>(List.of(action)));
         var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertFalse(validator.isValid(action2));
+    }
+
+    @Test
+    void testTwiceActionWithWind() {
+        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
+        assertTrue(validator.isValid(action));
+        validator =
+                new ActionValidator(
+                        board,
+                        gameInventory,
+                        new PrivateInventory(),
+                        new VisibleInventory(),
+                        WeatherDice.Face.WIND,
+                        new ArrayList<>(List.of(action)));
+        var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
+        assertTrue(validator.isValid(action2));
     }
 }
