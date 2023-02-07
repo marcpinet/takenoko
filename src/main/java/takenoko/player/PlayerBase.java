@@ -9,10 +9,10 @@ import takenoko.game.board.VisibleInventory;
 public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.PlayerBaseInterface>
         implements Player {
     private final SELF self;
-    private int actionCredits = 0;
-    private int score = 0;
     private final PrivateInventory privateInventory;
     private final VisibleInventory visibleInventory;
+    private int actionCredits = 0;
+    private int score = 0;
 
     @SuppressWarnings("unchecked")
     protected PlayerBase() {

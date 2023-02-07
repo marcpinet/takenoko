@@ -15,12 +15,11 @@ import takenoko.utils.Coord;
 
 class BambooSizeObjectiveTest {
 
-    BambooSizeObjective b1, b2, b3, b4, b5, b6;
-    Board board;
-
     // The board always apply this action first
     static final Action.PlaceTile INITIAL_ACTION =
             new Action.PlaceTile(new Coord(0, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
+    BambooSizeObjective b1, b2, b3, b4, b5, b6;
+    Board board;
 
     Action.PlaceTile placeBambooTile(Board board, Coord c, Color co) {
         try {

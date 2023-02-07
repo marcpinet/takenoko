@@ -10,9 +10,9 @@ import takenoko.player.InventoryException;
 
 public class VisibleInventory {
     private final EnumMap<Color, Integer> bamboos;
-    private int irrigations;
     private final EnumMap<PowerUp, Integer> powerUps;
     private final List<Objective> finishedObjectives;
+    private int irrigations;
 
     public VisibleInventory() {
         bamboos = new EnumMap<>(Color.class);

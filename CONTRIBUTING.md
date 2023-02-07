@@ -4,13 +4,16 @@
 
 ## Contributing Guidelines
 
-Thank you for considering contributing to our project! We appreciate any help you can offer, and there are many ways to contribute.
+Thank you for considering contributing to our project! We appreciate any help you can offer, and there are many ways to
+contribute.
 
 ## Branching strategy
 
 We chose to do Github Flow for several reasons:
+
 - we think that Git Flow was forcing us to create too many branches, which we didn't like
 - we wanted the working version of our code to be on the main branch, which eliminated the Gitlab Flow strategy
+
 So Github Flow was the branching strategy that suited us best.
 
 ## Code Contributions
@@ -32,6 +35,7 @@ So Github Flow was the branching strategy that suited us best.
 ### How to run tests
 
 Before starting, check that you have a java 17 jdk at least, and maven on your machine. Then, :
+
 - Open a terminal in the project directory
 - Execute the command "mvn test"
 

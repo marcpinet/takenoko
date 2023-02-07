@@ -11,11 +11,12 @@ public class BambooSizeObjective implements Objective {
     private final int sizeObjective;
     private final Color color;
     private final int score;
-    private Status status;
-    private final PowerUpNecessity
-            powerUpNecessity; // MANDATORY if the objective need a PowerUp to be completed,
+    // MANDATORY if the objective need a PowerUp to be completed,
     // FORBIDDEN if PowerUps are forbidden, else NO_MATTER.
+    private final PowerUpNecessity powerUpNecessity;
+
     private final PowerUp powerUp;
+    private Status status;
 
     public BambooSizeObjective(
             int nbOfBamboos,

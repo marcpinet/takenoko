@@ -4,13 +4,10 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class BambooTile implements Tile {
-    private int bambooSize;
-
     private final Map<TileSide, Boolean> irrigatedSides;
-
-    private PowerUp powerUp;
-
     private final Color color;
+    private int bambooSize;
+    private PowerUp powerUp;
 
     public BambooTile(Color color) {
         bambooSize = 0;
@@ -98,15 +95,15 @@ public class BambooTile implements Tile {
         return powerUp;
     }
 
-    public Color getColor() {
-        return color;
-    }
-
     public void setPowerUp(PowerUp powerUp) throws PowerUpException {
         if (this.powerUp != PowerUp.NONE) {
             throw new PowerUpException("Error: Tile already has a power up.");
         }
         this.powerUp = powerUp;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     @Override

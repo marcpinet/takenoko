@@ -3,11 +3,15 @@ package takenoko.game.tile;
 import java.util.*;
 
 public class TileDeck extends takenoko.game.Deck<Tile> {
-    private static final int DRAW_SIZE = 3;
     public static final DrawPredicate<Tile> DEFAULT_DRAW_PREDICATE = ignored -> 0;
+    private static final int DRAW_SIZE = 3;
 
     public TileDeck(Random random) {
         this(generateOfficialTiles(random));
+    }
+
+    public TileDeck(Deque<Tile> tiles) {
+        super(tiles, DRAW_SIZE);
     }
 
     private static Deque<Tile> generateOfficialTiles(Random random) {
@@ -39,9 +43,5 @@ public class TileDeck extends takenoko.game.Deck<Tile> {
 
         Collections.shuffle(tempTiles, random);
         return new ArrayDeque<>(tempTiles);
-    }
-
-    public TileDeck(Deque<Tile> tiles) {
-        super(tiles, DRAW_SIZE);
     }
 }

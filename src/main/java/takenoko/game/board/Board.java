@@ -9,10 +9,10 @@ import takenoko.utils.Coord;
 
 public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
-    private final Map<Coord, Tile> tiles;
-    private final Map<MovablePiece, Coord> movablePieces;
     private static final String TILE_EXCEPTION_MESSAGE =
             "Error: the tile with these coordinates is not present on the board.";
+    private final Map<Coord, Tile> tiles;
+    private final Map<MovablePiece, Coord> movablePieces;
     private final List<Player> players;
 
     public Board() {

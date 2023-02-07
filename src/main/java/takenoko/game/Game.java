@@ -20,9 +20,9 @@ public class Game {
     private final Board board;
     private final List<Player> players;
     private final Logger out;
-    private int numTurn = 1;
     private final GameInventory inventory;
     private final UndoStack state;
+    private int numTurn = 1;
 
     public Game(List<Player> players, Logger out, TileDeck tileDeck, Random random) {
         board = new Board(players);
@@ -47,7 +47,7 @@ public class Game {
     public Optional<Player> play() {
         this.out.log(Level.INFO, "Beginning of the game!\n\n");
         while (numTurn < 1000) {
-            this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!\n");
+            this.out.log(Level.INFO, "Beginning of the tour number {0}!\n", numTurn);
             playTurn();
             if (endOfGame()) {
                 playTurn(); // we need to play a last turn before ending

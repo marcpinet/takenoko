@@ -10,8 +10,6 @@ import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.*;
-import takenoko.game.tile.Color;
-import takenoko.game.tile.EmptyDeckException;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.utils.Pair;
