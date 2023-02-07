@@ -136,8 +136,9 @@ public class ActionApplier {
             board.move(MovablePiece.PANDA, movePandaAnywhere.to(), player, true);
             return new UndoAction.MovePiece(boardCopy, inventoryCopy);
         } catch (BoardException e) {
-            throw new RuntimeException(e);
+            this.out.log(Level.SEVERE, e.getMessage());
         }
+        return UndoAction.NONE;
     }
 
     private UndoAction apply(Action.GrowOneTile growOneTile) {
@@ -146,8 +147,9 @@ public class ActionApplier {
             bambooTile.growBamboo();
             return new UndoAction.GrowOneTile(growOneTile.at());
         } catch (BoardException | BambooSizeException | BambooIrrigationException e) {
-            throw new RuntimeException(e);
+            this.out.log(Level.SEVERE, e.getMessage());
         }
+        return UndoAction.NONE;
     }
 
     private void undo(UndoAction.GrowOneTile growOneTile) {
@@ -155,7 +157,7 @@ public class ActionApplier {
             var bambooTile = (BambooTile) board.getTile(growOneTile.at());
             bambooTile.shrinkBamboo();
         } catch (BoardException | BambooSizeException e) {
-            throw new RuntimeException(e);
+            this.out.log(Level.SEVERE, e.getMessage());
         }
     }
 

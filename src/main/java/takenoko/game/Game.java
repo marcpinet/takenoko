@@ -72,7 +72,6 @@ public class Game {
         return winner;
     }
 
-
     private void playTurn() {
         int numPlayer = 1;
         int numAction = 1;
@@ -141,6 +140,7 @@ public class Game {
         this.out.log(Level.INFO, "Weather: {0}", weather);
         return weather;
     }
+
     private PossibleActionLister makeActionLister(
             Player player, List<Action> alreadyPlayedActions, WeatherDice.Face weather) {
         var validator =
