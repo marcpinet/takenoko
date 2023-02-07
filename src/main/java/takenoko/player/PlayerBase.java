@@ -18,17 +18,16 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     private String name;
 
     @SuppressWarnings("unchecked")
-    protected PlayerBase() {
+    protected PlayerBase(String name) {
         // SAFETY: This is safe because we're an abstract class using CRTP
         self = (SELF) this;
         privateInventory = new PrivateInventory();
         visibleInventory = new VisibleInventory();
-        this.name = "Unnamed";
+        this.name = name;
     }
 
-    protected PlayerBase(String name) {
-        this();
-        this.name = name;
+    protected PlayerBase() {
+        this("Unnamed");
     }
 
     @Override
