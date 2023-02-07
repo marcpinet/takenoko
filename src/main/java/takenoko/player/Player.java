@@ -10,7 +10,7 @@ public interface Player {
 
     int availableActionCredits();
 
-    Action chooseAction(Board board, PossibleActionLister actionLister) throws PlayerException;
+    Action chooseAction(Board board, PossibleActionLister actionLister);
 
     PrivateInventory getPrivateInventory();
 

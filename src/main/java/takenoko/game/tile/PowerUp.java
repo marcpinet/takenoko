@@ -4,5 +4,5 @@ public enum PowerUp {
     NONE,
     ENCLOSURE, // TODO
     FERTILIZER,
-    WATERSHED;
+    WATERSHED
 }

@@ -9,10 +9,10 @@ import takenoko.utils.Coord;
 
 public class Board {
     public static final Coord POND_COORD = new Coord(0, 0);
-    private final Map<Coord, Tile> tiles;
-    private final Map<MovablePiece, Coord> movablePieces;
     private static final String TILE_EXCEPTION_MESSAGE =
             "Error: the tile with these coordinates is not present on the board.";
+    private final Map<Coord, Tile> tiles;
+    private final Map<MovablePiece, Coord> movablePieces;
     private final List<Player> players;
 
     public Board() {
@@ -66,14 +66,14 @@ public class Board {
 
         // Check if the tile is adjacent to the pond AND/OR to at least 2 tiles already on the board
         // (including the pond)
-        Set<Coord> intersecWithTiles =
+        Set<Coord> intersectionWithTiles =
                 Stream.of(c.adjacentCoords())
                         .filter(tiles::containsKey)
                         .collect(Collectors.toSet());
 
-        if (intersecWithTiles.isEmpty()) return false;
+        if (intersectionWithTiles.isEmpty()) return false;
 
-        return intersecWithTiles.size() != 1 || intersecWithTiles.contains(POND_COORD);
+        return intersectionWithTiles.size() != 1 || intersectionWithTiles.contains(POND_COORD);
     }
 
     public void placeIrrigation(Coord coord, TileSide side)
@@ -108,43 +108,6 @@ public class Board {
 
     public Set<Coord> getPlacedCoords() {
         return tiles.keySet();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = -2; i < 3; i++) {
-            for (int j = -2; j < 3; j++) {
-                var tile = getTileAtDisplayPosition(i, j);
-                if (tile.isPresent()) {
-                    if (tile.get() instanceof BambooTile bambooTile) {
-                        sb.append(' ')
-                                .append(bambooTile.getColor().toString().charAt(0))
-                                .append(' ');
-                    } else {
-                        sb.append("---");
-                    }
-                    sb.append("(").append(i).append(",").append(j).append(") ");
-
-                } else {
-                    sb.append("-------- ");
-                }
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
-
-    private Optional<Tile> getTileAtDisplayPosition(int i, int j) {
-        for (var keyval : tiles.entrySet()) {
-            Coord c = keyval.getKey();
-            var row = c.x();
-            var col = c.y() + (c.x() + (c.x() & 1)) / 2;
-            if (row == i && col == j) {
-                return Optional.of(keyval.getValue());
-            }
-        }
-        return Optional.empty();
     }
 
     public boolean contains(Coord coord) {
@@ -222,5 +185,10 @@ public class Board {
 
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
+    }
+
+    @Override
+    public String toString() {
+        return new BoardDisplayer(this).toString();
     }
 }

@@ -14,9 +14,7 @@ import takenoko.action.Action;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
-import takenoko.player.InventoryException;
 import takenoko.player.Player;
-import takenoko.player.PlayerException;
 import takenoko.player.PrivateInventory;
 import takenoko.player.bot.EasyBot;
 import utils.TestLogHandler;
@@ -27,7 +25,7 @@ class GameTest {
     Logger logger;
 
     @BeforeEach
-    public void setUp() throws InventoryException {
+    public void setUp() {
         tileDeck = new TileDeck(new Random(0));
 
         logger = Logger.getAnonymousLogger();
@@ -47,7 +45,7 @@ class GameTest {
     }
 
     @Test
-    void testGetWinner() throws PlayerException {
+    void testGetWinner() {
         var p1 = mock(Player.class);
         when(p1.getVisibleInventory()).thenReturn(new VisibleInventory());
         when(p1.getPrivateInventory()).thenReturn(new PrivateInventory());
@@ -72,7 +70,7 @@ class GameTest {
         var p1 = new EasyBot(new Random(0));
         var p2 = new EasyBot(new Random(0));
 
-        var game = new Game(List.of(p1, p2), logger, tileDeck, new Random(0));
+        new Game(List.of(p1, p2), logger, tileDeck, new Random(0));
 
         assertEquals(3, p1.getPrivateInventory().getObjectives().size());
     }
@@ -96,6 +94,7 @@ class GameTest {
         Player p1 = mock(Player.class);
         Player p2 = new EasyBot(new Random());
         VisibleInventory vi = mock(VisibleInventory.class);
+        @SuppressWarnings("unchecked")
         List<Objective> li = mock(ArrayList.class);
         when(p1.getVisibleInventory()).thenReturn(vi);
         when(p1.getPrivateInventory()).thenReturn(new PrivateInventory());

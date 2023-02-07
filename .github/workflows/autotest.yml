@@ -2,7 +2,7 @@ name: autotest
 
 on:
   pull_request:
-    types: [review_requested]
+    types: [ review_requested ]
 
 jobs:
   build:

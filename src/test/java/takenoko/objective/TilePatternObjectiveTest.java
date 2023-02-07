@@ -96,7 +96,7 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testBicolourObjectiveProgression() throws IrrigationException, BoardException {
+    void testTwoColouredObjectiveProgression() {
         List<Color> colors = List.of(Color.YELLOW, Color.YELLOW, Color.PINK, Color.PINK);
         var objective = new TilePatternObjective(colors, TilePatternObjective.DIAMOND, 1);
 

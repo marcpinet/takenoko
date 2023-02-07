@@ -53,7 +53,7 @@ public record Coord(int x, int y) {
     ///    Convert the vector back to a position by adding the center: rotated =
     // cube_add(rotated_vec, center) = Cube
     ///    (rotated_vec.q + center.q, rotated_vec.r + center.r, rotated_vec.s + center.s).
-    ///    Convert the cube position rotated back to to your preferred coordinate system.
+    ///    Convert the cube position rotated back to your preferred coordinate system.
     public Coord rotate(Coord center) {
         var q = x - center.x;
         var s = z() - center.z();

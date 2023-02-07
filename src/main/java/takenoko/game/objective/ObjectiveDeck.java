@@ -10,6 +10,10 @@ import takenoko.game.tile.PowerUp;
 public class ObjectiveDeck extends Deck<Objective> {
     static final int DRAW_SIZE = 1;
 
+    public ObjectiveDeck(Deque<Objective> elements) {
+        super(elements, DRAW_SIZE);
+    }
+
     public static ObjectiveDeck makeTilePatternObjectiveDeck(Random random) {
         var list = new ArrayList<TilePatternObjective>();
 
@@ -127,10 +131,6 @@ public class ObjectiveDeck extends Deck<Objective> {
         Collections.shuffle(list, random);
 
         return new ObjectiveDeck(new ArrayDeque<>(list));
-    }
-
-    public ObjectiveDeck(Deque<Objective> elements) {
-        super(elements, DRAW_SIZE);
     }
 
     public Objective draw() throws EmptyDeckException {

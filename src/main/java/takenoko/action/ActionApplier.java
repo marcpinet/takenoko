@@ -10,8 +10,6 @@ import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.*;
-import takenoko.game.tile.Color;
-import takenoko.game.tile.EmptyDeckException;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
 import takenoko.utils.Pair;
@@ -68,6 +66,7 @@ public class ActionApplier {
         }
     }
 
+    @SuppressWarnings("SameReturnValue")
     private UndoAction apply(UndoStack undoStack, Action.SimulateActions simulateActions) {
         for (var action : simulateActions.alternativeActions()) {
             apply(undoStack, Action.BEGIN_SIMULATION);
@@ -105,7 +104,7 @@ public class ActionApplier {
     // S1301: we want pattern matching so switch is necessary
     // S1481: pattern matching requires variable name even if unused
     // S131: we're using pattern matching, so we don't need a default branch
-    @SuppressWarnings({"java:S1301", "java:S1481", "java:S131"})
+    @SuppressWarnings({"java:S1301", "java:S1481", "java:S131", "DuplicateBranchesInSwitch"})
     private void undo(UndoAction action) {
         switch (action) {
             case UndoAction.None ignored -> {}

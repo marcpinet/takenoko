@@ -13,16 +13,15 @@ import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
-import takenoko.player.PlayerException;
 
 public class Game {
     private static final int DEFAULT_ACTION_CREDIT = 2;
     private final Board board;
     private final List<Player> players;
     private final Logger out;
-    private int numTurn = 1;
     private final GameInventory inventory;
     private final UndoStack state;
+    private int numTurn = 1;
 
     public Game(List<Player> players, Logger out, TileDeck tileDeck, Random random) {
         board = new Board(players);
@@ -47,7 +46,7 @@ public class Game {
     public Optional<Player> play() {
         this.out.log(Level.INFO, "Beginning of the game!\n\n");
         while (numTurn < 1000) {
-            this.out.log(Level.INFO, "Beginning of the tour number " + numTurn + "!\n");
+            this.out.log(Level.INFO, "Beginning of the tour number {0}!\n", numTurn);
             playTurn();
             if (endOfGame()) {
                 playTurn(); // we need to play a last turn before ending
@@ -77,18 +76,15 @@ public class Game {
             ArrayList<Action> alreadyPlayedActions = new ArrayList<>();
             while (true) {
                 this.out.log(Level.INFO, "Action number {0}:", numAction);
-                try {
-                    var actionLister = makeActionLister(player, alreadyPlayedActions);
-                    var action = player.chooseAction(board, actionLister);
-                    this.out.log(Level.INFO, "Action: {0}\n", action);
-                    if (action == Action.END_TURN) break;
-                    var applier = new ActionApplier(board, out, inventory, player);
-                    applier.apply(state, action);
-                    alreadyPlayedActions.add(action);
-                    checkObjectives(action);
-                } catch (PlayerException e) {
-                    this.out.log(Level.SEVERE, "Player exception: {0}", e.getMessage());
-                }
+                var actionLister = makeActionLister(player, alreadyPlayedActions);
+                var action = player.chooseAction(board, actionLister);
+                this.out.log(Level.INFO, "Action: {0}\n", action);
+                if (action == Action.END_TURN) break;
+                var applier = new ActionApplier(board, out, inventory, player);
+                applier.apply(state, action);
+                alreadyPlayedActions.add(action);
+                checkObjectives(action);
+
                 numAction++;
             }
             numPlayer++;
@@ -121,7 +117,7 @@ public class Game {
         int numPlayer = 1;
         for (Player p : players) {
             VisibleInventory vi = p.getVisibleInventory();
-            this.out.log(Level.INFO, "Player number {0} informations :", numPlayer);
+            this.out.log(Level.INFO, "Player number {0} information :", numPlayer);
             this.out.log(Level.INFO, "Score : {0}", p.getScore());
             this.out.log(
                     Level.INFO,

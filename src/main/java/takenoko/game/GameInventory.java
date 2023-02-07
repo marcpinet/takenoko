@@ -6,13 +6,12 @@ import takenoko.game.tile.PowerUpReserve;
 import takenoko.game.tile.TileDeck;
 
 public class GameInventory {
-    int irrigationSticks;
-    TileDeck tileDeck;
     private final ObjectiveDeck tilePatternObjectiveDeck;
     private final ObjectiveDeck bambooSizeObjectiveDeck;
     private final ObjectiveDeck harvestingObjectiveDeck;
-
     private final PowerUpReserve powerUpReserve;
+    private int irrigationSticks;
+    private final TileDeck tileDeck;
 
     public GameInventory(int irrigationSticks, TileDeck tileDeck, Random random) {
         this(

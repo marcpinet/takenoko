@@ -64,7 +64,8 @@
 
 ## Game Rules
 
-Takenoko is a board game for 2-4 players, set in ancient China during the Han Dynasty. The objective of the game is to earn the most points by cultivating the garden and completing objectives.
+Takenoko is a board game for 2-4 players, set in ancient China during the Han Dynasty. The objective of the game is to
+earn the most points by cultivating the garden and completing objectives.
 
 Here are the basic rules for playing Takenoko:
 
@@ -75,7 +76,7 @@ Here are the basic rules for playing Takenoko:
   - Move the gardener and grow the adjacent bamboos according to the rules
   - Move the panda and get a bamboo on the arrival tile
   - Draw an objective card of a certain type. (max 5 in your hand)
-- If a player unveils one of his achieved objective cards, he get the points indicated on the card.
+- If a player unveils one of his achieved objective cards, he gets the points indicated on the card.
 - The game ends when a player has revealed 7 objective cards, the player with the most points wins.
 
 <a href="./readme-data/takenoko.pdf">Entire rules</a>
@@ -85,6 +86,7 @@ Here are the basic rules for playing Takenoko:
 ## Current features
 
 Updated on December 20, 2022
+
 * //TODO
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -146,7 +148,9 @@ Updated on December 20, 2022
 
 ## Usage
 
-This version of takenoko is fully automated: bots of different levels play against each other, so there is no specific action to perform during the game, logs informing about each action will be logged as well as the detailed result of the game.
+This version of takenoko is fully automated: bots of different levels play against each other, so there is no specific
+action to perform during the game, logs informing about each action will be logged as well as the detailed result of the
+game.
 To configure the number of bots of their level :
 //TODO
 

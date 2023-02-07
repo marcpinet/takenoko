@@ -9,10 +9,10 @@ import takenoko.game.board.VisibleInventory;
 public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.PlayerBaseInterface>
         implements Player {
     private final SELF self;
-    private int actionCredits = 0;
-    private int score = 0;
     private final PrivateInventory privateInventory;
     private final VisibleInventory visibleInventory;
+    private int actionCredits = 0;
+    private int score = 0;
 
     @SuppressWarnings("unchecked")
     protected PlayerBase() {
@@ -40,8 +40,7 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     @Override
-    public Action chooseAction(Board board, PossibleActionLister actionLister)
-            throws PlayerException {
+    public Action chooseAction(Board board, PossibleActionLister actionLister) {
         var action = self.chooseActionImpl(board, actionLister);
 
         actionCredits -= action.hasCost() ? 1 : 0;
@@ -67,7 +66,6 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     public interface PlayerBaseInterface {
-        Action chooseActionImpl(Board board, PossibleActionLister actionLister)
-                throws PlayerException;
+        Action chooseActionImpl(Board board, PossibleActionLister actionLister);
     }
 }

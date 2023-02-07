@@ -1,6 +1,7 @@
 package takenoko.game.tile;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -10,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import takenoko.game.Deck;
 
 class TileDeckTest {
-    TileDeck deck;
     private static final int DECK_SIZE = 10;
+    TileDeck deck;
 
     @BeforeEach
     void setUp() {
