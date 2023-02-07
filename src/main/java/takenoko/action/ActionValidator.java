@@ -63,6 +63,7 @@ public class ActionValidator {
             case Action.UnveilObjective a -> isValid(a);
             case Action.MovePiece a -> isValid(a);
             case Action.EndTurn ignored -> true;
+            case Action.SimulateActions ignored -> true;
             case Action.BeginSimulation ignored -> true;
             case Action.EndSimulation ignored -> true;
             case Action.PickPowerUp a -> isValid(a);
