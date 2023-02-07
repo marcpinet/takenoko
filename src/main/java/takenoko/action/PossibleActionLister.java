@@ -22,7 +22,7 @@ public class PossibleActionLister {
         this.playerPrivateInventory = playerPrivateInventory;
     }
 
-    public List<Action> getPossibleActions(Deck.DrawPredicate<Tile> drawPredicate) {
+    private List<Action> getActionsExceptPlaceTile() {
         List<Action> possibleActions = new ArrayList<>();
 
         possibleActions.add(Action.NONE);
@@ -57,6 +57,24 @@ public class PossibleActionLister {
         for (var objective : playerPrivateInventory.getObjectives()) {
             possibleActions.add(new Action.UnveilObjective(objective));
         }
+
+        return possibleActions;
+    }
+
+    public List<Action> getPossibleActions() {
+        List<Action> possibleActions = getActionsExceptPlaceTile();
+
+        for (var coord : board.getAvailableCoords()) {
+            possibleActions.add(new Action.PlaceTile(coord, tiles -> 0));
+            possibleActions.add(new Action.PlaceTile(coord, tiles -> 1));
+            possibleActions.add(new Action.PlaceTile(coord, tiles -> 2));
+        }
+
+        return possibleActions.stream().filter(validator::isValid).toList();
+    }
+
+    public List<Action> getPossibleActions(Deck.DrawPredicate<Tile> drawPredicate) {
+        List<Action> possibleActions = getActionsExceptPlaceTile();
 
         for (var coord : board.getAvailableCoords()) {
             possibleActions.add(new Action.PlaceTile(coord, drawPredicate));

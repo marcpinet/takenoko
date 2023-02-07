@@ -10,6 +10,7 @@ import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.Color;
+import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.PowerUp;
 import takenoko.player.PrivateInventory;
 
@@ -92,7 +93,16 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PlaceTile action) {
-        return gameInventory.getTileDeck().size() > 0 && board.isAvailableCoord(action.coord());
+        var deck = gameInventory.getTileDeck();
+        if (deck.size() == 0) return false;
+        try {
+            int pickedTile = deck.simulateDraw(action.drawPredicate());
+            return pickedTile >= 0
+                    && pickedTile < deck.size()
+                    && board.isAvailableCoord(action.coord());
+        } catch (EmptyDeckException e) {
+            return false;
+        }
     }
 
     private boolean isValid(Action.TakeIrrigationStick ignored) {
