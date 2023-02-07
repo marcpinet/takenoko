@@ -8,6 +8,7 @@ import takenoko.action.Action;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.objective.BambooSizeObjective;
+import takenoko.game.objective.Objective;
 import takenoko.game.objective.PowerUpNecessity;
 import takenoko.game.tile.*;
 import takenoko.utils.Coord;
@@ -64,11 +65,11 @@ class BambooSizeObjectiveTest {
     }
 
     @Test
-    void testIsAchieved() throws BambooSizeException, BambooIrrigationException, BoardException {
+    void testStatus() throws BambooSizeException, BambooIrrigationException, BoardException {
         // Initial verification
-        assertFalse(b1.computeAchieved(board, INITIAL_ACTION, null));
-        assertFalse(b2.computeAchieved(board, INITIAL_ACTION, null));
-        assertFalse(b3.computeAchieved(board, INITIAL_ACTION, null));
+        assertEquals(new Objective.Status(0, 2), b1.computeAchieved(board, INITIAL_ACTION, null));
+        assertEquals(new Objective.Status(0, 3), b2.computeAchieved(board, INITIAL_ACTION, null));
+        assertEquals(new Objective.Status(0, 1), b3.computeAchieved(board, INITIAL_ACTION, null));
 
         // Verification of the 1st objective
         var secondAction = placeBambooTile(board, new Coord(0, 1), Color.PINK);
@@ -85,12 +86,12 @@ class BambooSizeObjectiveTest {
         // First bamboo grow on the 1st tile
         bt1_1.growBamboo();
 
-        assertFalse(b1.computeAchieved(board, thirdAction, null));
+        assertEquals(new Objective.Status(1, 2), b1.computeAchieved(board, thirdAction, null));
 
         // First bamboo grow on the 2nd tile
         bt2_1.growBamboo();
 
-        assertTrue(b1.computeAchieved(board, thirdAction, null));
+        assertEquals(new Objective.Status(2, 2), b1.computeAchieved(board, thirdAction, null));
         assertTrue(b1.isAchieved());
 
         // Verification of the 2nd objective
@@ -118,7 +119,12 @@ class BambooSizeObjectiveTest {
         // objectif
         bt3_1.growBamboo();
         bt3_1.growBamboo();
+
+        assertEquals(new Objective.Status(0, 3), b2.computeAchieved(board, fifthAction, null));
+
         bt3_1.growBamboo();
+
+        assertEquals(new Objective.Status(1, 3), b2.computeAchieved(board, fifthAction, null));
 
         // We apply growBamboo() three times in the fourth tile because we need it for the 2nd
         // objectif
@@ -132,7 +138,8 @@ class BambooSizeObjectiveTest {
         bt5_1.growBamboo();
         bt5_1.growBamboo();
 
-        assertTrue(b2.computeAchieved(board, sixthAction, null));
+        assertEquals(new Objective.Status(3, 3), b2.computeAchieved(board, fifthAction, null));
+
         assertTrue(b2.isAchieved());
 
         // Verification of the 3rd objective
@@ -153,7 +160,7 @@ class BambooSizeObjectiveTest {
         bt6_1.growBamboo();
         bt6_1.growBamboo();
 
-        assertTrue(b3.computeAchieved(board, seventhAction, null));
+        assertEquals(new Objective.Status(1, 1), b3.computeAchieved(board, seventhAction, null));
         assertTrue(b3.isAchieved());
     }
 
@@ -174,18 +181,19 @@ class BambooSizeObjectiveTest {
         bt1_1.growBamboo();
 
         // The objective b4 is not achieved because a fertilizer power-up is mandatory.
-        assertFalse(b4.computeAchieved(board, secondAction, null));
+        assertEquals(new Objective.Status(1, 2), b4.computeAchieved(board, secondAction, null));
         // But the b5 does, because no power-up are on the tile.
-        assertTrue(b5.computeAchieved(board, secondAction, null));
+        assertEquals(new Objective.Status(2, 2), b5.computeAchieved(board, secondAction, null));
         // And the b6 will be finished all the time, regardless of power-up changes, because it
-        // hasn't constraint on power-ups.
-        assertTrue(b6.computeAchieved(board, secondAction, null));
+        // assertEquals't constraint on power-ups.
+        assertEquals(new Objective.Status(1, 1), b6.computeAchieved(board, secondAction, null));
 
         bt1_1.setPowerUp(PowerUp.FERTILIZER);
-        assertTrue(b6.computeAchieved(board, secondAction, null));
         // Now the objective b4 is achieved.
-        assertTrue(b4.computeAchieved(board, secondAction, null));
+        assertEquals(new Objective.Status(2, 2), b4.computeAchieved(board, secondAction, null));
         // But the b5 is not anymore.
-        assertFalse(b5.computeAchieved(board, secondAction, null));
+        assertEquals(new Objective.Status(1, 2), b5.computeAchieved(board, secondAction, null));
+
+        assertEquals(new Objective.Status(1, 1), b6.computeAchieved(board, secondAction, null));
     }
 }

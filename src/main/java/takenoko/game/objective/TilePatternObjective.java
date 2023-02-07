@@ -1,9 +1,6 @@
 package takenoko.game.objective;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import takenoko.action.Action;
 import takenoko.game.board.Board;
@@ -192,7 +189,7 @@ public class TilePatternObjective implements Objective {
             List.of(new Coord(0, 0), new Coord(0, 1), new Coord(0, 2));
 
     private final Set<List<Element>> patternVariations;
-    private boolean achieved = false;
+    private Status status;
     private final int score;
 
     /// pattern is an array of deltas from one edge of the pattern to the next, expected to start
@@ -217,6 +214,7 @@ public class TilePatternObjective implements Objective {
                         // remove potential duplicates
                         .collect(Collectors.toSet());
         this.score = score;
+        resetStatus(0);
     }
 
     /// alternative constructor for a pattern with only one color
@@ -226,6 +224,11 @@ public class TilePatternObjective implements Objective {
 
     public TilePatternObjective(Color color, List<Coord> pattern) {
         this(Collections.nCopies(pattern.size(), color), pattern, 1);
+    }
+
+    private void resetStatus(int completion) {
+        var patternSize = patternVariations.stream().findAny().orElseThrow().size();
+        status = new Status(completion, patternSize);
     }
 
     /// Generate all possible rotations of a pattern
@@ -260,25 +263,28 @@ public class TilePatternObjective implements Objective {
     }
 
     @Override
-    public boolean computeAchieved(Board board, Action lastAction, VisibleInventory ignored) {
+    public Status computeAchieved(Board board, Action lastAction, VisibleInventory ignored) {
         // Once the objective is achieved, it stays achieved
-        if (achieved) {
-            return true;
+        if (status.achieved()) {
+            return status;
         }
         // We know the status can only change if the last action was a tile placement
         if (!(lastAction instanceof Action.PlaceTile placeTile)) {
-            return false;
+            return status;
         }
         // Test all possible patterns
         var coord = placeTile.coord();
-        achieved =
-                patternVariations.stream().anyMatch(pattern -> isPatternAt(board, coord, pattern));
-        return achieved;
+        status =
+                patternVariations.stream()
+                        .map(pattern -> isPatternAt(board, coord, pattern))
+                        .max(Comparator.comparingDouble(Status::progressFraction))
+                        .orElseThrow();
+        return status;
     }
 
     @Override
-    public boolean isAchieved() {
-        return achieved;
+    public Status status() {
+        return status;
     }
 
     @Override
@@ -299,7 +305,12 @@ public class TilePatternObjective implements Objective {
         return false;
     }
 
-    private boolean isPatternAt(Board board, Coord coord, List<Element> pattern) {
-        return pattern.stream().map(el -> el.offset(coord)).allMatch(el -> isValidTile(board, el));
+    private Status isPatternAt(Board board, Coord coord, List<Element> pattern) {
+        var matchCount =
+                pattern.stream()
+                        .map(el -> el.offset(coord))
+                        .filter(el -> isValidTile(board, el))
+                        .count();
+        return new Status((int) matchCount, pattern.size());
     }
 }

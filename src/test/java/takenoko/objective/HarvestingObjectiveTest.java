@@ -1,12 +1,12 @@
 package takenoko.objective;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
+import takenoko.game.objective.Objective;
 import takenoko.game.tile.Color;
 
 class HarvestingObjectiveTest {
@@ -23,31 +23,32 @@ class HarvestingObjectiveTest {
     }
 
     @Test
-    void testIsAchieved() {
-        assertFalse(h1.computeAchieved(null, null, visibleInventory));
-        assertFalse(h2.computeAchieved(null, null, visibleInventory));
-        assertFalse(h3.computeAchieved(null, null, visibleInventory));
+    void testStatus() {
+
+        assertEquals(new Objective.Status(0, 3), h1.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(0, 4), h2.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(0, 3), h3.computeAchieved(null, null, visibleInventory));
 
         for (int i = 0; i < 3; i++) {
             visibleInventory.incrementBamboo(Color.GREEN);
         }
 
-        assertFalse(h1.computeAchieved(null, null, visibleInventory));
-        assertFalse(h2.computeAchieved(null, null, visibleInventory));
-        assertTrue(h3.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(1, 3), h1.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(2, 4), h2.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(3, 3), h3.computeAchieved(null, null, visibleInventory));
 
         for (int i = 0; i < 2; i++) {
             visibleInventory.incrementBamboo(Color.YELLOW);
         }
 
-        assertFalse(h1.computeAchieved(null, null, visibleInventory));
-        assertTrue(h2.computeAchieved(null, null, visibleInventory));
-        assertTrue(h3.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(2, 3), h1.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(4, 4), h2.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(3, 3), h3.computeAchieved(null, null, visibleInventory));
 
         visibleInventory.incrementBamboo(Color.PINK);
 
-        assertTrue(h1.computeAchieved(null, null, visibleInventory));
-        assertTrue(h2.computeAchieved(null, null, visibleInventory));
-        assertTrue(h3.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(3, 3), h1.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(4, 4), h2.computeAchieved(null, null, visibleInventory));
+        assertEquals(new Objective.Status(3, 3), h3.computeAchieved(null, null, visibleInventory));
     }
 }
