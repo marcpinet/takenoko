@@ -20,7 +20,7 @@ public class Simulator {
     private final Logger logger;
 
     private static final List<String> NAMES =
-            List.of("Phillipe", "Mireille", "Anne-Marie", "Nassim");
+            List.of("Philippe", "Mireille", "Anne-Marie", "Nassim");
 
     public Simulator(int nbGames, List<PlayerType> botTypes, Logger logger)
             throws IllegalArgumentException {
