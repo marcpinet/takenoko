@@ -15,12 +15,11 @@ import takenoko.game.board.Board;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
-import takenoko.player.PlayerException;
 import takenoko.utils.Coord;
 
 class EasyBotTest {
     Random randomSource;
-    @Mock PossibleActionLister actionLister = mock(PossibleActionLister.class);
+    @Mock final PossibleActionLister actionLister = mock(PossibleActionLister.class);
 
     @BeforeEach
     void setUp() {
@@ -29,7 +28,7 @@ class EasyBotTest {
     }
 
     @Test
-    void testChooseActions() throws PlayerException {
+    void testChooseActions() {
         Board board = new Board();
         EasyBot bot = new EasyBot(randomSource);
 
@@ -44,7 +43,7 @@ class EasyBotTest {
     }
 
     @Test
-    void unveilsObjectiveASAP() throws PlayerException, InventoryException {
+    void unveilsObjectiveASAP() throws InventoryException {
         Board board = new Board();
         EasyBot bot = new EasyBot(randomSource);
 

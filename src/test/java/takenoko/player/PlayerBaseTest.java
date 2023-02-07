@@ -27,7 +27,7 @@ class PlayerBaseTest {
     }
 
     @Test
-    void testCredits() throws PlayerException {
+    void testCredits() {
         player.beginTurn(3);
         assertEquals(3, player.availableActionCredits());
 

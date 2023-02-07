@@ -12,18 +12,18 @@ public class VisibleInventory {
     private final EnumMap<Color, Integer> bamboos;
     private final EnumMap<PowerUp, Integer> powerUps;
     private final List<Objective> finishedObjectives;
-    private int irrigations;
+    private int irrigationCount;
 
     public VisibleInventory() {
         bamboos = new EnumMap<>(Color.class);
-        irrigations = 0;
+        irrigationCount = 0;
         powerUps = new EnumMap<>(PowerUp.class);
         finishedObjectives = new ArrayList<>();
     }
 
     public VisibleInventory(VisibleInventory other) {
         bamboos = new EnumMap<>(other.bamboos);
-        irrigations = other.irrigations;
+        irrigationCount = other.irrigationCount;
         powerUps = new EnumMap<>(other.powerUps);
         finishedObjectives = new ArrayList<>(other.finishedObjectives);
     }
@@ -31,7 +31,7 @@ public class VisibleInventory {
     public void restore(VisibleInventory other) {
         bamboos.clear();
         bamboos.putAll(other.bamboos);
-        irrigations = other.irrigations;
+        irrigationCount = other.irrigationCount;
         powerUps.clear();
         powerUps.putAll(other.powerUps);
         finishedObjectives.clear();
@@ -54,18 +54,18 @@ public class VisibleInventory {
     }
 
     public boolean hasIrrigation() {
-        return irrigations > 0;
+        return irrigationCount > 0;
     }
 
     public void incrementIrrigation() {
-        irrigations++;
+        irrigationCount++;
     }
 
     public void decrementIrrigation() throws InventoryException {
         if (!hasIrrigation()) {
             throw new InventoryException("Not enough irrigation");
         }
-        irrigations--;
+        irrigationCount--;
     }
 
     public boolean hasPowerUp(PowerUp powerUp) {

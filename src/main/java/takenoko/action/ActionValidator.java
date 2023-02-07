@@ -14,6 +14,7 @@ import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.PowerUp;
 import takenoko.player.PrivateInventory;
 
+@SuppressWarnings("DuplicateBranchesInSwitch")
 public class ActionValidator {
     private final Board board;
     private final GameInventory gameInventory;

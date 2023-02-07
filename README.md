@@ -76,7 +76,7 @@ Here are the basic rules for playing Takenoko:
   - Move the gardener and grow the adjacent bamboos according to the rules
   - Move the panda and get a bamboo on the arrival tile
   - Draw an objective card of a certain type. (max 5 in your hand)
-- If a player unveils one of his achieved objective cards, he get the points indicated on the card.
+- If a player unveils one of his achieved objective cards, he gets the points indicated on the card.
 - The game ends when a player has revealed 7 objective cards, the player with the most points wins.
 
 <a href="./readme-data/takenoko.pdf">Entire rules</a>

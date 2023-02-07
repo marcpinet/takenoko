@@ -33,7 +33,7 @@ class PossibleActionListerTest {
     }
 
     @Test
-    void listActionsWhenfirstAction() {
+    void listActionsWhenFirstAction() {
         PossibleActionLister lister = new PossibleActionLister(board, validator, privateInventory);
 
         var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;

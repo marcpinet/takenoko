@@ -35,24 +35,9 @@ public class BambooTile implements Tile {
         irrigatedSides.put(side, true);
     }
 
-    @Override
-    public void removeIrrigation(TileSide side) throws IrrigationException {
-        if (Boolean.FALSE.equals(irrigatedSides.get(side))) {
-            throw new IrrigationException("Error: This side is not irrigated.");
-        }
-        irrigatedSides.put(side, false);
-    }
-
     public boolean isIrrigated() {
         return irrigatedSides.values().stream().anyMatch(Boolean::booleanValue)
                 || powerUp == PowerUp.WATERSHED;
-    }
-
-    public boolean isSideIrrigable(TileSide side) {
-        if (isSideIrrigated(side)) {
-            return false;
-        }
-        return irrigatedSides.get(side.leftSide()) || irrigatedSides.get(side.rightSide());
     }
 
     @Override
@@ -65,7 +50,7 @@ public class BambooTile implements Tile {
             throw new BambooSizeException("Max bamboo size reached.");
         }
         if (!isIrrigated()) {
-            throw new BambooIrrigationException("Cannot grow bamboo on an unirrigated tile");
+            throw new BambooIrrigationException("Cannot grow bamboo on a not irrigated tile");
         }
         bambooSize++;
 
@@ -86,7 +71,6 @@ public class BambooTile implements Tile {
         }
     }
 
-    @Override
     public boolean isCultivable() {
         return bambooSize < 4;
     }

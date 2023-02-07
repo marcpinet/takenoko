@@ -10,8 +10,8 @@ public class GameInventory {
     private final ObjectiveDeck bambooSizeObjectiveDeck;
     private final ObjectiveDeck harvestingObjectiveDeck;
     private final PowerUpReserve powerUpReserve;
-    int irrigationSticks;
-    TileDeck tileDeck;
+    private int irrigationSticks;
+    private final TileDeck tileDeck;
 
     public GameInventory(int irrigationSticks, TileDeck tileDeck, Random random) {
         this(

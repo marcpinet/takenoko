@@ -45,22 +45,10 @@ class BambooSizeObjectiveTest {
 
     @Test
     void testBambooSizeObjectiveException() {
-        assertThrows(
-                BambooSizeException.class,
-                () -> {
-                    BambooSizeObjective b5 = new BambooSizeObjective(1, 5, Color.PINK);
-                });
-        assertThrows(
-                BambooSizeException.class,
-                () -> {
-                    BambooSizeObjective b6 = new BambooSizeObjective(0, 3, Color.PINK);
-                });
+        assertThrows(BambooSizeException.class, () -> new BambooSizeObjective(1, 5, Color.PINK));
+        assertThrows(BambooSizeException.class, () -> new BambooSizeObjective(0, 3, Color.PINK));
 
-        assertThrows(
-                BambooSizeException.class,
-                () -> {
-                    BambooSizeObjective b7 = new BambooSizeObjective(1, 0, Color.GREEN);
-                });
+        assertThrows(BambooSizeException.class, () -> new BambooSizeObjective(1, 0, Color.GREEN));
     }
 
     @Test
@@ -71,7 +59,7 @@ class BambooSizeObjectiveTest {
         assertEquals(new Objective.Status(0, 1), b3.computeAchieved(board, INITIAL_ACTION, null));
 
         // Verification of the 1st objective
-        var secondAction = placeBambooTile(board, new Coord(0, 1), Color.PINK);
+        placeBambooTile(board, new Coord(0, 1), Color.PINK);
         var thirdAction = placeBambooTile(board, new Coord(1, 0), Color.PINK);
 
         var bt1 = board.getTile(new Coord(0, 1));
@@ -94,9 +82,9 @@ class BambooSizeObjectiveTest {
         assertTrue(b1.isAchieved());
 
         // Verification of the 2nd objective
-        var fourthAction = placeBambooTile(board, new Coord(1, 1), Color.YELLOW);
+        placeBambooTile(board, new Coord(1, 1), Color.YELLOW);
         var fifthAction = placeBambooTile(board, new Coord(2, 0), Color.YELLOW);
-        var sixthAction = placeBambooTile(board, new Coord(0, 2), Color.YELLOW);
+        placeBambooTile(board, new Coord(0, 2), Color.YELLOW);
 
         var bt3 = board.getTile(new Coord(1, 1));
         var bt4 = board.getTile(new Coord(2, 0));
@@ -115,7 +103,7 @@ class BambooSizeObjectiveTest {
         bt5_1.irrigateSide(TileSide.UP);
 
         // We apply growBamboo() three times in the third tile because we need it for the 2nd
-        // objectif
+        // objective
         bt3_1.growBamboo();
         bt3_1.growBamboo();
 
@@ -126,13 +114,13 @@ class BambooSizeObjectiveTest {
         assertEquals(new Objective.Status(1, 3), b2.computeAchieved(board, fifthAction, null));
 
         // We apply growBamboo() three times in the fourth tile because we need it for the 2nd
-        // objectif
+        // objective
         bt4_1.growBamboo();
         bt4_1.growBamboo();
         bt4_1.growBamboo();
 
         // We apply growBamboo() three times in the fifth tile because we need it for the 2nd
-        // objectif
+        // objective
         bt5_1.growBamboo();
         bt5_1.growBamboo();
         bt5_1.growBamboo();
@@ -153,7 +141,7 @@ class BambooSizeObjectiveTest {
         bt6_1.irrigateSide(TileSide.UP);
 
         // We apply growBamboo() four times in the sixth tile because we need it for the 3rd
-        // objectif
+        // objective
         bt6_1.growBamboo();
         bt6_1.growBamboo();
         bt6_1.growBamboo();
@@ -184,7 +172,7 @@ class BambooSizeObjectiveTest {
         // But the b5 does, because no power-up are on the tile.
         assertEquals(new Objective.Status(2, 2), b5.computeAchieved(board, secondAction, null));
         // And the b6 will be finished all the time, regardless of power-up changes, because it
-        // assertEquals't constraint on power-ups.
+        // isn't constrained by power-ups.
         assertEquals(new Objective.Status(1, 1), b6.computeAchieved(board, secondAction, null));
 
         bt1_1.setPowerUp(PowerUp.FERTILIZER);

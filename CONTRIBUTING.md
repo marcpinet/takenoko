@@ -9,12 +9,12 @@ contribute.
 
 ## Branching strategy
 
-We chose to do Github Flow for several reasons:
+We chose to do GitHub Flow for several reasons:
 
 - we think that Git Flow was forcing us to create too many branches, which we didn't like
 - we wanted the working version of our code to be on the main branch, which eliminated the Gitlab Flow strategy
 
-So Github Flow was the branching strategy that suited us best.
+So GitHub Flow was the branching strategy that suited us best.
 
 ## Code Contributions
 
@@ -30,7 +30,7 @@ So Github Flow was the branching strategy that suited us best.
 - Make your changes
 - Run any tests or checks (if applicable)
 - Commit your changes and push to your fork
-- Create a new pull request on github
+- Create a new pull request on GitHub
 
 ### How to run tests
 
