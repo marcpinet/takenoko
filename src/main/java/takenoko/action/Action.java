@@ -2,7 +2,6 @@ package takenoko.action;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import takenoko.game.Deck;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.Objective;
@@ -40,18 +39,14 @@ public sealed interface Action
         return this.getClass() == other.getClass();
     }
 
-    final class None implements Action {
-        private None() {}
-
+    record None() implements Action {
         @Override
         public String toString() {
             return "Nothing happened.";
         }
     }
 
-    final class EndTurn implements Action {
-        private EndTurn() {}
-
+    record EndTurn() implements Action {
         @Override
         public String toString() {
             return "End of the current turn.";
@@ -63,118 +58,36 @@ public sealed interface Action
         }
     }
 
-    record PlaceTile(Coord coord, Deck.DrawPredicate<Tile> drawPredicate) implements Action {
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof PlaceTile other) {
-                return coord.equals(other.coord) && drawPredicate.equals(other.drawPredicate);
-            }
-            return false;
-        }
+    record PlaceTile(Coord coord, Deck.DrawPredicate<Tile> drawPredicate) implements Action {}
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(coord, drawPredicate);
-        }
-    }
+    record TakeTilePatternObjective() implements Action {}
 
-    record TakeTilePatternObjective() implements Action {
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof TakeTilePatternObjective;
-        }
-    }
+    record TakeHarvestingObjective() implements Action {}
 
-    record TakeHarvestingObjective() implements Action {
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof TakeHarvestingObjective;
-        }
-    }
-
-    record TakeBambooSizeObjective() implements Action {
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof TakeBambooSizeObjective;
-        }
-    }
+    record TakeBambooSizeObjective() implements Action {}
 
     record UnveilObjective(Objective objective) implements Action {
         @Override
         public boolean hasCost() {
             return false;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof UnveilObjective other) {
-                return objective.equals(other.objective);
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(objective);
-        }
     }
 
-    record TakeIrrigationStick() implements Action {
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof TakeIrrigationStick;
-        }
-
-        @Override
-        public int hashCode() {
-            return 0;
-        }
-    }
+    record TakeIrrigationStick() implements Action {}
 
     record PlaceIrrigationStick(Coord coord, TileSide side) implements Action {
         @Override
         public boolean hasCost() {
             return false;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof PlaceIrrigationStick other) {
-                return coord.equals(other.coord) && side.equals(other.side);
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(coord, side);
-        }
     }
 
-    record MovePiece(MovablePiece piece, Coord to) implements Action {
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof MovePiece other) {
-                return piece.equals(other.piece) && to.equals(other.to);
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(piece, to);
-        }
-    }
+    record MovePiece(MovablePiece piece, Coord to) implements Action {}
 
     record BeginSimulation() implements Action {
         @Override
         public boolean hasCost() {
             return false;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof BeginSimulation;
         }
     }
 
@@ -182,11 +95,6 @@ public sealed interface Action
         @Override
         public boolean hasCost() {
             return false;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof EndSimulation;
         }
     }
 
@@ -206,38 +114,12 @@ public sealed interface Action
         public boolean hasCost() {
             return false;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof PickPowerUp other) {
-                return powerUp.equals(other.powerUp);
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(powerUp);
-        }
     }
 
     record PlacePowerUp(Coord coord, PowerUp powerUp) implements Action {
         @Override
         public boolean hasCost() {
             return false;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o instanceof PlacePowerUp other) {
-                return coord.equals(other.coord) && powerUp.equals(other.powerUp);
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(coord, powerUp);
         }
     }
 }
