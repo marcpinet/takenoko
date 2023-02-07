@@ -15,6 +15,7 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     private final VisibleInventory visibleInventory;
     private int actionCredits = 0;
     private int score = 0;
+    private String name;
 
     @SuppressWarnings("unchecked")
     protected PlayerBase() {
@@ -22,6 +23,12 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
         self = (SELF) this;
         privateInventory = new PrivateInventory();
         visibleInventory = new VisibleInventory();
+        this.name = "Unnamed";
+    }
+
+    protected PlayerBase(String name) {
+        this();
+        this.name = name;
     }
 
     @Override
@@ -74,6 +81,11 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     @Override
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     public interface PlayerBaseInterface {

@@ -25,4 +25,6 @@ public interface Player {
     void decreaseScore(int score);
 
     WeatherDice.Face chooseWeather(List<WeatherDice.Face> allowedWeathers);
+
+    String getName();
 }
