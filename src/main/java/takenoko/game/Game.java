@@ -43,10 +43,10 @@ public class Game {
         }
     }
 
-    public Optional<Player> play() {
+    public Optional<Player> play(int maxTurns) {
         this.out.log(Level.INFO, "Beginning of the game!\n\n");
-        while (numTurn < 1000) {
-            this.out.log(Level.INFO, "Beginning of the tour number {0}!\n", numTurn);
+        while (numTurn <= maxTurns) {
+            this.out.log(Level.INFO, "Beginning of the turn number {0}!\n", numTurn);
             playTurn();
             if (endOfGame()) {
                 playTurn(); // we need to play a last turn before ending
@@ -55,6 +55,10 @@ public class Game {
             numTurn++;
         }
         return Optional.empty();
+    }
+
+    public Optional<Player> play() {
+        return play(1000);
     }
 
     private Optional<Player> getWinner() {
