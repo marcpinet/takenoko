@@ -93,10 +93,12 @@ public class ActionValidator {
     }
 
     private boolean isValid(Action.PlaceTile action) {
+        var deck = gameInventory.getTileDeck();
+        if (deck.size() == 0) return false;
         try {
-            int pickedTile = gameInventory.getTileDeck().simulateDraw(action.drawPredicate());
+            int pickedTile = deck.simulateDraw(action.drawPredicate());
             return pickedTile >= 0
-                    && pickedTile < gameInventory.getTileDeck().size()
+                    && pickedTile < deck.size()
                     && board.isAvailableCoord(action.coord());
         } catch (EmptyDeckException e) {
             return false;

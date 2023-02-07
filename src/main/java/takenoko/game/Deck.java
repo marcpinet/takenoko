@@ -17,7 +17,7 @@ public abstract class Deck<T> {
         this.drawSize = drawSize;
     }
 
-    public T draw(DrawPredicate<T> predicate) throws EmptyDeckException {
+    private ArrayList<T> prepareDraw() throws EmptyDeckException {
         if (elements.isEmpty()) {
             throw new EmptyDeckException("Deck is empty.");
         }
@@ -27,28 +27,30 @@ public abstract class Deck<T> {
         for (int i = 0; i < drawCount; ++i) {
             availableTiles.add(elements.poll());
         }
-        int pickedIndex = predicate.apply(availableTiles);
+        return availableTiles;
+    }
 
-        var res = availableTiles.get(pickedIndex);
-        availableTiles.remove(pickedIndex);
+    public T draw(DrawPredicate<T> predicate) throws EmptyDeckException {
+        var availableTs = prepareDraw();
+        int pickedIndex = predicate.apply(availableTs);
+
+        var res = availableTs.get(pickedIndex);
+        availableTs.remove(pickedIndex);
 
         // put back the tiles that were not picked
-        elements.addAll(availableTiles);
+        elements.addAll(availableTs);
 
         return res;
     }
 
     public int simulateDraw(DrawPredicate<T> predicate) throws EmptyDeckException {
-        if (elements.isEmpty()) {
-            throw new EmptyDeckException("Deck is empty.");
-        }
-        int drawCount = Math.min(drawSize, elements.size());
+        var availableTs = prepareDraw();
+        int pickedIndex = predicate.apply(availableTs);
 
-        var availableTiles = new ArrayList<T>(drawCount);
-        for (int i = 0; i < drawCount; ++i) {
-            availableTiles.add(elements.peek());
-        }
-        return predicate.apply(availableTiles);
+        // put back the tiles
+        elements.addAll(availableTs);
+
+        return pickedIndex;
     }
 
     public void addFirst(T element) {
