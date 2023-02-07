@@ -16,8 +16,4 @@ public class DefaultBot extends PlayerBase<DefaultBot> implements PlayerBase.Pla
     public WeatherDice.Face chooseWeatherImpl(List<WeatherDice.Face> allowedWeathers) {
         return WeatherDice.Face.SUN;
     }
-
-    public WeatherDice.Face chooseWeatherImpl() {
-        return WeatherDice.Face.SUN;
-    }
 }
