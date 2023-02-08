@@ -14,19 +14,17 @@ public sealed interface Action
         permits Action.BeginSimulation,
                 Action.EndSimulation,
                 Action.EndTurn,
+                Action.GrowOneTile,
+                Action.MovePandaAnywhere,
                 Action.MovePiece,
                 Action.None,
                 Action.PickPowerUp,
                 Action.PlaceIrrigationStick,
                 Action.PlacePowerUp,
                 Action.PlaceTile,
-                Action.GrowOneTile,
                 Action.SimulateActions,
-                Action.TakeBambooSizeObjective,
-                Action.TakeHarvestingObjective,
                 Action.TakeIrrigationStick,
-                Action.TakeTilePatternObjective,
-                Action.MovePandaAnywhere,
+                Action.TakeObjective,
                 Action.UnveilObjective {
     Action NONE = new Action.None();
     Action END_TURN = new Action.EndTurn();
@@ -62,11 +60,7 @@ public sealed interface Action
 
     record PlaceTile(Coord coord, Deck.DrawPredicate<Tile> drawPredicate) implements Action {}
 
-    record TakeTilePatternObjective() implements Action {}
-
-    record TakeHarvestingObjective() implements Action {}
-
-    record TakeBambooSizeObjective() implements Action {}
+    record TakeObjective(Objective.Type type) implements Action {}
 
     record UnveilObjective(Objective objective) implements Action {
         @Override

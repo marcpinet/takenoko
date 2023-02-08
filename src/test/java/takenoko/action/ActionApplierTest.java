@@ -96,7 +96,7 @@ class ActionApplierTest {
 
     @Test
     void unveilObjective() throws InventoryException {
-        var mockObj = mock(Objective.class);
+        var mockObj = mock(BambooSizeObjective.class);
         when(mockObj.computeAchieved(any(), any(), any())).thenReturn(new Objective.Status(1, 1));
         when(mockObj.isAchieved()).thenReturn(true);
         when(mockObj.getScore()).thenReturn(1);
@@ -239,7 +239,7 @@ class ActionApplierTest {
 
     @Test
     void drawObjective() {
-        var action = new Action.TakeBambooSizeObjective();
+        var action = new Action.TakeObjective(Objective.Type.BAMBOO_SIZE);
 
         applier.apply(undoStack, action);
 

@@ -14,6 +14,7 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.board.VisibleInventory;
+import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
 import takenoko.player.PrivateInventory;
 import takenoko.utils.Coord;
@@ -54,9 +55,9 @@ class PossibleActionListerTest {
                 List.of(
                         Action.NONE,
                         Action.END_TURN,
-                        new Action.TakeBambooSizeObjective(),
-                        new Action.TakeHarvestingObjective(),
-                        new Action.TakeTilePatternObjective(),
+                        new Action.TakeObjective(Objective.Type.BAMBOO_SIZE),
+                        new Action.TakeObjective(Objective.Type.HARVESTING),
+                        new Action.TakeObjective(Objective.Type.TILE_PATTERN),
 
                         // not possible to move characters on the first turn
 
@@ -90,9 +91,9 @@ class PossibleActionListerTest {
                 List.of(
                         Action.NONE,
                         Action.END_TURN,
-                        new Action.TakeBambooSizeObjective(),
-                        new Action.TakeHarvestingObjective(),
-                        new Action.TakeTilePatternObjective(),
+                        new Action.TakeObjective(Objective.Type.BAMBOO_SIZE),
+                        new Action.TakeObjective(Objective.Type.HARVESTING),
+                        new Action.TakeObjective(Objective.Type.TILE_PATTERN),
                         new Action.PickPowerUp(PowerUp.ENCLOSURE),
                         new Action.PickPowerUp(PowerUp.FERTILIZER),
                         new Action.PickPowerUp(PowerUp.WATERSHED),

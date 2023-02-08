@@ -8,7 +8,6 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
-import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.EmptyDeckException;
@@ -64,12 +63,7 @@ public class ActionValidator {
             case Action.PlaceIrrigationStick a -> isValid(a);
             case Action.PlaceTile a -> isValid(a);
             case Action.TakeIrrigationStick a -> isValid(a);
-            case Action.TakeHarvestingObjective ignored -> canTakeObjective(
-                    gameInventory.getHarvestingObjectiveDeck());
-            case Action.TakeBambooSizeObjective ignored -> canTakeObjective(
-                    gameInventory.getBambooSizeObjectiveDeck());
-            case Action.TakeTilePatternObjective ignored -> canTakeObjective(
-                    gameInventory.getTilePatternObjectiveDeck());
+            case Action.TakeObjective a -> isValid(a);
             case Action.UnveilObjective a -> isValid(a);
             case Action.MovePiece a -> isValid(a);
             case Action.EndTurn ignored -> true;
@@ -100,7 +94,8 @@ public class ActionValidator {
                 && board.getPlacedCoords().contains(movePandaAnywhere.to());
     }
 
-    private boolean canTakeObjective(ObjectiveDeck deck) {
+    private boolean isValid(Action.TakeObjective takeObjective) {
+        var deck = gameInventory.getObjectiveDeck(takeObjective.type());
         return deck.size() > 0 && playerPrivateInventory.canDrawObjective();
     }
 

@@ -3,7 +3,6 @@ package takenoko.action;
 import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.Objective;
-import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.PowerUp;
 import takenoko.utils.Coord;
 
@@ -41,7 +40,7 @@ public sealed interface UndoAction
 
     record BeginSimulation() implements UndoAction {}
 
-    record TakeObjective(ObjectiveDeck objectiveDeck, Objective objective) implements UndoAction {}
+    record TakeObjective(Objective.Type type, Objective objective) implements UndoAction {}
 
     record PlacePowerUp(Coord coord, PowerUp powerUp) implements UndoAction {}
 

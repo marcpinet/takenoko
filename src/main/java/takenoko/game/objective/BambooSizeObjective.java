@@ -6,7 +6,7 @@ import takenoko.game.board.BoardException;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.*;
 
-public class BambooSizeObjective implements Objective {
+public final class BambooSizeObjective implements Objective {
     private final int numberOfBamboos;
     private final int sizeObjective;
     private final Color color;
@@ -95,5 +95,10 @@ public class BambooSizeObjective implements Objective {
     @Override
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.BAMBOO_SIZE;
     }
 }

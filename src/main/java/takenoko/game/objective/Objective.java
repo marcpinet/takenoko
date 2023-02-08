@@ -4,7 +4,14 @@ import takenoko.action.Action;
 import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
 
-public interface Objective {
+public sealed interface Objective
+        permits BambooSizeObjective, HarvestingObjective, TilePatternObjective {
+    enum Type {
+        BAMBOO_SIZE,
+        HARVESTING,
+        TILE_PATTERN
+    }
+
     record Status(int completed, int totalToComplete) {
         public boolean achieved() {
             return completed >= totalToComplete;
@@ -24,4 +31,6 @@ public interface Objective {
     }
 
     int getScore();
+
+    Type getType();
 }

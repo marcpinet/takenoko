@@ -5,6 +5,7 @@ import java.util.List;
 import takenoko.game.Deck;
 import takenoko.game.board.Board;
 import takenoko.game.board.MovablePiece;
+import takenoko.game.objective.Objective;
 import takenoko.game.tile.PowerUp;
 import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
@@ -28,9 +29,9 @@ public class PossibleActionLister {
         possibleActions.add(Action.NONE);
         possibleActions.add(Action.END_TURN);
 
-        possibleActions.add(new Action.TakeBambooSizeObjective());
-        possibleActions.add(new Action.TakeHarvestingObjective());
-        possibleActions.add(new Action.TakeTilePatternObjective());
+        for (var objectiveType : Objective.Type.values()) {
+            possibleActions.add(new Action.TakeObjective(objectiveType));
+        }
 
         for (var powerUp : PowerUp.values()) {
             if (powerUp != PowerUp.NONE) {

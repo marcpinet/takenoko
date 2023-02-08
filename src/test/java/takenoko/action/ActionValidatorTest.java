@@ -19,6 +19,7 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.board.VisibleInventory;
+import takenoko.game.objective.BambooSizeObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
 import takenoko.player.PrivateInventory;
@@ -131,8 +132,8 @@ class ActionValidatorTest {
     }
 
     private static Stream<Arguments> unveilObjectiveProvider() {
-        var objMock1 = mock(Objective.class);
-        var objMock2 = mock(Objective.class);
+        var objMock1 = mock(BambooSizeObjective.class);
+        var objMock2 = mock(BambooSizeObjective.class);
         return Stream.of(Arguments.of(objMock1, true), Arguments.of(objMock2, false));
     }
 
@@ -174,10 +175,12 @@ class ActionValidatorTest {
         assertEquals(expectedResult, validator.isValid(action));
     }
 
-    @Test
-    void testTwiceAction() {
-        var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
-        assertTrue(validator.isValid(action));
+    @ParameterizedTest
+    @MethodSource("testTwiceActionProvider")
+    void testTwiceAction(Action action1, Action action2) {
+        assertTrue(validator.isValid(action1));
+        assertTrue(validator.isValid(action2));
+
         validator =
                 new ActionValidator(
                         board,
@@ -185,9 +188,20 @@ class ActionValidatorTest {
                         new PrivateInventory(),
                         new VisibleInventory(),
                         WeatherDice.Face.SUN,
-                        new ArrayList<>(List.of(action)));
-        var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
+                        new ArrayList<>(List.of(action1)));
+
+        assertFalse(validator.isValid(action1));
         assertFalse(validator.isValid(action2));
+    }
+
+    private static Stream<Arguments> testTwiceActionProvider() {
+        return Stream.of(
+                Arguments.of(
+                        new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE),
+                        new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE)),
+                Arguments.of(
+                        new Action.TakeObjective(Objective.Type.BAMBOO_SIZE),
+                        new Action.TakeObjective(Objective.Type.HARVESTING)));
     }
 
     @Test
