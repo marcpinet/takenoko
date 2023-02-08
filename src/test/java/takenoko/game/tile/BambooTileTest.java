@@ -89,4 +89,17 @@ class BambooTileTest {
         bambooTile.setPowerUp(PowerUp.WATERSHED);
         assertDoesNotThrow(() -> bambooTile.growBamboo());
     }
+
+    @Test
+    void cannotSetTwoPowerUps() throws PowerUpException {
+        bambooTile.setPowerUp(PowerUp.WATERSHED);
+        assertThrows(PowerUpException.class, () -> bambooTile.setPowerUp(PowerUp.FERTILIZER));
+    }
+
+    @Test
+    void canRemovePowerUp() throws PowerUpException {
+        bambooTile.setPowerUp(PowerUp.WATERSHED);
+        bambooTile.setPowerUp(PowerUp.NONE);
+        assertDoesNotThrow(() -> bambooTile.setPowerUp(PowerUp.FERTILIZER));
+    }
 }

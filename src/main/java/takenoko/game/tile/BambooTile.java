@@ -80,7 +80,7 @@ public class BambooTile implements Tile {
     }
 
     public void setPowerUp(PowerUp powerUp) throws PowerUpException {
-        if (this.powerUp != PowerUp.NONE) {
+        if (this.powerUp != PowerUp.NONE && powerUp != PowerUp.NONE) {
             throw new PowerUpException("Error: Tile already has a power up.");
         }
         this.powerUp = powerUp;
