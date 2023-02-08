@@ -29,7 +29,7 @@ class RandomBotTest {
     }
 
     @Test
-    void testChooseActions() {
+    void chooseActions() {
         Board board = new Board();
         RandomBot bot = new RandomBot(randomSource, "edgar");
 

@@ -7,19 +7,19 @@ import org.junit.jupiter.api.Test;
 class TileSideTest {
 
     @Test
-    void rightSideTest() {
+    void rightSide() {
         assertEquals(TileSide.UP_RIGHT, TileSide.UP.rightSide());
         assertEquals(TileSide.UP_LEFT, TileSide.DOWN_LEFT.rightSide());
     }
 
     @Test
-    void leftSideTest() {
+    void leftSide() {
         assertEquals(TileSide.UP_LEFT, TileSide.UP.leftSide());
         assertEquals(TileSide.UP_RIGHT, TileSide.DOWN_RIGHT.leftSide());
     }
 
     @Test
-    void oppositeSideTest() {
+    void oppositeSide() {
         assertEquals(TileSide.UP_LEFT, TileSide.DOWN_RIGHT.oppositeSide());
         assertEquals(TileSide.UP, TileSide.DOWN.oppositeSide());
     }

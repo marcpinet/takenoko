@@ -45,7 +45,7 @@ class GameTest {
     }
 
     @Test
-    void testGetWinner() {
+    void getWinner() {
         var p1 = mock(Player.class);
         when(p1.getVisibleInventory()).thenReturn(new VisibleInventory());
         when(p1.getPrivateInventory()).thenReturn(new PrivateInventory());
@@ -67,7 +67,7 @@ class GameTest {
     }
 
     @Test
-    void testInitialDrawAtStart() {
+    void initialDrawAtStart() {
         var p1 = new RandomBot(new Random(0), "edgar");
         var p2 = new RandomBot(new Random(0), "marc");
 
@@ -93,7 +93,7 @@ class GameTest {
     }
 
     @Test
-    void testEndOfGame() {
+    void endOfGame() {
         Random r = new Random(0);
         Player p1 = mock(Player.class);
         Player p2 = new RandomBot(new Random(), "edgar");

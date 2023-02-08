@@ -18,7 +18,7 @@ class PrivateInventoryTest {
     }
 
     @Test
-    void testObjective() throws BambooSizeException, InventoryException {
+    void objective() throws BambooSizeException, InventoryException {
         var objective = new BambooSizeObjective(1, 2, Color.PINK, 1);
         for (int i = 0; i < 5; i++) {
             assertTrue(privateInventory.canDrawObjective());

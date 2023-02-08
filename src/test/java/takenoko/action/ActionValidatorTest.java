@@ -62,13 +62,13 @@ class ActionValidatorTest {
     }
 
     @Test
-    void testNone() {
+    void none() {
         assertTrue(validator.isValid(Action.NONE));
     }
 
     @ParameterizedTest
     @MethodSource("placeTileProvider")
-    void testPlaceTile(Coord coord, BambooTile tile, boolean expectedResult) {
+    void placeTile(Coord coord, BambooTile tile, boolean expectedResult) {
         var action = new Action.PlaceTile(coord, TileDeck.DEFAULT_DRAW_PREDICATE);
         assertEquals(expectedResult, validator.isValid(action));
     }
@@ -82,7 +82,7 @@ class ActionValidatorTest {
 
     @ParameterizedTest
     @MethodSource("placeIrrigationProvider")
-    void testPlaceIrrigation(Coord coord, TileSide side, boolean expectedResult)
+    void placeIrrigation(Coord coord, TileSide side, boolean expectedResult)
             throws IrrigationException, BoardException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         var action = new Action.PlaceIrrigationStick(coord, side);
@@ -97,7 +97,7 @@ class ActionValidatorTest {
     }
 
     @Test
-    void testPlaceIrrigationWhenNotEnough() throws IrrigationException, BoardException {
+    void placeIrrigationWhenNotEnough() throws IrrigationException, BoardException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         var action = new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_LEFT);
         validator =
@@ -111,13 +111,13 @@ class ActionValidatorTest {
     }
 
     @Test
-    void testTakeIrrigation() {
+    void takeIrrigation() {
         var action = new Action.TakeIrrigationStick();
         assertTrue(validator.isValid(action));
     }
 
     @Test
-    void testTakeIrrigationWhenNotEnough() {
+    void takeIrrigationWhenNotEnough() {
         var validator =
                 new ActionValidator(
                         board,
@@ -135,7 +135,7 @@ class ActionValidatorTest {
 
     @ParameterizedTest
     @MethodSource("unveilObjectiveProvider")
-    void testUnveilObjective(Objective obj, boolean expectedResult) {
+    void unveilObjective(Objective obj, boolean expectedResult) {
         when(obj.isAchieved()).thenReturn(expectedResult);
         var action = new Action.UnveilObjective(obj);
         assertEquals(expectedResult, validator.isValid(action));
@@ -157,7 +157,7 @@ class ActionValidatorTest {
 
     @ParameterizedTest
     @MethodSource("moveGardenerProvider")
-    void testMoveGardener(Coord coord, boolean expectedResult)
+    void moveGardener(Coord coord, boolean expectedResult)
             throws IrrigationException, BoardException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
@@ -176,7 +176,7 @@ class ActionValidatorTest {
 
     @ParameterizedTest
     @MethodSource("movePandaProvider")
-    void testMovePanda(Coord coord, boolean expectedResult)
+    void movePanda(Coord coord, boolean expectedResult)
             throws IrrigationException, BoardException, PowerUpException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
@@ -191,8 +191,8 @@ class ActionValidatorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("testTwiceActionProvider")
-    void testTwiceAction(Action action1, Action action2) {
+    @MethodSource("twiceActionProvider")
+    void twiceAction(Action action1, Action action2) {
         assertTrue(validator.isValid(action1));
         assertTrue(validator.isValid(action2));
 
@@ -202,7 +202,7 @@ class ActionValidatorTest {
         assertFalse(validator.isValid(action2));
     }
 
-    private static Stream<Arguments> testTwiceActionProvider() {
+    private static Stream<Arguments> twiceActionProvider() {
         return Stream.of(
                 Arguments.of(
                         new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE),
@@ -213,7 +213,7 @@ class ActionValidatorTest {
     }
 
     @Test
-    void testTwiceActionWithWind() {
+    void twiceActionWithWind() {
         resetWeather(WeatherDice.Face.WIND);
 
         var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
@@ -226,7 +226,7 @@ class ActionValidatorTest {
     }
 
     @Test
-    void testMovePandaAndGardenerAreNotLinked() throws IrrigationException, BoardException {
+    void movePandaAndGardenerAreNotLinked() throws IrrigationException, BoardException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
 

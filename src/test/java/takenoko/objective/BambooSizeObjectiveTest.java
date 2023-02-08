@@ -44,7 +44,7 @@ class BambooSizeObjectiveTest {
     }
 
     @Test
-    void testBambooSizeObjectiveException() {
+    void bambooSizeObjectiveException() {
         assertThrows(BambooSizeException.class, () -> new BambooSizeObjective(1, 5, Color.PINK));
         assertThrows(BambooSizeException.class, () -> new BambooSizeObjective(0, 3, Color.PINK));
 
@@ -52,7 +52,7 @@ class BambooSizeObjectiveTest {
     }
 
     @Test
-    void testStatus() throws BambooSizeException, BambooIrrigationException, BoardException {
+    void status() throws BambooSizeException, BambooIrrigationException, BoardException {
         // Initial verification
         assertEquals(new Objective.Status(0, 2), b1.computeAchieved(board, INITIAL_ACTION, null));
         assertEquals(new Objective.Status(0, 3), b2.computeAchieved(board, INITIAL_ACTION, null));
@@ -152,7 +152,7 @@ class BambooSizeObjectiveTest {
     }
 
     @Test
-    void testIsAchievedWithPowerUpConstraints()
+    void isAchievedWithPowerUpConstraints()
             throws BoardException, BambooSizeException, BambooIrrigationException,
                     PowerUpException {
         var secondAction = placeBambooTile(board, new Coord(0, 1), Color.PINK);

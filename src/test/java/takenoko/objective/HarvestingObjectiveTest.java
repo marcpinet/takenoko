@@ -23,7 +23,7 @@ class HarvestingObjectiveTest {
     }
 
     @Test
-    void testStatus() {
+    void status() {
 
         assertEquals(new Objective.Status(0, 3), h1.computeAchieved(null, null, visibleInventory));
         assertEquals(new Objective.Status(0, 4), h2.computeAchieved(null, null, visibleInventory));
