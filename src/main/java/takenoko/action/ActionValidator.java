@@ -6,6 +6,7 @@ import takenoko.game.GameInventory;
 import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
+import takenoko.game.board.MovablePiece;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.tile.BambooTile;
@@ -145,6 +146,15 @@ public class ActionValidator {
 
     private boolean isValid(Action.MovePiece action) {
         var currentCoord = board.getPieceCoord(action.piece());
+        try {
+            if (action.piece().equals(MovablePiece.PANDA)
+                    && board.getTile(action.to()) instanceof BambooTile bambooTile
+                    && bambooTile.getPowerUp().equals(PowerUp.ENCLOSURE)) {
+                return false;
+            }
+        } catch (BoardException ignored) {
+            return false;
+        }
         return board.getPlacedCoords().contains(action.to())
                 && !currentCoord.equals(action.to())
                 && currentCoord.isAlignedWith(action.to());

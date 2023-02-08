@@ -177,12 +177,17 @@ class ActionValidatorTest {
     @ParameterizedTest
     @MethodSource("movePandaProvider")
     void testMovePanda(Coord coord, boolean expectedResult)
-            throws IrrigationException, BoardException {
+            throws IrrigationException, BoardException, PowerUpException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
         board.placeTile(new Coord(1, 1), new BambooTile(Color.GREEN));
         var action = new Action.MovePiece(MovablePiece.PANDA, coord);
         assertEquals(expectedResult, validator.isValid(action));
+        if (board.getTile(new Coord(1, 1)) instanceof BambooTile bambooTile) {
+            bambooTile.setPowerUp(PowerUp.ENCLOSURE);
+        }
+        var secondAction = new Action.MovePiece(MovablePiece.PANDA, new Coord(1, 1));
+        assertFalse(validator.isValid(secondAction));
     }
 
     @ParameterizedTest
