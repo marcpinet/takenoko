@@ -219,4 +219,21 @@ class ActionValidatorTest {
         var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertTrue(validator.isValid(action2));
     }
+
+    @Test
+    void testMovePandaAndGardenerAreNotLinked() throws IrrigationException, BoardException {
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        board.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
+
+        var action1 = new Action.MovePiece(MovablePiece.PANDA, new Coord(0, 1));
+        var action2 = new Action.MovePiece(MovablePiece.GARDENER, new Coord(1, 0));
+
+        assertTrue(validator.isValid(action1));
+        assertTrue(validator.isValid(action2));
+
+        previousActions.add(action1);
+
+        assertFalse(validator.isValid(action1));
+        assertTrue(validator.isValid(action2));
+    }
 }
