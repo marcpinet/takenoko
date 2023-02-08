@@ -56,12 +56,22 @@ public class Main {
 
         logger.setLevel(Level.OFF);
 
-        Simulator simulator =
+        Simulator simulator1 =
                 new Simulator(
                         500,
-                        List.of(PlayerType.RANDOM, PlayerType.SABOTEUR),
+                        List.of(PlayerType.PLOT_RUSH, PlayerType.SABOTEUR),
                         logger,
                         Simulator.Parallelism.YES);
+
+        Simulator simulator2 =
+                new Simulator(
+                        1000,
+                        List.of(PlayerType.PLOT_RUSH, PlayerType.PLOT_RUSH),
+                        logger,
+                        Simulator.Parallelism.YES);
+
+        var res1 = simulator1.simulate();
+        var res2 = simulator2.simulate();
 
         logger.setLevel(Level.INFO);
         logger.log(Level.INFO, "{0}", res1);
