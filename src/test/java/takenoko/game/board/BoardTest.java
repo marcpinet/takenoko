@@ -24,7 +24,7 @@ class BoardTest {
     }
 
     @Test
-    void placeTileTest() throws Exception {
+    void placeTile() throws Exception {
         Coord c2 = new Coord(0, 1);
         Tile t = new BambooTile(Color.GREEN);
         board.placeTile(c2, t);
@@ -40,7 +40,7 @@ class BoardTest {
     }
 
     @Test
-    void cannotPlaceTileTest() throws IrrigationException, BoardException {
+    void cannotPlaceTile() throws IrrigationException, BoardException {
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
 
         // Must be adjacent to the pond or TWO tiles
@@ -59,7 +59,7 @@ class BoardTest {
     }
 
     @Test
-    void placeIrrigationTest() throws Exception {
+    void placeIrrigation() throws Exception {
         Coord c = new Coord(0, 1);
         Tile t = new BambooTile(Color.GREEN);
         board.placeTile(c, t);
@@ -70,13 +70,13 @@ class BoardTest {
     }
 
     @Test
-    void canNotPlaceIrrigationTest() {
+    void canNotPlaceIrrigation() {
         Coord c = new Coord(1, 2);
         assertThrows(BoardException.class, () -> board.placeIrrigation(c, TileSide.UP));
     }
 
     @Test
-    void moveTest() throws Exception {
+    void move() throws Exception {
         Coord c1 = new Coord(0, 1);
         Coord c2 = new Coord(0, 2);
         BambooTile t1 = new BambooTile(Color.GREEN);

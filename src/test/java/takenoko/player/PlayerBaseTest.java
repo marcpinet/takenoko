@@ -29,7 +29,7 @@ class PlayerBaseTest {
     }
 
     @Test
-    void testCredits() {
+    void credits() {
         player.beginTurn(3);
         assertEquals(3, player.availableActionCredits());
 

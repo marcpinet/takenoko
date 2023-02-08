@@ -50,7 +50,7 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testTriangle() {
+    void triangle() {
         var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.TRIANGLE);
 
         var board = prepareBoard(objective, new Coord(0, 1), new Coord(-1, 1));
@@ -60,7 +60,7 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testDiamondWithoutRightPart() throws IrrigationException, BoardException {
+    void diamondWithoutRightPart() throws IrrigationException, BoardException {
         var objective =
                 new TilePatternObjective(
                         Color.GREEN, TilePatternObjective.DIAMOND_WITHOUT_RIGHT_PART);
@@ -75,7 +75,7 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testLineOfThree() {
+    void lineOfThree() {
         var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_3);
 
         // to achieve a line of 3, we need to place more than 3 tiles due to requirements
@@ -86,7 +86,7 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testDiamond() {
+    void diamond() {
         var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.DIAMOND);
 
         var board = prepareBoard(objective, new Coord(0, 1), new Coord(-1, 1), new Coord(-1, 2));
@@ -96,7 +96,7 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testTwoColouredObjectiveProgression() {
+    void twoColouredObjectiveProgression() {
         List<Color> colors = List.of(Color.YELLOW, Color.YELLOW, Color.PINK, Color.PINK);
         var objective = new TilePatternObjective(colors, TilePatternObjective.DIAMOND, 1);
 
@@ -133,7 +133,7 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testDifferentColor() throws IrrigationException, BoardException {
+    void differentColor() throws IrrigationException, BoardException {
         var objective = new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2);
 
         var board = prepareBoard(objective, new Coord(-1, 0));
@@ -151,7 +151,7 @@ class TilePatternObjectiveTest {
     }
 
     @Test
-    void testNonIrrigated() throws IrrigationException, BoardException {
+    void nonIrrigated() throws IrrigationException, BoardException {
         var objective = new TilePatternObjective(Color.PINK, TilePatternObjective.LINE_2);
 
         // prepare board

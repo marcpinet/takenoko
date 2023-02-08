@@ -12,7 +12,7 @@ import takenoko.player.PlayerType;
 class SimulatorTest {
 
     @Test
-    void testSimulator() {
+    void simulator() {
         var logger = Logger.getGlobal();
         logger.setLevel(OFF);
         var sim =

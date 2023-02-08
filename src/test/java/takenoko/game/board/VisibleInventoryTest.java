@@ -18,14 +18,14 @@ class VisibleInventoryTest {
     }
 
     @Test
-    void testIncrementBamboo() {
+    void incrementBamboo() {
         assertEquals(0, visibleInventory.getBamboo(Color.GREEN));
         visibleInventory.incrementBamboo(Color.GREEN);
         assertEquals(1, visibleInventory.getBamboo(Color.GREEN));
     }
 
     @Test
-    void testUseBamboo() throws InventoryException {
+    void useBamboo() throws InventoryException {
         visibleInventory.incrementBamboo(Color.PINK);
         visibleInventory.incrementBamboo(Color.PINK);
         assertEquals(2, visibleInventory.getBamboo(Color.PINK));
@@ -35,14 +35,14 @@ class VisibleInventoryTest {
     }
 
     @Test
-    void testHasIrrigation() {
+    void hasIrrigation() {
         assertFalse(visibleInventory.hasIrrigation());
         visibleInventory.incrementIrrigation();
         assertTrue(visibleInventory.hasIrrigation());
     }
 
     @Test
-    void testDecrementIrrigation() throws InventoryException {
+    void decrementIrrigation() throws InventoryException {
         visibleInventory.incrementIrrigation();
         assertTrue(visibleInventory.hasIrrigation());
         visibleInventory.decrementIrrigation();
@@ -51,21 +51,21 @@ class VisibleInventoryTest {
     }
 
     @Test
-    void testHasPowerUp() {
+    void hasPowerUp() {
         assertFalse(visibleInventory.hasPowerUp(PowerUp.WATERSHED));
         visibleInventory.incrementPowerUp(PowerUp.WATERSHED);
         assertTrue(visibleInventory.hasPowerUp(PowerUp.WATERSHED));
     }
 
     @Test
-    void testIncrementPowerUp() {
+    void incrementPowerUp() {
         assertFalse(visibleInventory.hasPowerUp(PowerUp.WATERSHED));
         visibleInventory.incrementPowerUp(PowerUp.WATERSHED);
         assertTrue(visibleInventory.hasPowerUp(PowerUp.WATERSHED));
     }
 
     @Test
-    void testDecrementPowerUp() throws InventoryException {
+    void decrementPowerUp() throws InventoryException {
         visibleInventory.incrementPowerUp(PowerUp.WATERSHED);
         assertTrue(visibleInventory.hasPowerUp(PowerUp.WATERSHED));
         visibleInventory.decrementPowerUp(PowerUp.WATERSHED);

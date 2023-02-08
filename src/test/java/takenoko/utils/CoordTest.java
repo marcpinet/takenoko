@@ -22,7 +22,7 @@ class CoordTest {
     }
 
     @Test
-    void componentTest() {
+    void component() {
         assertEquals(1, coordx1y2.x());
         assertEquals(2, coordx1y2.y());
         assertEquals(-3, coordx1y2.z());
@@ -33,13 +33,13 @@ class CoordTest {
     }
 
     @Test
-    void equalsTest() {
+    void equals() {
         assertEquals(new Coord(1, 2), coordx1y2);
         assertNotEquals(coordx2y2, coordx1y2);
     }
 
     @Test
-    void adjacentCoordsTest() {
+    void adjacentCoords() {
         Coord[] adjacentCoords = center.adjacentCoords();
         assertEquals(6, adjacentCoords.length);
         assertEquals(new Coord(0, -1), adjacentCoords[0]);
@@ -51,7 +51,7 @@ class CoordTest {
     }
 
     @Test
-    void isAdjacentToTest() {
+    void isAdjacentTo() {
         assertTrue(coordx1y2.isAdjacentTo(coordx2y2));
         assertFalse(coordx1y2.isAdjacentTo(coordx3y2));
     }
@@ -64,12 +64,12 @@ class CoordTest {
     }
 
     @Test
-    void adjacentCoordSideTest() {
+    void adjacentCoordSide() {
         assertEquals(coordx2y2, coordx1y2.adjacentCoordSide(TileSide.DOWN_RIGHT));
     }
 
     @Test
-    void isAlignedWithTest() {
+    void isAlignedWith() {
         Coord coordx0y0 = new Coord(0, 0);
         Coord coordx3y0 = new Coord(3, 0);
 

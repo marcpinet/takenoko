@@ -14,7 +14,7 @@ class BambooTileTest {
     }
 
     @Test
-    void testGrowBamboo() throws BambooSizeException, BambooIrrigationException {
+    void growBamboo() throws BambooSizeException, BambooIrrigationException {
         assertEquals(0, bambooTile.getBambooSize());
         bambooTile.irrigateSide(TileSide.UP);
         bambooTile.growBamboo();
@@ -29,7 +29,7 @@ class BambooTileTest {
     }
 
     @Test
-    void testShrinkBamboo() throws BambooSizeException, BambooIrrigationException {
+    void shrinkBamboo() throws BambooSizeException, BambooIrrigationException {
         assertThrows(BambooSizeException.class, () -> bambooTile.shrinkBamboo());
         bambooTile.irrigateSide(TileSide.UP);
         bambooTile.growBamboo();
@@ -39,7 +39,7 @@ class BambooTileTest {
     }
 
     @Test
-    void testIsCultivable() throws BambooSizeException, BambooIrrigationException {
+    void isCultivable() throws BambooSizeException, BambooIrrigationException {
         assertTrue(bambooTile.isCultivable());
         bambooTile.irrigateSide(TileSide.UP);
         bambooTile.growBamboo();
@@ -53,7 +53,7 @@ class BambooTileTest {
     }
 
     @Test
-    void testEquals() throws BambooSizeException, BambooIrrigationException {
+    void equals() throws BambooSizeException, BambooIrrigationException {
         BambooTile otherTile = new BambooTile(Color.GREEN);
         assertEquals(bambooTile, otherTile);
         bambooTile.irrigateSide(TileSide.UP);
@@ -67,13 +67,13 @@ class BambooTileTest {
     }
 
     @Test
-    void irrigateSideTest() {
+    void irrigateSide() {
         bambooTile.irrigateSide(TileSide.UP);
         assertTrue(bambooTile.isSideIrrigated(TileSide.UP));
     }
 
     @Test
-    void powerUpFertilizerTest() throws Exception {
+    void powerUpFertilizer() throws Exception {
         bambooTile.irrigateSide(TileSide.UP);
         bambooTile.growBamboo();
         bambooTile.setPowerUp(PowerUp.FERTILIZER);
@@ -85,7 +85,7 @@ class BambooTileTest {
     }
 
     @Test
-    void powerUpWatershedTest() throws PowerUpException {
+    void powerUpWatershed() throws PowerUpException {
         bambooTile.setPowerUp(PowerUp.WATERSHED);
         assertDoesNotThrow(() -> bambooTile.growBamboo());
     }

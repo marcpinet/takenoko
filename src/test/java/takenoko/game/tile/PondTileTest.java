@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 
 class PondTileTest {
     @Test
-    void isSideIrrigatedTest() {
+    void isSideIrrigated() {
         PondTile pondTile = new PondTile();
         assertTrue(pondTile.isSideIrrigated(TileSide.UP));
     }
 
     @Test
-    void irrigateSideTest() {
+    void irrigateSide() {
         PondTile pondTile = new PondTile();
         assertThrows(Exception.class, () -> pondTile.irrigateSide(TileSide.UP));
     }
