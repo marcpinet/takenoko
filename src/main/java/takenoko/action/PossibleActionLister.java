@@ -26,9 +26,6 @@ public class PossibleActionLister {
     private List<Action> getActionsExceptPlaceTile() {
         List<Action> possibleActions = new ArrayList<>();
 
-        possibleActions.add(Action.NONE);
-        possibleActions.add(Action.END_TURN);
-
         for (var objectiveType : Objective.Type.values()) {
             possibleActions.add(new Action.TakeObjective(objectiveType));
         }
