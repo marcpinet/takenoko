@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +41,10 @@ public class CSVHandler {
         if (Files.notExists(path.getParent())) {
             try {
                 Files.createDirectory(path.getParent());
-            } catch (Exception ignored) {
+            } catch (FileAlreadyExistsException ignored) {
+                return true;
+            } catch (IOException e) {
+                return false;
             }
         }
 
@@ -155,10 +159,10 @@ public class CSVHandler {
         }
 
         // Deleting old file
-        path.toFile().delete();
+        Files.delete(path);
 
         // Renaming new file
-        file.renameTo(path.toFile());
+        if (!file.renameTo(path.toFile())) throw new IOException("Could not rename file");
     }
 
     public Path getFilePath() {
