@@ -2,7 +2,7 @@ package takenoko.game.tile;
 
 public enum PowerUp {
     NONE,
-    ENCLOSURE, // TODO
+    ENCLOSURE,
     FERTILIZER,
     WATERSHED
 }

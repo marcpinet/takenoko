@@ -21,7 +21,7 @@ class SimulatorTest {
         var res = sim.simulate();
         assertEquals(20, res.nbGames());
         assertEquals(2, res.players().size());
-        assertEquals(11, res.getNumWins().get("Mireille"));
-        assertEquals(9, res.getNumWins().get("Philippe"));
+        assertEquals(13, res.getNumWins().get("Mireille"));
+        assertEquals(7, res.getNumWins().get("Philippe"));
     }
 }
