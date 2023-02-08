@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,8 +73,15 @@ class SaboteurBotTest {
     }
 
     @Test
-    void chooseRandomWeather() {
-        var allowedWeathers = List.of(WeatherDice.Face.SUN, WeatherDice.Face.RAIN);
+    void chooseWeatherWithRain() {
+        var allowedWeathers = Arrays.asList(WeatherDice.Face.values());
+        var weather = bot.chooseWeather(allowedWeathers);
+        assertEquals(WeatherDice.Face.RAIN, weather);
+    }
+
+    @Test
+    void chooseRandomWeatherWithNoRain() {
+        var allowedWeathers = List.of(WeatherDice.Face.SUN, WeatherDice.Face.CLOUDY);
         var weather = bot.chooseWeather(allowedWeathers);
         assertTrue(allowedWeathers.contains(weather));
     }
@@ -82,6 +90,19 @@ class SaboteurBotTest {
     void throwsWhenNoPossibleWeather() {
         var allowedWeathers = new ArrayList<WeatherDice.Face>();
         assertThrows(IllegalStateException.class, () -> bot.chooseWeather(allowedWeathers));
+    }
+
+    @Test
+    void pickWatershedWhenPossible() {
+        var pickWatershed = new Action.PickPowerUp(PowerUp.WATERSHED);
+
+        var defaultPossibleActions = new ArrayList<>(actionLister.getPossibleActions());
+        defaultPossibleActions.add(pickWatershed);
+
+        var lister = mock(PossibleActionLister.class);
+        when(lister.getPossibleActions()).thenReturn(defaultPossibleActions);
+
+        assertEquals(pickWatershed, bot.chooseAction(board, lister));
     }
 
     @Test

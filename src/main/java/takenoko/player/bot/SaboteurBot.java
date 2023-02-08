@@ -11,6 +11,7 @@ import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.tile.BambooTile;
+import takenoko.game.tile.PowerUp;
 import takenoko.player.PlayerBase;
 import takenoko.utils.Utils;
 
@@ -28,6 +29,11 @@ public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.P
         if (availableActionCredits() == 0) return Action.END_TURN;
 
         var possibleActions = actionLister.getPossibleActions();
+
+        var pickWaterPowerUp = pickWaterShedPowerUp(possibleActions);
+        if (pickWaterPowerUp.isPresent()) {
+            return pickWaterPowerUp.get();
+        }
 
         var bambooAction = retrieveBamboo(board, possibleActions);
         if (bambooAction.isPresent()) {
@@ -59,8 +65,20 @@ public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.P
         return bambooActions.findFirst();
     }
 
+    private Optional<Action.PickPowerUp> pickWaterShedPowerUp(List<Action> possibleActions) {
+        return possibleActions.stream()
+                .filter(Action.PickPowerUp.class::isInstance)
+                .map(action -> (Action.PickPowerUp) action)
+                .filter(pickPowerUp -> pickPowerUp.powerUp() == PowerUp.WATERSHED)
+                .findFirst();
+    }
+
     @Override
     public WeatherDice.Face chooseWeatherImpl(List<WeatherDice.Face> allowedWeathers) {
+        if (allowedWeathers.contains(WeatherDice.Face.RAIN)) {
+            return WeatherDice.Face.RAIN;
+        }
+
         return Utils.randomPick(allowedWeathers, randomSource)
                 .orElseThrow(() -> new IllegalStateException("No possible weather"));
     }
