@@ -96,6 +96,9 @@ public class ActionApplier {
             if (action == UndoAction.BEGIN_SIMULATION) break;
             undo(action);
         }
+        for (var objective : player.getPrivateInventory().getObjectives()) {
+            objective.forceRecomputeOnNextCheck();
+        }
     }
 
     // S1301: we want pattern matching so switch is necessary

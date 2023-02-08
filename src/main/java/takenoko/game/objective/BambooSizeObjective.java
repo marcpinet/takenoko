@@ -93,6 +93,11 @@ public final class BambooSizeObjective implements Objective {
     }
 
     @Override
+    public void forceRecomputeOnNextCheck() {
+        // nothing to do
+    }
+
+    @Override
     public int getScore() {
         return score;
     }

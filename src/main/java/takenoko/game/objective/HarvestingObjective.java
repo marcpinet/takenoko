@@ -51,6 +51,11 @@ public final class HarvestingObjective implements Objective {
     }
 
     @Override
+    public void forceRecomputeOnNextCheck() {
+        // Nothing to do
+    }
+
+    @Override
     public int getScore() {
         return score;
     }

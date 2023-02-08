@@ -26,6 +26,8 @@ public sealed interface Objective
 
     Status status();
 
+    void forceRecomputeOnNextCheck();
+
     default boolean isAchieved() {
         return status().achieved();
     }
