@@ -7,57 +7,45 @@ import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
-import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
 import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.Color;
 import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.PowerUp;
-import takenoko.player.PrivateInventory;
+import takenoko.player.Player;
 
 @SuppressWarnings("DuplicateBranchesInSwitch")
 public class ActionValidator {
     private final Board board;
     private final GameInventory gameInventory;
-    private final PrivateInventory playerPrivateInventory;
-    private final VisibleInventory playerVisibleInventory;
+    private final Player player;
     private final List<Action> alreadyPlayedActions;
     private final WeatherDice.Face weather;
 
     public ActionValidator(
             Board board,
             GameInventory gameInventory,
-            PrivateInventory playerPrivateInventory,
-            VisibleInventory playerVisibleInventory,
+            Player player,
             WeatherDice.Face weather,
             List<Action> alreadyPlayedActions) {
         this.board = board;
         this.gameInventory = gameInventory;
-        this.playerPrivateInventory = playerPrivateInventory;
-        this.playerVisibleInventory = playerVisibleInventory;
+        this.player = player;
         this.alreadyPlayedActions = alreadyPlayedActions;
         this.weather = weather;
     }
 
     public ActionValidator(
-            Board board,
-            GameInventory gameInventory,
-            PrivateInventory playerPrivateInventory,
-            VisibleInventory playerVisibleInventory,
-            WeatherDice.Face weather) {
-        this(
-                board,
-                gameInventory,
-                playerPrivateInventory,
-                playerVisibleInventory,
-                weather,
-                new ArrayList<>());
+            Board board, GameInventory gameInventory, Player player, WeatherDice.Face weather) {
+        this(board, gameInventory, player, weather, new ArrayList<>());
     }
 
     public boolean isValid(Action action) {
         if (weather != WeatherDice.Face.WIND
                 && alreadyPlayedActions.stream().anyMatch(a -> a.isSameTypeAs(action)))
             return false;
+
+        if (action.hasCost() && player.availableActionCredits() < 1) return false;
 
         return switch (action) {
             case Action.None ignored -> true;
@@ -97,11 +85,11 @@ public class ActionValidator {
 
     private boolean isValid(Action.TakeObjective takeObjective) {
         var deck = gameInventory.getObjectiveDeck(takeObjective.type());
-        return deck.size() > 0 && playerPrivateInventory.canDrawObjective();
+        return deck.size() > 0 && player.getPrivateInventory().canDrawObjective();
     }
 
     private boolean isValid(Action.PlaceIrrigationStick action) {
-        if (!playerVisibleInventory.hasIrrigation()) {
+        if (!player.getVisibleInventory().hasIrrigation()) {
             return false;
         }
 
@@ -137,9 +125,10 @@ public class ActionValidator {
         if (!action.objective().isAchieved()) return false;
 
         if (action.objective() instanceof HarvestingObjective needs) {
-            return playerVisibleInventory.getBamboo(Color.GREEN) >= needs.getGreen()
-                    && playerVisibleInventory.getBamboo(Color.PINK) >= needs.getPink()
-                    && playerVisibleInventory.getBamboo(Color.YELLOW) >= needs.getYellow();
+            var inventory = player.getVisibleInventory();
+            return inventory.getBamboo(Color.GREEN) >= needs.getGreen()
+                    && inventory.getBamboo(Color.PINK) >= needs.getPink()
+                    && inventory.getBamboo(Color.YELLOW) >= needs.getYellow();
         }
         return true;
     }
@@ -169,7 +158,7 @@ public class ActionValidator {
         try {
             return board.getTile(action.coord()) instanceof BambooTile bambooTile
                     && bambooTile.getPowerUp().equals(PowerUp.NONE)
-                    && playerVisibleInventory.hasPowerUp(action.powerUp());
+                    && player.getVisibleInventory().hasPowerUp(action.powerUp());
         } catch (BoardException ignored) {
         }
         return false;

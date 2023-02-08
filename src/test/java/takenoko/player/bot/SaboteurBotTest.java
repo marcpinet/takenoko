@@ -43,12 +43,7 @@ class SaboteurBotTest {
 
         validator =
                 new ActionValidator(
-                        board,
-                        gameInventory,
-                        bot.getPrivateInventory(),
-                        bot.getVisibleInventory(),
-                        WeatherDice.Face.SUN,
-                        alreadyPlayedActions);
+                        board, gameInventory, bot, WeatherDice.Face.SUN, alreadyPlayedActions);
         actionLister = new PossibleActionLister(board, validator, bot.getPrivateInventory());
 
         bot.beginTurn(2);

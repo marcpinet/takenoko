@@ -147,13 +147,7 @@ public class Game {
     private PossibleActionLister makeActionLister(
             Player player, List<Action> alreadyPlayedActions, WeatherDice.Face weather) {
         var validator =
-                new ActionValidator(
-                        board,
-                        inventory,
-                        player.getPrivateInventory(),
-                        player.getVisibleInventory(),
-                        weather,
-                        alreadyPlayedActions);
+                new ActionValidator(board, inventory, player, weather, alreadyPlayedActions);
 
         return new PossibleActionLister(board, validator, player.getPrivateInventory());
     }

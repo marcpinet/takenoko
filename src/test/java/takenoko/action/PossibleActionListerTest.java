@@ -13,16 +13,15 @@ import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
-import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
-import takenoko.player.PrivateInventory;
+import takenoko.player.Player;
+import takenoko.player.bot.RandomBot;
 import takenoko.utils.Coord;
 
 class PossibleActionListerTest {
     ActionValidator validator;
-    PrivateInventory privateInventory;
-    VisibleInventory visibleInventory;
+    Player player;
     Board board;
     TileDeck deck;
 
@@ -30,9 +29,8 @@ class PossibleActionListerTest {
     void setUp() {
         board = new Board();
         deck = new TileDeck(new Random(0));
-
-        privateInventory = new PrivateInventory();
-        visibleInventory = new VisibleInventory();
+        player = new RandomBot(new Random(0), "RandomBot");
+        player.beginTurn(2);
         resetValidator(WeatherDice.Face.SUN);
     }
 
@@ -40,14 +38,13 @@ class PossibleActionListerTest {
         WeatherDice dice = mock(WeatherDice.class);
         when(dice.throwDice()).thenReturn(weather);
         GameInventory gameInventory = new GameInventory(20, deck, new Random(0), dice);
-        validator =
-                new ActionValidator(
-                        board, gameInventory, privateInventory, visibleInventory, weather);
+        validator = new ActionValidator(board, gameInventory, player, weather);
     }
 
     @Test
     void listActionsWhenFirstAction() {
-        PossibleActionLister lister = new PossibleActionLister(board, validator, privateInventory);
+        PossibleActionLister lister =
+                new PossibleActionLister(board, validator, player.getPrivateInventory());
 
         var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;
 
@@ -78,12 +75,14 @@ class PossibleActionListerTest {
     @Test
     void listActionsWhenATileWasPlacedWithCloud() throws IrrigationException, BoardException {
         resetValidator(WeatherDice.Face.CLOUDY);
-        PossibleActionLister lister = new PossibleActionLister(board, validator, privateInventory);
+        PossibleActionLister lister =
+                new PossibleActionLister(board, validator, player.getPrivateInventory());
 
         var TILE_PRED = TileDeck.DEFAULT_DRAW_PREDICATE;
 
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
-        visibleInventory.incrementIrrigation(); // we assume that the player has an irrigation stick
+        player.getVisibleInventory()
+                .incrementIrrigation(); // we assume that the player has an irrigation stick
 
         var expected =
                 List.of(

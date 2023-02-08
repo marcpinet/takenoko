@@ -38,8 +38,7 @@ class PlayerBaseTest {
                 new ActionValidator(
                         board,
                         new GameInventory(20, deck, new Random(0), new WeatherDice(new Random(0))),
-                        player.getPrivateInventory(),
-                        player.getVisibleInventory(),
+                        player,
                         WeatherDice.Face.SUN);
         var lister = new PossibleActionLister(board, validator, player.getPrivateInventory());
 
