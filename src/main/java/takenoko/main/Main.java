@@ -58,7 +58,7 @@ public class Main {
 
         Simulator simulator1 =
                 new Simulator(
-                        500,
+                        1000,
                         List.of(PlayerType.PLOT_RUSH, PlayerType.SABOTEUR),
                         logger,
                         Simulator.Parallelism.YES);
