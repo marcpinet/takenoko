@@ -56,7 +56,7 @@ class ActionApplierTest {
         deck = new TileDeck(new Random(0));
         gameInventory = new GameInventory(1, deck, new Random(0), new WeatherDice(new Random(0)));
 
-        player = new RandomBot(new Random(0), "bizel");
+        player = new RandomBot(new Random(0), "edgar");
 
         objective = new TilePatternObjective(Color.PINK, TilePatternObjective.LINE_2);
         player.getPrivateInventory().addObjective(objective);
