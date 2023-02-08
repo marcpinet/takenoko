@@ -298,6 +298,11 @@ public final class TilePatternObjective implements Objective {
 
     // A tile is part of the pattern if it is the right color and if it's irrigated
     private boolean isValidTile(Board board, Element element) {
+        // perf: avoid the try/catch if possible. Benchmarks show that this is *really* important
+        if (!board.contains(element.coord())) {
+            return false;
+        }
+
         try {
             var tile = board.getTile(element.coord());
             if (tile instanceof BambooTile bambooTile) {
