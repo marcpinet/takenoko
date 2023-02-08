@@ -117,6 +117,40 @@ public class Simulator {
             return numWins;
         }
 
+        public Map<String, Integer> getNumDraws() {
+            var numDraws = new HashMap<String, Integer>();
+            for (var player : players) {
+                numDraws.put(player, 0);
+            }
+
+            for (var stat : stats) {
+                if (stat.winnerName.isEmpty()) {
+                    for (var player : players) {
+                        numDraws.put(player, numDraws.get(player) + 1);
+                    }
+                }
+            }
+
+            return numDraws;
+        }
+
+        public Map<String, Integer> getNumLosses() {
+            var numLosses = new HashMap<String, Integer>();
+            for (var player : players) {
+                numLosses.put(player, 0);
+            }
+
+            for (var stat : stats) {
+                stat.winnerName.ifPresent(name -> numLosses.put(name, numLosses.get(name) + 1));
+            }
+
+            for (var player : players) {
+                numLosses.put(player, nbGames - numLosses.get(player));
+            }
+
+            return numLosses;
+        }
+
         public Map<String, Double> getPercentWins() {
             var percentWins = new HashMap<String, Double>();
             var numWins = getNumWins();
@@ -125,6 +159,26 @@ public class Simulator {
             }
 
             return percentWins;
+        }
+
+        public Map<String, Double> getPercentDraws() {
+            var percentDraws = new HashMap<String, Double>();
+            var numDraws = getNumDraws();
+            for (var player : players) {
+                percentDraws.put(player, (double) numDraws.get(player) / nbGames * 100);
+            }
+
+            return percentDraws;
+        }
+
+        public Map<String, Double> getPercentLosses() {
+            var percentLosses = new HashMap<String, Double>();
+            var numLosses = getNumLosses();
+            for (var player : players) {
+                percentLosses.put(player, (double) numLosses.get(player) / nbGames * 100);
+            }
+
+            return percentLosses;
         }
 
         public Map<String, Double> getAvgScore() {
