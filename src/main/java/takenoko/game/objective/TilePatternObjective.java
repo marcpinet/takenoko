@@ -287,6 +287,11 @@ public final class TilePatternObjective implements Objective {
     }
 
     @Override
+    public void forceRecomputeOnNextCheck() {
+        resetStatus(0);
+    }
+
+    @Override
     public int getScore() {
         return score;
     }
