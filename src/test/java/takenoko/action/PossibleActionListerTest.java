@@ -53,8 +53,6 @@ class PossibleActionListerTest {
 
         var expected =
                 List.of(
-                        Action.NONE,
-                        Action.END_TURN,
                         new Action.TakeObjective(Objective.Type.BAMBOO_SIZE),
                         new Action.TakeObjective(Objective.Type.HARVESTING),
                         new Action.TakeObjective(Objective.Type.TILE_PATTERN),
@@ -89,8 +87,6 @@ class PossibleActionListerTest {
 
         var expected =
                 List.of(
-                        Action.NONE,
-                        Action.END_TURN,
                         new Action.TakeObjective(Objective.Type.BAMBOO_SIZE),
                         new Action.TakeObjective(Objective.Type.HARVESTING),
                         new Action.TakeObjective(Objective.Type.TILE_PATTERN),

@@ -81,9 +81,8 @@ class GameTest {
 
         for (int i = 0; i < 10; i++) {
             List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
-            var game =
-                    new Game(
-                            players, logger, tileDeck, new WeatherDice(new Random()), new Random());
+            var deck = new TileDeck(new Random());
+            var game = new Game(players, logger, deck, new WeatherDice(new Random()), new Random());
             game.play();
             assertNoSevereLog();
         }

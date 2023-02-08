@@ -34,8 +34,8 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
         // if we do not have enough action credits, end the turn
         if (availableActionCredits() == 0) return Action.END_TURN;
 
-        return Utils.randomPick(possibleActions, randomSource)
-                .orElseThrow(() -> new IllegalStateException("No possible action"));
+        // It is possible that there are no possible actions (3 actions, objective inventory full)
+        return Utils.randomPick(possibleActions, randomSource).orElse(Action.END_TURN);
     }
 
     @Override

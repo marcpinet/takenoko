@@ -15,8 +15,8 @@ public class BoardDisplayer {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = -2; i < 3; i++) {
-            for (int j = -2; j < 3; j++) {
+        for (int i = -6; i < 6; i++) {
+            for (int j = -6; j < 6; j++) {
                 var tile = getTileAtDisplayPosition(i, j);
                 if (tile.isPresent()) {
                     if (tile.get() instanceof BambooTile bambooTile) {
@@ -34,6 +34,11 @@ public class BoardDisplayer {
             }
             sb.append("\n");
         }
+        for (var piece : MovablePiece.values())
+            sb.append(piece.toString())
+                    .append(": ")
+                    .append(board.getPieceCoord(piece))
+                    .append("\n");
         return sb.toString();
     }
 
