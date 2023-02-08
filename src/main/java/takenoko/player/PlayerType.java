@@ -1,5 +1,6 @@
 package takenoko.player;
 
 public enum PlayerType {
-    RANDOM
+    RANDOM,
+    PLOT_RUSH
 }

@@ -24,7 +24,7 @@ import takenoko.game.objective.TilePatternObjective;
 import takenoko.game.tile.*;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
-import takenoko.player.bot.DefaultBot;
+import takenoko.player.bot.RandomBot;
 import takenoko.utils.Coord;
 import utils.TestLogHandler;
 
@@ -56,7 +56,7 @@ class ActionApplierTest {
         deck = new TileDeck(new Random(0));
         gameInventory = new GameInventory(1, deck, new Random(0), new WeatherDice(new Random(0)));
 
-        player = new DefaultBot();
+        player = new RandomBot(new Random(0), "edgar");
 
         objective = new TilePatternObjective(Color.PINK, TilePatternObjective.LINE_2);
         player.getPrivateInventory().addObjective(objective);

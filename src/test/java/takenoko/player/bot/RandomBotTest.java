@@ -13,13 +13,14 @@ import takenoko.action.Action;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
 import takenoko.game.objective.BambooSizeObjective;
+import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.utils.Coord;
 
-class EasyBotTest {
+class RandomBotTest {
     Random randomSource;
-    @Mock final PossibleActionLister actionLister = mock(PossibleActionLister.class);
+    @Mock PossibleActionLister actionLister = mock(PossibleActionLister.class);
 
     @BeforeEach
     void setUp() {
@@ -30,7 +31,7 @@ class EasyBotTest {
     @Test
     void testChooseActions() {
         Board board = new Board();
-        EasyBot bot = new EasyBot(randomSource);
+        RandomBot bot = new RandomBot(randomSource, "edgar");
 
         bot.beginTurn(1);
 
@@ -45,10 +46,10 @@ class EasyBotTest {
     @Test
     void unveilsObjectiveASAP() throws InventoryException {
         Board board = new Board();
-        EasyBot bot = new EasyBot(randomSource);
+        RandomBot bot = new RandomBot(randomSource, "edgar");
 
         var objMock = mock(BambooSizeObjective.class);
-        when(objMock.isAchieved()).thenReturn(true);
+        when(objMock.status()).thenReturn(new Objective.Status(1, 1));
 
         bot.getPrivateInventory().addObjective(objMock);
         var possibleAction =

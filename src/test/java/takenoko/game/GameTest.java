@@ -15,7 +15,7 @@ import takenoko.game.objective.Objective;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.PrivateInventory;
-import takenoko.player.bot.EasyBot;
+import takenoko.player.bot.RandomBot;
 import utils.TestLogHandler;
 
 class GameTest {
@@ -67,8 +67,8 @@ class GameTest {
 
     @Test
     void testInitialDrawAtStart() {
-        var p1 = new EasyBot(new Random(0));
-        var p2 = new EasyBot(new Random(0));
+        var p1 = new RandomBot(new Random(0), "edgar");
+        var p2 = new RandomBot(new Random(0), "marc");
 
         new Game(List.of(p1, p2), logger, tileDeck, new WeatherDice(new Random(0)), new Random(0));
         assertEquals(3, p1.getPrivateInventory().getObjectives().size());
@@ -80,7 +80,10 @@ class GameTest {
         // So we run some games
 
         for (int i = 0; i < 10; i++) {
-            List<Player> players = List.of(new EasyBot(new Random()), new EasyBot(new Random()));
+            List<Player> players =
+                    List.of(
+                            new RandomBot(new Random(), "marc"),
+                            new RandomBot(new Random(), "edgar"));
             var deck = new TileDeck(new Random());
             var game = new Game(players, logger, deck, new WeatherDice(new Random()), new Random());
             game.play();
@@ -92,7 +95,7 @@ class GameTest {
     void testEndOfGame() {
         Random r = new Random(0);
         Player p1 = mock(Player.class);
-        Player p2 = new EasyBot(new Random());
+        Player p2 = new RandomBot(new Random(), "edgar");
         VisibleInventory vi = mock(VisibleInventory.class);
         @SuppressWarnings("unchecked")
         List<Objective> li = mock(ArrayList.class);
@@ -105,14 +108,14 @@ class GameTest {
         var game = new Game(players, logger, tileDeck, new WeatherDice(new Random(0)), r);
         assertTrue(game.endOfGame());
 
-        Player p3 = new EasyBot(new Random());
+        Player p3 = new RandomBot(new Random(), "marc");
         players = List.of(p1, p2, p3);
         game = new Game(players, logger, tileDeck, new WeatherDice(new Random(0)), r);
         assertFalse(game.endOfGame());
         when(li.size()).thenReturn(8);
         assertTrue(game.endOfGame());
 
-        Player p4 = new EasyBot(new Random());
+        Player p4 = new RandomBot(new Random(), "cléclé");
         players = List.of(p1, p2, p3, p4);
         game = new Game(players, logger, tileDeck, new WeatherDice(new Random(0)), r);
         assertFalse(game.endOfGame());
@@ -123,8 +126,8 @@ class GameTest {
     @Test
     void weatherSun() {
         Random r = new Random(0);
-        Player p1 = spy(new EasyBot(new Random(0)));
-        Player p2 = new EasyBot(new Random(0));
+        Player p1 = spy(new RandomBot(new Random(0), "loic2"));
+        Player p2 = new RandomBot(new Random(0), "loic1");
 
         var players = List.of(p1, p2);
 
