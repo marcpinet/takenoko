@@ -44,6 +44,11 @@
             <!-- use mockito-line instead of mockito-core to be able to mock static methods -->
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+            <version>1.82</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
