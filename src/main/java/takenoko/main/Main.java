@@ -34,6 +34,9 @@ public class Main {
         if (args2.isTwoThousands()) {
             simulate(logger);
         }
+        if (args2.isCsv()) {
+            generateCsv(logger);
+        }
     }
 
     public static void demo(Logger logger) {
@@ -76,5 +79,24 @@ public class Main {
         logger.setLevel(Level.INFO);
         logger.log(Level.INFO, "{0}", res1);
         logger.log(Level.INFO, "{0}", res2);
+    }
+
+    public static void generateCsv(Logger logger) {
+        logger.setLevel(Level.OFF);
+
+        var simulator =
+                new Simulator(
+                        100,
+                        List.of(PlayerType.PLOT_RUSH, PlayerType.SABOTEUR, PlayerType.RANDOM),
+                        logger,
+                        Simulator.Parallelism.YES);
+        Simulator.SimStats stats = simulator.simulate();
+
+        CSVHandler csvHandler = new CSVHandler(stats);
+        try {
+            csvHandler.write();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
