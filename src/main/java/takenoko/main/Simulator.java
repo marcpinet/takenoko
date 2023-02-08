@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 import takenoko.game.Game;
+import takenoko.game.WeatherDice;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.PlayerFactory;
@@ -83,7 +84,7 @@ public class Simulator {
             players.add(PlayerFactory.makePlayer(botTypes.get(j), NAMES.get(j), random));
         }
 
-        var game = new Game(players, logger, tileDeck, random);
+        var game = new Game(players, logger, tileDeck, new WeatherDice(random), random);
         var result = game.play();
         Optional<String> winner = result.map(Player::getName);
 
