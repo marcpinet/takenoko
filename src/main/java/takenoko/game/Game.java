@@ -71,6 +71,10 @@ public class Game {
         return winner;
     }
 
+    public int getNumTurn() {
+        return numTurn;
+    }
+
     private void playTurn() {
         int numPlayer = 1;
         int numAction = 1;

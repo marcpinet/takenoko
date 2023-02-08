@@ -17,6 +17,11 @@ public class EasyBot extends PlayerBase<EasyBot> implements PlayerBase.PlayerBas
         this.randomSource = randomSource;
     }
 
+    public EasyBot(Random randomSource, String name) {
+        super(name);
+        this.randomSource = randomSource;
+    }
+
     public Action chooseActionImpl(Board board, PossibleActionLister actionLister) {
         var possibleActions = actionLister.getPossibleActions();
         // If an objective is achieved, unveil it

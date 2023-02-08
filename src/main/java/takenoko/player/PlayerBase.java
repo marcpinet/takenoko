@@ -15,13 +15,19 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     private final VisibleInventory visibleInventory;
     private int actionCredits = 0;
     private int score = 0;
+    private String name;
 
     @SuppressWarnings("unchecked")
-    protected PlayerBase() {
+    protected PlayerBase(String name) {
         // SAFETY: This is safe because we're an abstract class using CRTP
         self = (SELF) this;
         privateInventory = new PrivateInventory();
         visibleInventory = new VisibleInventory();
+        this.name = name;
+    }
+
+    protected PlayerBase() {
+        this("Unnamed");
     }
 
     @Override
@@ -74,6 +80,11 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     @Override
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     public interface PlayerBaseInterface {

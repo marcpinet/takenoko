@@ -107,7 +107,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>takenoko.Main</mainClass>
+                    <mainClass>takenoko.main.Main</mainClass>
                 </configuration>
                 <executions>
                     <execution>
