@@ -1,5 +1,6 @@
 package takenoko.main;
 
+import com.beust.jcommander.JCommander;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.ConsoleHandler;
@@ -16,8 +17,14 @@ import takenoko.utils.LogFormatter;
 public class Main {
 
     public static void main(String... args) {
-        demo();
-        simulate();
+        Args args2 = new Args();
+        JCommander.newBuilder().addObject(args2).build().parse(args);
+        if (args2.isDemo() || args.length == 0) {
+            demo();
+        }
+        if (args2.isTwoThousands()) {
+            simulate();
+        }
     }
 
     public static void demo() {
