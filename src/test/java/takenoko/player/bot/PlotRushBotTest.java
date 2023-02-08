@@ -24,7 +24,6 @@ class PlotRushBotTest {
     private Board board;
     private PlotRushBot bot;
     private PossibleActionLister actionLister;
-    private ActionValidator validator;
 
     @BeforeEach
     void setUp() {
@@ -34,13 +33,8 @@ class PlotRushBotTest {
 
         var gameInventory =
                 new GameInventory(20, new TileDeck(random), random, new WeatherDice(random));
-        validator =
-                new ActionValidator(
-                        board,
-                        gameInventory,
-                        bot.getPrivateInventory(),
-                        bot.getVisibleInventory(),
-                        WeatherDice.Face.SUN);
+        ActionValidator validator =
+                new ActionValidator(board, gameInventory, bot, WeatherDice.Face.SUN);
         actionLister = new PossibleActionLister(board, validator, bot.getPrivateInventory());
         bot.beginTurn(2);
     }

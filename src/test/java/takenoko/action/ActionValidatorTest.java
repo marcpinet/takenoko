@@ -17,11 +17,11 @@ import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
-import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.BambooSizeObjective;
 import takenoko.game.objective.Objective;
 import takenoko.game.tile.*;
-import takenoko.player.PrivateInventory;
+import takenoko.player.InventoryException;
+import takenoko.player.bot.RandomBot;
 import takenoko.utils.Coord;
 
 class ActionValidatorTest {
@@ -29,15 +29,15 @@ class ActionValidatorTest {
     private GameInventory gameInventory;
     private ActionValidator validator;
     private ArrayList<Action> previousActions;
-    private PrivateInventory privateInventory;
-    private VisibleInventory visibleInventory;
+
+    private RandomBot player;
 
     @BeforeEach
     void setUp() {
         board = new Board();
-        privateInventory = new PrivateInventory();
-        visibleInventory = new VisibleInventory();
-        visibleInventory.incrementIrrigation();
+        player = new RandomBot(new Random(0), "RandomBot");
+        player.beginTurn(2);
+        player.getVisibleInventory().incrementIrrigation();
 
         gameInventory =
                 new GameInventory(
@@ -51,14 +51,7 @@ class ActionValidatorTest {
     }
 
     void resetWeather(WeatherDice.Face weather) {
-        validator =
-                new ActionValidator(
-                        board,
-                        gameInventory,
-                        privateInventory,
-                        visibleInventory,
-                        weather,
-                        previousActions);
+        validator = new ActionValidator(board, gameInventory, player, weather, previousActions);
     }
 
     @Test
@@ -97,16 +90,12 @@ class ActionValidatorTest {
     }
 
     @Test
-    void placeIrrigationWhenNotEnough() throws IrrigationException, BoardException {
+    void placeIrrigationWhenNotEnough()
+            throws IrrigationException, BoardException, InventoryException {
+        player.getVisibleInventory().decrementIrrigation();
         board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
         var action = new Action.PlaceIrrigationStick(new Coord(0, 1), TileSide.UP_LEFT);
-        validator =
-                new ActionValidator(
-                        board,
-                        gameInventory,
-                        new PrivateInventory(),
-                        new VisibleInventory(),
-                        WeatherDice.Face.SUN);
+        validator = new ActionValidator(board, gameInventory, player, WeatherDice.Face.SUN);
         assertFalse(validator.isValid(action));
     }
 
@@ -126,8 +115,7 @@ class ActionValidatorTest {
                                 new TileDeck(new Random(0)),
                                 new Random(0),
                                 new WeatherDice(new Random(0))),
-                        new PrivateInventory(),
-                        new VisibleInventory(),
+                        player,
                         WeatherDice.Face.SUN);
         var action = new Action.TakeIrrigationStick();
         assertFalse(validator.isValid(action));
