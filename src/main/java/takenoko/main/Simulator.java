@@ -117,23 +117,85 @@ public class Simulator {
             return numWins;
         }
 
+        public Map<String, Double> getPercentWins() {
+            var percentWins = new HashMap<String, Double>();
+            var numWins = getNumWins();
+            for (var player : players) {
+                percentWins.put(player, (double) numWins.get(player) / nbGames * 100);
+            }
+
+            return percentWins;
+        }
+
+        public Map<String, Double> getAvgScore() {
+            var avgScore = new HashMap<String, Double>();
+            for (var player : players) {
+                avgScore.put(player, 0.0);
+            }
+
+            for (var stat : stats) {
+                for (var playerStat : stat.playersStats) {
+                    avgScore.put(
+                            playerStat.playerName,
+                            avgScore.get(playerStat.playerName) + playerStat.score);
+                }
+            }
+
+            for (var player : players) {
+                avgScore.put(player, avgScore.get(player) / nbGames);
+            }
+
+            return avgScore;
+        }
+
+        public Map<String, Double> getAvgObjective() {
+            var avgObjective = new HashMap<String, Double>();
+            for (var player : players) {
+                avgObjective.put(player, 0.0);
+            }
+
+            for (var stat : stats) {
+                for (var playerStat : stat.playersStats) {
+                    avgObjective.put(
+                            playerStat.playerName,
+                            avgObjective.get(playerStat.playerName)
+                                    + playerStat.completedObjectiveCount);
+                }
+            }
+
+            for (var player : players) {
+                avgObjective.put(player, avgObjective.get(player) / nbGames);
+            }
+
+            return avgObjective;
+        }
+
+        public double getAvgTurn() {
+            var avgTurn = 0.0;
+            for (var stat : stats) {
+                avgTurn += stat.turns;
+            }
+
+            return avgTurn / nbGames;
+        }
+
         @Override
         public String toString() {
-            return "Number of games: "
+            return "Results for "
                     + nbGames
-                    + "\n"
-                    + "Number of players: "
-                    + players.size()
-                    + "\n"
-                    + "Players: "
-                    + players
-                    + "\n"
-                    + "Bot types: "
+                    + " games simulated:"
+                    + "\n Type of bots: "
                     + botTypes
-                    + "\n"
-                    + "Number of wins: "
+                    + "\n Number of wins: "
                     + getNumWins()
-                    + "\n";
+                    + "\n Win rate: "
+                    + getPercentWins()
+                    + "\n Average score: "
+                    + getAvgScore()
+                    + "\n Average objectives: "
+                    + getAvgObjective()
+                    + "\n Average turns: "
+                    + getAvgTurn();
         }
     }
 

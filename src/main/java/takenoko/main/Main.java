@@ -19,27 +19,29 @@ public class Main {
 
     public static void main(String... args) {
         Args args2 = new Args();
-        JCommander.newBuilder().addObject(args2).build().parse(args);
-        if (args2.isDemo() || args.length == 0) {
-            demo();
-        }
-        if (args2.isTwoThousands()) {
-            simulate();
-        }
-    }
 
-    public static void demo() {
-        List<Player> players =
-                List.of(
-                        new RandomBot(new Random(), "edgar"),
-                        new PlotRushBot(new Random(), "marc"));
-        var tileDeck = new TileDeck(new Random());
         var logger = Logger.getGlobal();
         ConsoleHandler handler = new ConsoleHandler();
         logger.addHandler(handler);
         LogFormatter formatter = new LogFormatter();
         logger.setUseParentHandlers(false);
         handler.setFormatter(formatter);
+
+        JCommander.newBuilder().addObject(args2).build().parse(args);
+        if (args2.isDemo() || args.length == 0) {
+            demo(logger);
+        }
+        if (args2.isTwoThousands()) {
+            simulate(logger);
+        }
+    }
+
+    public static void demo(Logger logger) {
+        List<Player> players =
+                List.of(
+                        new RandomBot(new Random(), "edgar"),
+                        new PlotRushBot(new Random(), "marc"));
+        var tileDeck = new TileDeck(new Random());
         var game = new Game(players, logger, tileDeck, new WeatherDice(new Random()), new Random());
         var winner = game.play();
 
@@ -50,19 +52,29 @@ public class Main {
         }
     }
 
-    public static void simulate() {
+    public static void simulate(Logger logger) {
 
-        var logger = Logger.getGlobal();
         logger.setLevel(Level.OFF);
 
-        Simulator simulator =
+        Simulator simulator1 =
                 new Simulator(
-                        500,
-                        List.of(PlayerType.RANDOM, PlayerType.SABOTEUR),
+                        1000,
+                        List.of(PlayerType.PLOT_RUSH, PlayerType.SABOTEUR),
                         logger,
                         Simulator.Parallelism.YES);
 
+        Simulator simulator2 =
+                new Simulator(
+                        1000,
+                        List.of(PlayerType.PLOT_RUSH, PlayerType.PLOT_RUSH),
+                        logger,
+                        Simulator.Parallelism.YES);
+
+        var res1 = simulator1.simulate();
+        var res2 = simulator2.simulate();
+
         logger.setLevel(Level.INFO);
-        logger.log(Level.INFO, "{0}", simulator.simulate());
+        logger.log(Level.INFO, "{0}", res1);
+        logger.log(Level.INFO, "{0}", res2);
     }
 }
