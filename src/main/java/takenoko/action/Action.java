@@ -78,7 +78,16 @@ public sealed interface Action
         }
     }
 
-    record MovePiece(MovablePiece piece, Coord to) implements Action {}
+    record MovePiece(MovablePiece piece, Coord to) implements Action {
+        @Override
+        public boolean isSameTypeAs(Action other) {
+            if (other instanceof MovePiece otherMovePiece) {
+                // moving different pieces is not the same action
+                return piece.equals(otherMovePiece.piece);
+            }
+            return false;
+        }
+    }
 
     record BeginSimulation() implements Action {
         @Override

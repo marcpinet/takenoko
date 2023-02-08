@@ -5,7 +5,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,26 +28,37 @@ class ActionValidatorTest {
     private Board board;
     private GameInventory gameInventory;
     private ActionValidator validator;
+    private ArrayList<Action> previousActions;
+    private PrivateInventory privateInventory;
+    private VisibleInventory visibleInventory;
 
     @BeforeEach
     void setUp() {
         board = new Board();
-        PrivateInventory privateInventory = new PrivateInventory();
-        VisibleInventory visibleInventory = new VisibleInventory();
+        privateInventory = new PrivateInventory();
+        visibleInventory = new VisibleInventory();
         visibleInventory.incrementIrrigation();
+
         gameInventory =
                 new GameInventory(
                         20,
                         new TileDeck(new Random(0)),
                         new Random(0),
                         new WeatherDice(new Random(0)));
+
+        previousActions = new ArrayList<>();
+        resetWeather(WeatherDice.Face.SUN);
+    }
+
+    void resetWeather(WeatherDice.Face weather) {
         validator =
                 new ActionValidator(
                         board,
                         gameInventory,
                         privateInventory,
                         visibleInventory,
-                        WeatherDice.Face.SUN);
+                        weather,
+                        previousActions);
     }
 
     @Test
@@ -181,14 +191,7 @@ class ActionValidatorTest {
         assertTrue(validator.isValid(action1));
         assertTrue(validator.isValid(action2));
 
-        validator =
-                new ActionValidator(
-                        board,
-                        gameInventory,
-                        new PrivateInventory(),
-                        new VisibleInventory(),
-                        WeatherDice.Face.SUN,
-                        new ArrayList<>(List.of(action1)));
+        previousActions.add(action1);
 
         assertFalse(validator.isValid(action1));
         assertFalse(validator.isValid(action2));
@@ -206,17 +209,31 @@ class ActionValidatorTest {
 
     @Test
     void testTwiceActionWithWind() {
+        resetWeather(WeatherDice.Face.WIND);
+
         var action = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
         assertTrue(validator.isValid(action));
-        validator =
-                new ActionValidator(
-                        board,
-                        gameInventory,
-                        new PrivateInventory(),
-                        new VisibleInventory(),
-                        WeatherDice.Face.WIND,
-                        new ArrayList<>(List.of(action)));
+
+        previousActions.add(action);
+
         var action2 = new Action.PlaceTile(new Coord(1, 0), TileDeck.DEFAULT_DRAW_PREDICATE);
+        assertTrue(validator.isValid(action2));
+    }
+
+    @Test
+    void testMovePandaAndGardenerAreNotLinked() throws IrrigationException, BoardException {
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+        board.placeTile(new Coord(1, 0), new BambooTile(Color.GREEN));
+
+        var action1 = new Action.MovePiece(MovablePiece.PANDA, new Coord(0, 1));
+        var action2 = new Action.MovePiece(MovablePiece.GARDENER, new Coord(1, 0));
+
+        assertTrue(validator.isValid(action1));
+        assertTrue(validator.isValid(action2));
+
+        previousActions.add(action1);
+
+        assertFalse(validator.isValid(action1));
         assertTrue(validator.isValid(action2));
     }
 }
