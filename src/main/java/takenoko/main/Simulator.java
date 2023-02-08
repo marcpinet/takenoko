@@ -19,13 +19,37 @@ public class Simulator {
 
     private final Logger logger;
 
+    private final Random random;
+    boolean parallel;
+
     private static final List<String> NAMES =
             List.of("Philippe", "Mireille", "Anne-Marie", "Nassim");
 
-    public Simulator(int nbGames, List<PlayerType> botTypes, Logger logger) {
+    enum Parallelism {
+        YES
+    }
+
+    public Simulator(int nbGames, List<PlayerType> botTypes, Logger logger, Random random) {
+        this(nbGames, botTypes, logger, random, false);
+    }
+
+    public Simulator(
+            int nbGames, List<PlayerType> botTypes, Logger logger, Parallelism parallelism) {
+        // if we have parallelism, we can't have a deterministic random
+        this(nbGames, botTypes, logger, new Random(), parallelism == Parallelism.YES);
+    }
+
+    private Simulator(
+            int nbGames,
+            List<PlayerType> botTypes,
+            Logger logger,
+            Random random,
+            boolean parallel) {
         this.nbGames = nbGames;
         this.botTypes = botTypes;
         this.logger = logger;
+        this.random = random;
+        this.parallel = parallel;
         stats = new ArrayList<>(nbGames);
     }
 
@@ -35,11 +59,10 @@ public class Simulator {
             throw new IllegalArgumentException("Number of players must be between 2 and 4");
         }
 
-        this.stats =
-                IntStream.range(0, nbGames)
-                        .parallel()
-                        .mapToObj(ignored -> simulateOneGame())
-                        .toList();
+        var stream = IntStream.range(0, nbGames);
+        if (parallel) stream = stream.unordered().parallel();
+
+        this.stats = stream.mapToObj(ignored -> simulateOneGame()).toList();
 
         var botMap = new HashMap<String, PlayerType>();
         for (int i = 0; i < botTypes.size(); i++) {
@@ -53,14 +76,14 @@ public class Simulator {
 
     private GameStats simulateOneGame() {
 
-        var tileDeck = new TileDeck(new Random());
+        var tileDeck = new TileDeck(random);
 
         var players = new ArrayList<Player>();
         for (int j = 0; j < botTypes.size(); j++) {
-            players.add(PlayerFactory.makePlayer(botTypes.get(j), NAMES.get(j)));
+            players.add(PlayerFactory.makePlayer(botTypes.get(j), NAMES.get(j), random));
         }
 
-        var game = new Game(players, logger, tileDeck, new Random());
+        var game = new Game(players, logger, tileDeck, random);
         var result = game.play();
         Optional<String> winner = result.map(Player::getName);
 

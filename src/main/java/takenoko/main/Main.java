@@ -45,7 +45,13 @@ public class Main {
         logger.setLevel(Level.OFF);
 
         Simulator simulator =
-                new Simulator(500, List.of(PlayerType.RANDOM, PlayerType.RANDOM), logger);
-        System.out.println(simulator.simulate());
+                new Simulator(
+                        500,
+                        List.of(PlayerType.RANDOM, PlayerType.RANDOM),
+                        logger,
+                        Simulator.Parallelism.YES);
+
+        logger.setLevel(Level.INFO);
+        logger.log(Level.INFO, "{0}", simulator.simulate());
     }
 }
