@@ -43,7 +43,7 @@ public class CSVHandler {
                 Files.createDirectory(path.getParent());
             } catch (FileAlreadyExistsException ignored) {
                 return true;
-            } catch (IOException e) {
+            } catch (IOException ignored) {
                 return false;
             }
         }
@@ -159,10 +159,10 @@ public class CSVHandler {
         }
 
         // Deleting old file
-        Files.delete(path);
+        path.toFile().delete();
 
         // Renaming new file
-        if (!file.renameTo(path.toFile())) throw new IOException("Could not rename file");
+        file.renameTo(path.toFile());
     }
 
     public Path getFilePath() {
