@@ -16,6 +16,7 @@ import takenoko.game.tile.TileDeck;
 import takenoko.player.Player;
 import takenoko.player.PrivateInventory;
 import takenoko.player.bot.RandomBot;
+import takenoko.player.bot.SaboteurBot;
 import utils.TestLogHandler;
 
 class GameTest {
@@ -83,7 +84,7 @@ class GameTest {
             List<Player> players =
                     List.of(
                             new RandomBot(new Random(), "marc"),
-                            new RandomBot(new Random(), "edgar"));
+                            new SaboteurBot(new Random(), "edgar"));
             var deck = new TileDeck(new Random());
             var game = new Game(players, logger, deck, new WeatherDice(new Random()), new Random());
             game.play();

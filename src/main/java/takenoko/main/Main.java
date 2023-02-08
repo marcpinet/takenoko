@@ -58,7 +58,7 @@ public class Main {
         Simulator simulator =
                 new Simulator(
                         500,
-                        List.of(PlayerType.RANDOM, PlayerType.RANDOM),
+                        List.of(PlayerType.RANDOM, PlayerType.SABOTEUR),
                         logger,
                         Simulator.Parallelism.YES);
 
