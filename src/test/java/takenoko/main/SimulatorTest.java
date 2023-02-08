@@ -17,11 +17,11 @@ class SimulatorTest {
         logger.setLevel(OFF);
         var sim =
                 new Simulator(
-                        20, List.of(PlayerType.RANDOM, PlayerType.RANDOM), logger, new Random(0));
+                        20, List.of(PlayerType.RANDOM, PlayerType.SABOTEUR), logger, new Random(0));
         var res = sim.simulate();
         assertEquals(20, res.nbGames());
         assertEquals(2, res.players().size());
-        assertEquals(10, res.getNumWins().get("Mireille"));
-        assertEquals(6, res.getNumWins().get("Philippe"));
+        assertEquals(11, res.getNumWins().get("Mireille"));
+        assertEquals(9, res.getNumWins().get("Philippe"));
     }
 }
