@@ -18,6 +18,9 @@ import takenoko.utils.Utils;
 public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.PlayerBaseInterface {
     private final Random randomSource;
 
+    private static final List<Class<? extends Action>> PRIORITIES =
+            List.of(Action.TakeObjective.class, Action.TakeIrrigationStick.class);
+
     public SaboteurBot(Random randomSource, String name) {
         super(name);
         this.randomSource = randomSource;
@@ -35,12 +38,27 @@ public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.P
             return pickWaterPowerUp.get();
         }
 
+        var priorityAction = pickPriorityAction(possibleActions);
+        if (priorityAction.isPresent()) {
+            return priorityAction.get();
+        }
+
         var bambooAction = retrieveBamboo(board, possibleActions);
         if (bambooAction.isPresent()) {
             return bambooAction.get();
         }
 
         return Utils.randomPick(possibleActions, randomSource).orElse(Action.END_TURN);
+    }
+
+    private Optional<Action> pickPriorityAction(List<Action> possibleActions) {
+        for (var priority : PRIORITIES) {
+            var found = possibleActions.stream().filter(priority::isInstance).findFirst();
+            if (found.isPresent()) {
+                return found;
+            }
+        }
+        return Optional.empty();
     }
 
     private Optional<Action.MovePiece> retrieveBamboo(Board board, List<Action> possibleActions) {

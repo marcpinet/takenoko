@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import takenoko.action.Action;
@@ -27,6 +28,8 @@ class SaboteurBotTest {
     private PossibleActionLister actionLister;
     private ActionValidator validator;
 
+    private ArrayList<Action> alreadyPlayedActions;
+
     @BeforeEach
     void setUp() {
         board = new Board();
@@ -35,16 +38,32 @@ class SaboteurBotTest {
 
         var gameInventory =
                 new GameInventory(20, new TileDeck(random), random, new WeatherDice(random));
+
+        alreadyPlayedActions = new ArrayList<>();
+
         validator =
                 new ActionValidator(
                         board,
                         gameInventory,
                         bot.getPrivateInventory(),
                         bot.getVisibleInventory(),
-                        WeatherDice.Face.SUN);
+                        WeatherDice.Face.SUN,
+                        alreadyPlayedActions);
         actionLister = new PossibleActionLister(board, validator, bot.getPrivateInventory());
 
         bot.beginTurn(2);
+    }
+
+    @Test
+    void pickObjectiveAndIrrigationFirstTurn() {
+        var action = bot.chooseAction(board, actionLister);
+
+        assertTrue(action instanceof Action.TakeObjective);
+
+        alreadyPlayedActions.add(action);
+
+        action = bot.chooseAction(board, actionLister);
+        assertTrue(action instanceof Action.TakeIrrigationStick);
     }
 
     @Test
@@ -55,7 +74,17 @@ class SaboteurBotTest {
         board.placeTile(new Coord(0, 1), tile);
         tile.growBamboo();
 
-        var action = bot.chooseAction(board, actionLister);
+        // We don't want to take an objective or irrigation stick
+        var possibleActions =
+                actionLister.getPossibleActions().stream()
+                        .filter(Predicate.not(Action.TakeObjective.class::isInstance))
+                        .filter(Predicate.not(Action.TakeIrrigationStick.class::isInstance))
+                        .toList();
+
+        var lister = mock(PossibleActionLister.class);
+        when(lister.getPossibleActions()).thenReturn(possibleActions);
+
+        var action = bot.chooseAction(board, lister);
 
         assertTrue(
                 action instanceof Action.MovePiece movePiece
