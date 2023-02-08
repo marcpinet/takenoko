@@ -181,21 +181,21 @@ public class Simulator {
 
         @Override
         public String toString() {
-            return "Number of games: "
+            return "Results for "
                     + nbGames
-                    + "\n"
-                    + "Number of players: "
-                    + players.size()
-                    + "\n"
-                    + "Players: "
-                    + players
-                    + "\n"
-                    + "Bot types: "
+                    + " games simulated:"
+                    + "\n Type of bots: "
                     + botTypes
-                    + "\n"
-                    + "Number of wins: "
+                    + "\n Number of wins: "
                     + getNumWins()
-                    + "\n";
+                    + "\n Win rate: "
+                    + getPercentWins()
+                    + "\n Average score: "
+                    + getAvgScore()
+                    + "\n Average objectives: "
+                    + getAvgObjective()
+                    + "\n Average turns: "
+                    + getAvgTurn();
         }
     }
 
