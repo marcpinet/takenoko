@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import takenoko.action.*;
 import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
+import takenoko.game.objective.Objective;
 import takenoko.game.tile.EmptyDeckException;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
@@ -32,12 +33,10 @@ public class Game {
         this.state = new UndoStack();
         try {
             for (Player player : players) {
-                player.getPrivateInventory()
-                        .addObjective(inventory.getTilePatternObjectiveDeck().draw());
-                player.getPrivateInventory()
-                        .addObjective(inventory.getBambooSizeObjectiveDeck().draw());
-                player.getPrivateInventory()
-                        .addObjective(inventory.getHarvestingObjectiveDeck().draw());
+                for (var objectiveType : Objective.Type.values()) {
+                    player.getPrivateInventory()
+                            .addObjective(inventory.getObjectiveDeck(objectiveType).draw());
+                }
             }
         } catch (EmptyDeckException | InventoryException e) {
             out.log(Level.SEVERE, "Error while initializing the game", e);

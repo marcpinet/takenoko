@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import takenoko.action.Action;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.board.Board;
-import takenoko.game.objective.Objective;
+import takenoko.game.objective.BambooSizeObjective;
 import takenoko.game.tile.TileDeck;
 import takenoko.player.InventoryException;
 import takenoko.utils.Coord;
@@ -47,7 +47,7 @@ class EasyBotTest {
         Board board = new Board();
         EasyBot bot = new EasyBot(randomSource);
 
-        var objMock = mock(Objective.class);
+        var objMock = mock(BambooSizeObjective.class);
         when(objMock.isAchieved()).thenReturn(true);
 
         bot.getPrivateInventory().addObjective(objMock);

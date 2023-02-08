@@ -167,7 +167,7 @@ import takenoko.utils.Coord;
  * This is handled by `generateShifts`
  **/
 // spotless:on
-public class TilePatternObjective implements Objective {
+public final class TilePatternObjective implements Objective {
     private record Element(Color color, Coord coord) {
         public Element offset(Coord offset) {
             return new Element(color, coord.add(offset));
@@ -289,6 +289,11 @@ public class TilePatternObjective implements Objective {
     @Override
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.TILE_PATTERN;
     }
 
     // A tile is part of the pattern if it is the right color and if it's irrigated

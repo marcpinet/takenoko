@@ -9,7 +9,6 @@ import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.objective.HarvestingObjective;
-import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.*;
 import takenoko.player.InventoryException;
 import takenoko.player.Player;
@@ -50,12 +49,7 @@ public class ActionApplier {
                         yield UndoAction.NONE;
                     }
                     case Action.SimulateActions simulateAction -> apply(undoStack, simulateAction);
-                    case Action.TakeBambooSizeObjective ignored -> drawObjective(
-                            gameInventory.getBambooSizeObjectiveDeck());
-                    case Action.TakeHarvestingObjective ignored -> drawObjective(
-                            gameInventory.getHarvestingObjectiveDeck());
-                    case Action.TakeTilePatternObjective ignored -> drawObjective(
-                            gameInventory.getTilePatternObjectiveDeck());
+                    case Action.TakeObjective takeObjective -> apply(takeObjective);
                     case Action.PickPowerUp pickPowerUp -> apply(pickPowerUp);
                     case Action.PlacePowerUp placePowerUp -> apply(placePowerUp);
                     case Action.GrowOneTile growOneTile -> apply(growOneTile);
@@ -232,15 +226,15 @@ public class ActionApplier {
         }
     }
 
-    private UndoAction drawObjective(ObjectiveDeck objectiveDeck) {
+    private UndoAction apply(Action.TakeObjective takeObjective) {
         try {
-            var obj = objectiveDeck.draw();
-            player.getPrivateInventory().addObjective(obj);
-            return new UndoAction.TakeObjective(objectiveDeck, obj);
-        } catch (EmptyDeckException e) {
-            this.out.log(Level.SEVERE, "Objective deck is empty", e);
-        } catch (InventoryException e) {
-            this.out.log(Level.SEVERE, "Player inventory is full", e);
+            var deck = gameInventory.getObjectiveDeck(takeObjective.type());
+            var objective = deck.draw();
+            var inventory = player.getPrivateInventory();
+            inventory.addObjective(objective);
+            return new UndoAction.TakeObjective(takeObjective.type(), objective);
+        } catch (InventoryException | EmptyDeckException e) {
+            out.log(Level.SEVERE, "Error while taking objective", e);
         }
         return UndoAction.NONE;
     }
@@ -248,7 +242,8 @@ public class ActionApplier {
     private void undo(UndoAction.TakeObjective takeObjective) {
         try {
             player.getPrivateInventory().removeObjective(takeObjective.objective());
-            takeObjective.objectiveDeck().addFirst(takeObjective.objective());
+            var deck = gameInventory.getObjectiveDeck(takeObjective.type());
+            deck.addFirst(takeObjective.objective());
         } catch (InventoryException e) {
             this.out.log(Level.SEVERE, "Player inventory is empty", e);
         }

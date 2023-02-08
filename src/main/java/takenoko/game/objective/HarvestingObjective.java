@@ -6,7 +6,7 @@ import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
 import takenoko.game.tile.Color;
 
-public class HarvestingObjective implements Objective {
+public final class HarvestingObjective implements Objective {
     private final EnumMap<Color, Integer> needs;
     private final int score;
     private Status status;
@@ -53,6 +53,11 @@ public class HarvestingObjective implements Objective {
     @Override
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.HARVESTING;
     }
 
     public int getGreen() {

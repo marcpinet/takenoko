@@ -1,14 +1,15 @@
 package takenoko.game;
 
+import java.util.EnumMap;
 import java.util.Random;
+import takenoko.game.objective.Objective;
 import takenoko.game.objective.ObjectiveDeck;
 import takenoko.game.tile.PowerUpReserve;
 import takenoko.game.tile.TileDeck;
 
 public class GameInventory {
-    private final ObjectiveDeck tilePatternObjectiveDeck;
-    private final ObjectiveDeck bambooSizeObjectiveDeck;
-    private final ObjectiveDeck harvestingObjectiveDeck;
+    private final EnumMap<Objective.Type, ObjectiveDeck> objectiveDecks =
+            new EnumMap<>(Objective.Type.class);
     private final PowerUpReserve powerUpReserve;
     private final WeatherDice weatherDice;
     private int irrigationSticks;
@@ -35,9 +36,9 @@ public class GameInventory {
             WeatherDice dice) {
         this.irrigationSticks = irrigationSticks;
         this.tileDeck = tileDeck;
-        this.tilePatternObjectiveDeck = tilePatternObjectiveDeck;
-        this.bambooSizeObjectiveDeck = bambooSizeObjectiveDeck;
-        this.harvestingObjectiveDeck = harvestingObjectiveDeck;
+        objectiveDecks.put(Objective.Type.TILE_PATTERN, tilePatternObjectiveDeck);
+        objectiveDecks.put(Objective.Type.BAMBOO_SIZE, bambooSizeObjectiveDeck);
+        objectiveDecks.put(Objective.Type.HARVESTING, harvestingObjectiveDeck);
         this.powerUpReserve = powerUpReserve;
         this.weatherDice = dice;
     }
@@ -58,16 +59,8 @@ public class GameInventory {
         return tileDeck;
     }
 
-    public ObjectiveDeck getTilePatternObjectiveDeck() {
-        return tilePatternObjectiveDeck;
-    }
-
-    public ObjectiveDeck getBambooSizeObjectiveDeck() {
-        return bambooSizeObjectiveDeck;
-    }
-
-    public ObjectiveDeck getHarvestingObjectiveDeck() {
-        return harvestingObjectiveDeck;
+    public ObjectiveDeck getObjectiveDeck(Objective.Type type) {
+        return objectiveDecks.get(type);
     }
 
     public PowerUpReserve getPowerUpReserve() {
