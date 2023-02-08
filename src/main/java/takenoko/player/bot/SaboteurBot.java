@@ -28,9 +28,6 @@ public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.P
 
     @Override
     public Action chooseActionImpl(Board board, PossibleActionLister actionLister) {
-        // if we do not have enough action credits, end the turn
-        if (availableActionCredits() == 0) return Action.END_TURN;
-
         var possibleActions = actionLister.getPossibleActions();
 
         var pickWaterPowerUp = pickWaterShedPowerUp(possibleActions);
