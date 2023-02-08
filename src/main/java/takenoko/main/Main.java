@@ -86,7 +86,7 @@ public class Main {
 
         var simulator =
                 new Simulator(
-                        100,
+                        300,
                         List.of(PlayerType.PLOT_RUSH, PlayerType.SABOTEUR, PlayerType.RANDOM),
                         logger,
                         Simulator.Parallelism.YES);
