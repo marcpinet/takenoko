@@ -17,7 +17,7 @@ import java.util.List;
 public class CSVHandler {
 
     private Path path = Paths.get("stats/gamestats.csv");
-    private Simulator.SimStats stats;
+    private final Simulator.SimStats stats;
     private static final String[] HEADERS = {
         "Player Type",
         "Player Name",
@@ -136,33 +136,19 @@ public class CSVHandler {
     }
 
     public void write() throws CsvException, IOException {
-        boolean alreadyExists = ensureExistence();
-
-        File file = new File(path.toString() + ".tmp");
-        FileWriter outputFile = new FileWriter(file);
-
         List<String[]> data = this.generateData();
+        boolean alreadyExists = ensureExistence();
+        // if the file already exists, we merge the data
+        if (alreadyExists) mergeData(data, this.readAllEntriesExceptHeader(path));
 
-        try (CSVWriter writer = new CSVWriter(outputFile)) {
+        File file = path.toFile();
 
-            writer.writeNext(HEADERS);
-
-            // if the file already exists, we merge the data
-            if (alreadyExists) {
-                List<String[]> data2 = readAllEntriesExceptHeader(path);
-                mergeData(data, data2); // Merging data2 into data
-            }
-
-            for (String[] row : data) {
-                writer.writeNext(row);
+        try (FileWriter writer = new FileWriter(file)) {
+            try (CSVWriter csvWriter = new CSVWriter(writer)) {
+                csvWriter.writeNext(HEADERS);
+                csvWriter.writeAll(data);
             }
         }
-
-        // Deleting old file
-        path.toFile().delete();
-
-        // Renaming new file
-        file.renameTo(path.toFile());
     }
 
     public Path getFilePath() {
