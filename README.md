@@ -12,7 +12,7 @@
 [//]: # ([![MIT License][license-shield]][license-url])
 [//]: # ([![LinkedIn][linkedin-shield]][linkedin-url]-->
 
-[![Java CI with Maven](https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/actions/workflows/github-actions-maven-test-build.yml/badge.svg)](https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/actions)
+[![Java CI with Maven](https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/actions/workflows/autotest.yml/badge.svg)](https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/actions)
 
 <!-- PROJECT LOGO -->
 <br />
@@ -26,7 +26,6 @@
 
   <p align="center">Java implementation of the board game  <a href="https://fr.wikipedia.org/wiki/Takenoko">Takenoko</a> where players try to grow and harvest bamboo while managing a garden and a panda.
     <br />
-    <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a">View Demo</a>
@@ -36,29 +35,6 @@
     <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/issues">Request Feature</a>
   </p>
 </div>
-
-[//]: # (<!-- TABLE OF CONTENTS -->)
-[//]: # (<details>)
-[//]: # (  <summary>Table of Contents</summary>)
-[//]: # (  <ol>)
-[//]: # (    <li>)
-[//]: # (      <a href="#about-the-project">About The Project</a>)
-[//]: # (      <ul>)
-[//]: # (        <li><a href="#built-with">Built With</a></li>)
-[//]: # (      </ul>)
-[//]: # (    </li>)
-[//]: # (    <li>)
-[//]: # (      <a href="#getting-started">Getting Started</a>)
-[//]: # (      <ul>)
-[//]: # (        <li><a href="#prerequisites">Prerequisites</a></li>)
-[//]: # (        <li><a href="#installation">Installation</a></li>)
-[//]: # (      </ul>)
-[//]: # (    </li>)
-[//]: # (    <li><a href="#usage">Usage</a></li>)
-[//]: # (    <li><a href="#contributing">Contributing</a></li>)
-[//]: # (    <li><a href="#license">License</a></li>)
-[//]: # (  </ol>)
-[//]: # (</details>)
 
 <!-- ABOUT THE PROJECT -->
 
@@ -79,25 +55,49 @@ Here are the basic rules for playing Takenoko:
 - If a player unveils one of his achieved objective cards, he gets the points indicated on the card.
 - The game ends when a player has revealed 7 objective cards, the player with the most points wins.
 
-<a href="./readme-data/takenoko.pdf">Entire rules</a>
+<a href="./readme-data/takenoko.pdf">Detailed rules</a>
+<<<<<<< Updated upstream
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+=======
+>>>>>>> Stashed changes
 
 ## Current features
 
-Updated on December 20, 2022
+*Updated on February 09, 2023*
+<<<<<<< Updated upstream
 
-* //TODO
+* 3 types of bots (random, strategy, wrecker)
+* Simulations of n games in a row
+* Stats summary output in a `.csv` file
+* Actions system
+* Undo/Redo design
+* Fully automated repo to prevent breaking changes and minimize merge conflicts
+* Extensible, well-documented
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+=======
+
+* 3 types of bots (random, strategy, wrecker)
+* Simulations of n games in a row
+* Stats summary output in a `.csv` file
+* Actions system
+* Undo/Redo design
+* Fully automated repo to prevent breaking changes and minimize merge conflicts
+* Extensible, well-documented
+>>>>>>> Stashed changes
 
 ### Built With
 
 * [Java](https://www.java.com/fr/)
 * [Maven](https://maven.apache.org/)
 * [JUnit](https://junit.org/junit5/)
+* [OpenCSV](https://mvnrepository.com/artifact/com.opencsv/opencsv/)
+<<<<<<< Updated upstream
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+=======
+>>>>>>> Stashed changes
 
 <!-- GETTING STARTED -->
 
@@ -106,7 +106,7 @@ Updated on December 20, 2022
 ### Prerequisites
 
 * Maven
-* Java 17
+* Java 17 with preview enabled (--enable-preview VM option)
 * Git
 
 ### Installation
@@ -116,33 +116,74 @@ Updated on December 20, 2022
    ```sh
    git clone https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.git
    ```
-2. Build the project
+2. Install the required dependencies
 
    ```sh
    mvn clean install
    ```
-3. Run the project
+3. Build and run the project
 
    ```sh
    mvn exec:java
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<<<<<<< Updated upstream
 
-### Run tests
 
-1. Run tests
+### Tests and arguments
+
+Run tests
 
    ```sh
    mvn test
    ```
-2. Generate reports
+
+Generate reports of 300 games (can be tweaked in the [Main](src/main/java/takenoko/main/Main.java) file)
 
    ```sh
-   mvn site //TODO
+   mvn -e exec:java '-Dexec.args="--csv"'
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Generate simulation of 2000 games
+
+   ```sh
+   mvn -e exec:java '-Dexec.args="--2thousands"'
+   ```
+
+Demo of a single game
+
+   ```sh
+   mvn -e exec:java '-Dexec.args="--demo"'
+   ```
+
+
+=======
+### Tests and arguments
+
+Run tests
+
+```sh
+mvn test
+```
+
+Generate reports of 300 games (can be tweaked in the [Main](src/main/java/takenoko/main/Main.java) file)
+
+```sh
+mvn -e exec:java '-Dexec.args="--csv"'
+```
+
+Generate simulation of 2000 games
+
+```sh
+mvn -e exec:java '-Dexec.args="--2thousands"'
+```
+
+Demo of a single game
+
+```sh
+mvn -e exec:java '-Dexec.args="--demo"'
+```
+>>>>>>> Stashed changes
 
 <!-- USAGE EXAMPLES -->
 
@@ -151,77 +192,26 @@ Updated on December 20, 2022
 This version of takenoko is fully automated: bots of different levels play against each other, so there is no specific
 action to perform during the game, logs informing about each action will be logged as well as the detailed result of the
 game.
+
 To configure the number of bots of their level :
 //TODO
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<<<<<<< Updated upstream
 
-[//]: # ()
-[//]: # (<!-- ROADMAP -->)
-[//]: # ()
-[//]: # (## Roadmap)
-[//]: # ()
-[//]: # (- [ ] Feature 1)
-[//]: # (- [ ] Feature 2)
-[//]: # (- [ ] Feature 3)
-[//]: # (    - [ ] Nested Feature)
-[//]: # ()
-[//]: # (See the [open issues]&#40;https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/issues; for a full list of)
-[//]: # (proposed features &#40;and)
-[//]: # (known issues&#41;.)
-[//]: # ()
-[//]: # (<p align="right">&#40;<a href="#readme-top">back to top</a>&#41;</p>)
-[//]: # ()
-[//]: # (<!-- CONTRIBUTING -->)
-[//]: # ()
-[//]: # (## Contributing)
-[//]: # ()
-[//]: # (Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any)
-[//]: # (contributions you make are **greatly appreciated**.)
-[//]: # ()
-[//]: # (If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also)
-[//]: # (simply open an issue with the tag "enhancement".)
-[//]: # (Don't forget to give the project a star! Thanks again!)
-[//]: # ()
-[//]: # (1. Fork the Project)
-[//]: # (2. Create your Feature Branch &#40;`git checkout -b feature/AmazingFeature`&#41;)
-[//]: # (3. Commit your Changes &#40;`git commit -m 'Add some AmazingFeature'`&#41;)
-[//]: # (4. Push to the Branch &#40;`git push origin feature/AmazingFeature`&#41;)
-[//]: # (5. Open a Pull Request)
-[//]: # ()
-[//]: # (<p align="right">&#40;<a href="#readme-top">back to top</a>&#41;</p>)
-[//]: # ()
 
+=======
+>>>>>>> Stashed changes
 <!-- LICENSE -->
 
 ## License
 
 Distributed under the Mozilla Public License Version 2.0. See `LICENSE` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<<<<<<< Updated upstream
 
-<!-- CONTACT -->
-[//]: # (## Contact)
-[//]: # ()
-[//]: # (Your Name - [@twitter_handle]&#40;https://twitter.com/twitter_handle&#41; - email@email_client.com)
-[//]: # ()
-[//]: # (Project)
-[//]: # (Link: [https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a]&#40;https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a&#41;)
-[//]: # ()
-[//]: # (<p align="right">&#40;<a href="#readme-top">back to top</a>&#41;</p>)
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # (<!-- ACKNOWLEDGMENTS -->)
-[//]: # ()
-[//]: # (## Acknowledgments)
-[//]: # ()
-[//]: # (* []&#40;&#41;)
-[//]: # (* []&#40;&#41;)
-[//]: # (* []&#40;&#41;)
-[//]: # ()
-[//]: # (<p align="right">&#40;<a href="#readme-top">back to top</a>&#41;</p>)
-[//]: #-->
+
+=======
+>>>>>>> Stashed changes
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links
 [contributors-shield]: https://img.shields.io/github/contributors/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.svg?style=for-the-badge
