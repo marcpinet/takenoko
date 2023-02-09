@@ -1,7 +1,6 @@
 package takenoko.game.board;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import takenoko.game.tile.*;
 import takenoko.player.Player;
@@ -66,14 +65,20 @@ public class Board {
 
         // Check if the tile is adjacent to the pond AND/OR to at least 2 tiles already on the board
         // (including the pond)
-        Set<Coord> intersectionWithTiles =
-                Stream.of(c.adjacentCoords())
-                        .filter(tiles::containsKey)
-                        .collect(Collectors.toSet());
+        int adjacentTiles = 0;
+        for (var adjacentCoord : c.adjacentCoords()) {
+            if (adjacentCoord.equals(POND_COORD)) {
+                return true;
+            }
 
-        if (intersectionWithTiles.isEmpty()) return false;
-
-        return intersectionWithTiles.size() != 1 || intersectionWithTiles.contains(POND_COORD);
+            if (tiles.containsKey(adjacentCoord)) {
+                adjacentTiles++;
+            }
+            if (adjacentTiles >= 2) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void placeIrrigation(Coord coord, TileSide side)
@@ -100,10 +105,15 @@ public class Board {
     }
 
     public Set<Coord> getAvailableCoords() {
-        return tiles.keySet().stream()
-                .flatMap(c -> Stream.of(c.adjacentCoords()))
-                .filter(this::isAvailableCoord)
-                .collect(Collectors.toSet());
+        Set<Coord> availableCoords = new HashSet<>();
+        for (Coord c : tiles.keySet()) {
+            for (Coord adjacentCoord : c.adjacentCoords()) {
+                if (isAvailableCoord(adjacentCoord)) {
+                    availableCoords.add(adjacentCoord);
+                }
+            }
+        }
+        return availableCoords;
     }
 
     public Set<Coord> getPlacedCoords() {
