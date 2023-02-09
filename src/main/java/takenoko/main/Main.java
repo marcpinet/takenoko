@@ -49,7 +49,7 @@ public class Main {
         var winner = game.play();
 
         if (winner.isPresent()) {
-            logger.info("There is a winner: " + winner.get());
+            logger.info("There is a winner: " + winner.get().getName());
         } else {
             logger.info("No winner");
         }
