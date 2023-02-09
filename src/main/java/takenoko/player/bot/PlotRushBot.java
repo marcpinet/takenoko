@@ -6,7 +6,6 @@ import takenoko.action.PossibleActionLister;
 import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.objective.Objective;
-import takenoko.game.objective.TilePatternObjective;
 import takenoko.player.PlayerBase;
 import takenoko.utils.Utils;
 
@@ -86,25 +85,17 @@ public class PlotRushBot extends PlayerBase<PlotRushBot> implements PlayerBase.P
                     new Action.SimulateActions(possiblePlaceTilesAndIrrigations, outStatuses));
 
         if (!outStatuses.isEmpty()) {
+            var actionToObjectiveProgress = getObjectiveProgressFromSimulation(outStatuses);
+
             Action bestAction = null;
-            float maxRatio = 0;
-            for (var entry : outStatuses.entrySet()) {
+            double bestProgress = 0;
+            for (var entry : actionToObjectiveProgress.entrySet()) {
                 var action = entry.getKey();
                 for (var mapObjectiveStatus : entry.getValue().entrySet()) {
-                    var newStatus = mapObjectiveStatus.getValue();
-                    var newObjective = mapObjectiveStatus.getKey();
-
-                    for (TilePatternObjective tpo :
-                            this.getPrivateInventory().getObjectives().stream()
-                                    .filter(TilePatternObjective.class::isInstance)
-                                    .map(o -> (TilePatternObjective) o)
-                                    .toList()) {
-                        if (tpo == newObjective
-                                && newStatus.progressFraction() > tpo.status().progressFraction()
-                                && newStatus.progressFraction() > maxRatio) {
-                            bestAction = action;
-                            maxRatio = newStatus.progressFraction();
-                        }
+                    var progress = mapObjectiveStatus.getValue();
+                    if (progress > bestProgress) {
+                        bestProgress = progress;
+                        bestAction = action;
                     }
                 }
             }
