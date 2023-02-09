@@ -56,16 +56,10 @@ Here are the basic rules for playing Takenoko:
 - The game ends when a player has revealed 7 objective cards, the player with the most points wins.
 
 <a href="./readme-data/takenoko.pdf">Detailed rules</a>
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 
 ## Current features
 
 *Updated on February 09, 2023*
-<<<<<<< Updated upstream
 
 * 3 types of bots (random, strategy, wrecker)
 * Simulations of n games in a row
@@ -74,18 +68,6 @@ Here are the basic rules for playing Takenoko:
 * Undo/Redo design
 * Fully automated repo to prevent breaking changes and minimize merge conflicts
 * Extensible, well-documented
-
-
-=======
-
-* 3 types of bots (random, strategy, wrecker)
-* Simulations of n games in a row
-* Stats summary output in a `.csv` file
-* Actions system
-* Undo/Redo design
-* Fully automated repo to prevent breaking changes and minimize merge conflicts
-* Extensible, well-documented
->>>>>>> Stashed changes
 
 ### Built With
 
@@ -93,11 +75,6 @@ Here are the basic rules for playing Takenoko:
 * [Maven](https://maven.apache.org/)
 * [JUnit](https://junit.org/junit5/)
 * [OpenCSV](https://mvnrepository.com/artifact/com.opencsv/opencsv/)
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 
 <!-- GETTING STARTED -->
 
@@ -127,37 +104,6 @@ Here are the basic rules for playing Takenoko:
    mvn exec:java
    ```
 
-<<<<<<< Updated upstream
-
-
-### Tests and arguments
-
-Run tests
-
-   ```sh
-   mvn test
-   ```
-
-Generate reports of 300 games (can be tweaked in the [Main](src/main/java/takenoko/main/Main.java) file)
-
-   ```sh
-   mvn -e exec:java '-Dexec.args="--csv"'
-   ```
-
-Generate simulation of 2000 games
-
-   ```sh
-   mvn -e exec:java '-Dexec.args="--2thousands"'
-   ```
-
-Demo of a single game
-
-   ```sh
-   mvn -e exec:java '-Dexec.args="--demo"'
-   ```
-
-
-=======
 ### Tests and arguments
 
 Run tests
@@ -183,7 +129,6 @@ Demo of a single game
 ```sh
 mvn -e exec:java '-Dexec.args="--demo"'
 ```
->>>>>>> Stashed changes
 
 <!-- USAGE EXAMPLES -->
 
@@ -196,22 +141,12 @@ game.
 To configure the number of bots of their level :
 //TODO
 
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 <!-- LICENSE -->
 
 ## License
 
 Distributed under the Mozilla Public License Version 2.0. See `LICENSE` for more information.
 
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links
 [contributors-shield]: https://img.shields.io/github/contributors/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.svg?style=for-the-badge
