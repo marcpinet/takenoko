@@ -40,12 +40,14 @@ public class Main {
     }
 
     public static void demo(Logger logger) {
+        var seedGenerator = new Random();
+        var seed = seedGenerator.nextLong();
+
+        var random = new Random(seed);
         List<Player> players =
-                List.of(
-                        new RandomBot(new Random(), "edgar"),
-                        new PlotRushBot(new Random(), "marc"));
-        var tileDeck = new TileDeck(new Random());
-        var game = new Game(players, logger, tileDeck, new WeatherDice(new Random()), new Random());
+                List.of(new RandomBot(random, "edgar"), new PlotRushBot(random, "marc"));
+        var tileDeck = new TileDeck(random);
+        var game = new Game(players, logger, tileDeck, new WeatherDice(random), random);
         var winner = game.play();
 
         if (winner.isPresent()) {
@@ -53,6 +55,7 @@ public class Main {
         } else {
             logger.info("No winner");
         }
+        logger.log(Level.INFO, "Seed = {0}", seed);
     }
 
     public static void simulate(Logger logger) {
