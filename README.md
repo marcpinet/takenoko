@@ -144,6 +144,13 @@ game.
 
 Distributed under the Mozilla Public License Version 2.0. See `LICENSE` for more information.
 
+## Authors
+
+Marc PINET - [marcpinet](https://github.com/marcpinet)<br>
+Edgar BIZEL - [Guekka](https://github.com/Guekka)<br>
+Loïc PALAYER - [loicpalayer](https://github.com/loicpalayer)<br>
+Clément REMY - [ClementREMY2](https://github.com/ClementREMY2)<br>
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links
 [contributors-shield]: https://img.shields.io/github/contributors/marcpinet/takenoko.svg?style=for-the-badge
