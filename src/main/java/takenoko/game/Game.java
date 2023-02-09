@@ -76,10 +76,9 @@ public class Game {
     }
 
     private void playTurn() {
-        int numPlayer = 1;
         int numAction = 1;
         for (Player player : players) {
-            this.out.log(Level.INFO, "Turn of player number {0} to play!\n", numPlayer);
+            this.out.log(Level.INFO, "Turn of {0} to play!\n", player.getName());
 
             ArrayList<Action> alreadyPlayedActions = new ArrayList<>();
 
@@ -95,7 +94,6 @@ public class Game {
                 numAction++;
             }
 
-            numPlayer++;
             numAction = 1;
         }
         displayInventories();
@@ -160,16 +158,14 @@ public class Game {
     }
 
     private void displayInventories() {
-        int numPlayer = 1;
         for (Player p : players) {
             VisibleInventory vi = p.getVisibleInventory();
-            this.out.log(Level.INFO, "Player number {0} information :", numPlayer);
+            this.out.log(Level.INFO, "{0} information :", p.getName());
             this.out.log(Level.INFO, "Score : {0}", p.getScore());
             this.out.log(
                     Level.INFO,
                     "Number of objectives achieved : {0}\n\n",
                     vi.getFinishedObjectives().size());
-            numPlayer++;
         }
     }
 
