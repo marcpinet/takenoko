@@ -138,9 +138,6 @@ This version of takenoko is fully automated: bots of different levels play again
 action to perform during the game, logs informing about each action will be logged as well as the detailed result of the
 game.
 
-To configure the number of bots of their level :
-//TODO
-
 <!-- LICENSE -->
 
 ## License
