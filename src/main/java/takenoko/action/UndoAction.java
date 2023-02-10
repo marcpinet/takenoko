@@ -6,6 +6,11 @@ import takenoko.game.objective.Objective;
 import takenoko.game.tile.PowerUp;
 import takenoko.utils.Coord;
 
+/**
+ *
+ * This interface is used to simulate action. It permits to go back on a previous action. We used this interface with our bots.
+ *
+ */
 public sealed interface UndoAction
         permits UndoAction.BeginSimulation,
                 UndoAction.EndTurn,

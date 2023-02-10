@@ -10,6 +10,13 @@ import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
 
+/**
+ *
+ * This interface define the concept of action in Takenoko. Some have a cost, a player can perform 2 to 3 actions with a cost per turn.
+ * Actions that do not have a cost can be game events such as MovePiece, UnveilObjective or EndTurn, but also actions that a player
+ * can do whenever he wants, like PlaceIrrigationStick. The interface is sealed to make sure that we can't use an unexisting action.
+ *
+ */
 public sealed interface Action
         permits Action.BeginSimulation,
                 Action.EndSimulation,
@@ -39,6 +46,10 @@ public sealed interface Action
         return this.getClass() == other.getClass();
     }
 
+    /**
+     * We have created record here to override some methodes
+     * whose "basic" result did not suit us
+     */
     record None() implements Action {
         @Override
         public String toString() {

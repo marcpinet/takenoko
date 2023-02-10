@@ -7,6 +7,12 @@ import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.VisibleInventory;
 
+/**
+ *
+ * This interface is used to define player. In this project, all of ours players are bots.
+ *
+ */
+
 public interface Player {
     void beginTurn(int actionCredits);
 
