@@ -12,8 +12,6 @@
 [//]: # ([![MIT License][license-shield]][license-url])
 [//]: # ([![LinkedIn][linkedin-shield]][linkedin-url]-->
 
-[![Java CI with Maven](https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/actions/workflows/autotest.yml/badge.svg)](https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/actions)
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -28,8 +26,6 @@
     <br />
     <br />
     <br />
-    <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a">View Demo</a>
-    ·
     <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/issues">Report Bug</a>
     ·
     <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/issues">Request Feature</a>
@@ -83,7 +79,7 @@ Here are the basic rules for playing Takenoko:
 ### Prerequisites
 
 * Maven
-* Java 17 with preview enabled (--enable-preview VM option)
+* Java 17 (and not above, as we have enabled previews)
 * Git
 
 ### Installation
