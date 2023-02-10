@@ -2,8 +2,7 @@ package takenoko.player.bot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,9 +71,9 @@ class PlotRushBotTest {
 
         var map = ((Action.SimulateActions) (simulation)).outObjectiveStatus();
         // Manually filling map
-        Map<Objective, Objective.Status> obj = new HashMap<>();
+        LinkedHashMap<Objective, Objective.Status> obj = new LinkedHashMap<>();
         obj.put(tpob, new Objective.Status(2, 3));
-        Map<Objective, Objective.Status> obj2 = new HashMap<>();
+        LinkedHashMap<Objective, Objective.Status> obj2 = new LinkedHashMap<>();
         obj2.put(tpob, new Objective.Status(3, 3));
 
         map.put(new Action.PlaceTile(new Coord(0, -1), TileDeck.DEFAULT_DRAW_PREDICATE), obj);

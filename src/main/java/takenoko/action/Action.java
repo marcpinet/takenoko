@@ -1,7 +1,7 @@
 package takenoko.action;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import takenoko.game.Deck;
 import takenoko.game.board.MovablePiece;
 import takenoko.game.objective.Objective;
@@ -106,7 +106,7 @@ public sealed interface Action
     /// Simulates a list of actions. They will be tried alternatively, not sequentially
     record SimulateActions(
             List<Action> alternativeActions,
-            Map<Action, Map<Objective, Objective.Status>> outObjectiveStatus)
+            LinkedHashMap<Action, LinkedHashMap<Objective, Objective.Status>> outObjectiveStatus)
             implements Action {
         @Override
         public boolean hasCost() {
