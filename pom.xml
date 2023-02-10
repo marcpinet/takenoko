@@ -161,6 +161,7 @@
                             <include>**/*.md</include>
                         </includes>
                         <flexmark/>
+                        <endWithNewline/>
                     </markdown>
                     <pom>
                         <includes>
