@@ -44,6 +44,8 @@ public class Main {
         var seed = seedGenerator.nextLong();
 
         var random = new Random(seed);
+
+        for (int i = 0; i < 10; ++i) logger.log(Level.INFO, "{0}", random.nextInt());
         List<Player> players =
                 List.of(new RandomBot(random, "edgar"), new PlotRushBot(random, "marc"));
         var tileDeck = new TileDeck(random);
@@ -55,7 +57,6 @@ public class Main {
         } else {
             logger.info("No winner");
         }
-        logger.log(Level.INFO, "Seed = {0}", seed);
     }
 
     public static void simulate(Logger logger) {
