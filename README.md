@@ -36,6 +36,8 @@
   </p>
 </div>
 
+NOTE: As we can't fully import issues, projects and pull requests from one repo to another, the projet will be published as is, including some changes we might think of in the future.
+
 <!-- ABOUT THE PROJECT -->
 
 ## Game Rules

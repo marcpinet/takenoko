@@ -1,8 +1,6 @@
 package takenoko.player.bot;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Predicate;
 import takenoko.action.Action;
 import takenoko.action.PossibleActionLister;
@@ -10,16 +8,22 @@ import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
+import takenoko.game.objective.Objective;
+import takenoko.game.objective.Objective.Status;
 import takenoko.game.tile.BambooTile;
 import takenoko.game.tile.PowerUp;
 import takenoko.player.PlayerBase;
 import takenoko.utils.Utils;
 
 public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.PlayerBaseInterface {
-    private final Random randomSource;
-
     private static final List<Class<? extends Action>> PRIORITIES =
             List.of(Action.TakeObjective.class, Action.TakeIrrigationStick.class);
+
+    private final Random randomSource;
+    private final LinkedHashMap<Action, LinkedHashMap<Objective, Status>> simulationResults =
+            new LinkedHashMap<>();
+    private List<Objective> focusedObjectives;
+    private boolean previousWasSimulation = false;
 
     public SaboteurBot(Random randomSource, String name) {
         super(name);
@@ -28,10 +32,21 @@ public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.P
 
     @Override
     public Action chooseActionImpl(Board board, PossibleActionLister actionLister) {
-        // if we do not have enough action credits, end the turn
-        if (availableActionCredits() == 0) return Action.END_TURN;
-
         var possibleActions = actionLister.getPossibleActions();
+
+        // We have to clear the simulation results if we did not play the simulation result first
+        // Otherwise we could end up playing a simulation result from a previous turn
+        Optional<Action> simulationBestAction = Optional.empty();
+        // We also have to check if the simulation result was bad, because if it was, we should not
+        // try to simulate again
+        boolean simulationResultWasBad = false;
+        if (previousWasSimulation) {
+            simulationBestAction = applySimulationResult();
+            simulationResultWasBad = simulationBestAction.isEmpty();
+
+            previousWasSimulation = false;
+            simulationResults.clear();
+        }
 
         var pickWaterPowerUp = pickWaterShedPowerUp(possibleActions);
         if (pickWaterPowerUp.isPresent()) {
@@ -48,7 +63,17 @@ public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.P
             return bambooAction.get();
         }
 
-        return Utils.randomPick(possibleActions, randomSource).orElse(Action.END_TURN);
+        selectFocusedObjectives();
+
+        if (simulationBestAction.isPresent()) {
+            return simulationBestAction.get();
+        }
+
+        var simulateNextAction = simulateNextAction(possibleActions);
+        if (!simulationResultWasBad && simulateNextAction.isPresent()) {
+            return simulateNextAction.get();
+        }
+        return pickRandomAction(possibleActions);
     }
 
     private Optional<Action> pickPriorityAction(List<Action> possibleActions) {
@@ -89,6 +114,44 @@ public class SaboteurBot extends PlayerBase<SaboteurBot> implements PlayerBase.P
                 .map(action -> (Action.PickPowerUp) action)
                 .filter(pickPowerUp -> pickPowerUp.powerUp() == PowerUp.WATERSHED)
                 .findFirst();
+    }
+
+    private void selectFocusedObjectives() {
+        var objectives = getPrivateInventory().getObjectives();
+        // pick the two objectives with the highest score
+        focusedObjectives =
+                objectives.stream()
+                        .sorted(Comparator.comparing(Objective::getScore).reversed())
+                        .limit(2)
+                        .toList();
+    }
+
+    private Optional<Action> applySimulationResult() {
+        if (!simulationResults.isEmpty()) {
+            // let's find the action that will make us progress the most on our focused objectives
+            var ret = bestActionsFromSimulation(simulationResults, focusedObjectives);
+
+            var best = ret.entrySet().stream().max(Comparator.comparingDouble(Map.Entry::getValue));
+
+            // if the best action doesn't make us progress, we don't do it
+            if (best.isPresent() && best.get().getValue() > 0) {
+                return best.map(Map.Entry::getKey);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<Action> simulateNextAction(List<Action> possibleActions) {
+        if (!possibleActions.isEmpty()) {
+            previousWasSimulation = true;
+            return Optional.of(new Action.SimulateActions(possibleActions, simulationResults));
+        }
+
+        return Optional.empty();
+    }
+
+    private Action pickRandomAction(List<Action> possibleActions) {
+        return Utils.randomPick(possibleActions, randomSource).orElse(Action.END_TURN);
     }
 
     @Override
