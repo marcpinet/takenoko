@@ -7,9 +7,8 @@ import takenoko.game.tile.PowerUp;
 import takenoko.utils.Coord;
 
 /**
- *
- * This interface is used to simulate action. It permits to go back on a previous action. We used this interface with our bots.
- *
+ * This interface is used to simulate actions. It allows to rollback one or several previous
+ * actions. It is not meant to be used explicitly by the player.
  */
 public sealed interface UndoAction
         permits UndoAction.BeginSimulation,
