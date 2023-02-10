@@ -4,10 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,11 +12,14 @@ import takenoko.action.Action;
 import takenoko.action.ActionValidator;
 import takenoko.action.PossibleActionLister;
 import takenoko.game.GameInventory;
+import takenoko.game.GameInventoryException;
 import takenoko.game.WeatherDice;
 import takenoko.game.board.Board;
 import takenoko.game.board.BoardException;
 import takenoko.game.board.MovablePiece;
+import takenoko.game.objective.*;
 import takenoko.game.tile.*;
+import takenoko.player.InventoryException;
 import takenoko.utils.Coord;
 
 class SaboteurBotTest {
@@ -27,7 +27,7 @@ class SaboteurBotTest {
     private SaboteurBot bot;
     private PossibleActionLister actionLister;
     private ActionValidator validator;
-
+    private GameInventory gameInventory;
     private ArrayList<Action> alreadyPlayedActions;
 
     @BeforeEach
@@ -36,7 +36,7 @@ class SaboteurBotTest {
         var random = new Random(0);
         bot = new SaboteurBot(random, "Saboteur");
 
-        var gameInventory =
+        gameInventory =
                 new GameInventory(20, new TileDeck(random), random, new WeatherDice(random));
 
         alreadyPlayedActions = new ArrayList<>();
@@ -134,5 +134,55 @@ class SaboteurBotTest {
         var lister = mock(PossibleActionLister.class);
         when(lister.getPossibleActions()).thenReturn(new ArrayList<>());
         assertEquals(Action.END_TURN, bot.chooseAction(board, lister));
+    }
+
+    @Test
+    void focusesOnTwoHighestScoreObjectives()
+            throws BambooSizeException, InventoryException, IrrigationException, BoardException,
+                    GameInventoryException {
+        var proposedObjective =
+                new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2, 1);
+        var highScoreObjective =
+                new BambooSizeObjective(
+                        2, 1, Color.GREEN, 3, PowerUpNecessity.NO_MATTER, PowerUp.NONE);
+        var allObjectives =
+                List.of(
+                        // low score
+                        proposedObjective,
+                        new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2, 2),
+                        new TilePatternObjective(Color.GREEN, TilePatternObjective.LINE_2, 1),
+                        // high score
+                        new HarvestingObjective(1, 1, 1, 4),
+                        highScoreObjective);
+
+        for (var objective : allObjectives) {
+            bot.getPrivateInventory().addObjective(objective);
+        }
+
+        // usually, it would take an irrigation stick, so let's prevent it
+        while (gameInventory.hasIrrigation()) gameInventory.decrementIrrigation();
+
+        // let's provide it with an opportunity to complete the low score objective
+        board.placeTile(new Coord(0, 1), new BambooTile(Color.GREEN));
+
+        // even though it could complete the low score objective, it will not
+        var action = bot.chooseAction(board, actionLister);
+
+        // it will simulate actions
+        assertTrue(action instanceof Action.SimulateActions);
+        var simResult = ((Action.SimulateActions) action).outObjectiveStatus();
+
+        simResult.put(
+                new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE),
+                new LinkedHashMap<>(Map.of(proposedObjective, new Objective.Status(1, 1))));
+        simResult.put(
+                new Action.MovePiece(MovablePiece.GARDENER, new Coord(0, 1)),
+                new LinkedHashMap<>(Map.of(highScoreObjective, new Objective.Status(1, 4))));
+
+        var newAction = bot.chooseAction(board, actionLister);
+
+        // it could complete the low score objective! but it will not, because it is focused on the
+        // high score objective. What an idiot! :)
+        assertEquals(new Action.MovePiece(MovablePiece.GARDENER, new Coord(0, 1)), newAction);
     }
 }
