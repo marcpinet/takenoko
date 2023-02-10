@@ -46,11 +46,13 @@ public sealed interface Action
         return this.getClass() == other.getClass();
     }
 
-    /**
-     * We have created record here to override some methodes
-     * whose "basic" result did not suit us
-     */
+
     record None() implements Action {
+        /**
+         * We have override some methods whose "basic" result did not suit us
+         * Example here with the toString method, to print a clear message when
+         * Action.None is used.
+         */
         @Override
         public String toString() {
             return "Nothing happened.";
