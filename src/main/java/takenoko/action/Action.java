@@ -10,6 +10,18 @@ import takenoko.game.tile.Tile;
 import takenoko.game.tile.TileSide;
 import takenoko.utils.Coord;
 
+/**
+ * This interface defines the concept of action in Takenoko. Some have a cost, a player can perform
+ * 2 to 3 actions with a cost per turn. Actions that do not have a cost can be game events such as
+ * UnveilObjective or EndTurn, but also actions that a player can do whenever he wants, like
+ * PlaceIrrigationStick. The interface is sealed to make sure that we can't use an unexisting
+ * action.
+ *
+ * <p>Actions do not contain any logic, they are just a way to represent the different actions that
+ * a player can do and only contain the data needed to perform the action.
+ *
+ * <p>Action are mostly handled by ActionValidator and ActionApplier.
+ */
 public sealed interface Action
         permits Action.BeginSimulation,
                 Action.EndSimulation,
@@ -40,6 +52,10 @@ public sealed interface Action
     }
 
     record None() implements Action {
+        /**
+         * We have overridden some methods whose "basic" result did not suit us Example here with
+         * the toString method, to print a clear message when Action.None is used.
+         */
         @Override
         public String toString() {
             return "Nothing happened.";
@@ -103,7 +119,14 @@ public sealed interface Action
         }
     }
 
-    /// Simulates a list of actions. They will be tried alternatively, not sequentially
+    /**
+     * This action is used to simulate a list of actions. It is used to evaluate the cost of an
+     * action. It is not a real action, it is only used to simulate a list of actions.
+     *
+     * @param alternativeActions the list of actions to simulate
+     * @param outObjectiveStatus the status of the objectives after the simulation. You need to pass
+     *     a reference to an empty map
+     */
     record SimulateActions(
             List<Action> alternativeActions,
             LinkedHashMap<Action, LinkedHashMap<Objective, Objective.Status>> outObjectiveStatus)
