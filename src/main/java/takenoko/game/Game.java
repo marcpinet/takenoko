@@ -47,9 +47,17 @@ public class Game {
         this.out.log(Level.INFO, "Beginning of the game!\n\n");
         while (numTurn <= maxTurns) {
             this.out.log(Level.INFO, "Beginning of the turn number {0}!\n", numTurn);
-            playTurn();
+            playTurn(players);
             if (endOfGame()) {
-                playTurn(); // we need to play a last turn before ending
+                List<Player> playersEndGame = new ArrayList<>();
+                for (Player p : players) {
+                    if (p.getVisibleInventory().getFinishedObjectives().size()
+                            == getNumberOfNeededObjectiveToEndTheGame()) {
+                        break;
+                    }
+                    playersEndGame.add(p);
+                }
+                playTurn(playersEndGame);
                 return getWinner();
             }
             numTurn++;
@@ -75,9 +83,9 @@ public class Game {
         return numTurn;
     }
 
-    private void playTurn() {
+    private void playTurn(List<Player> p) {
         int numAction = 1;
-        for (Player player : players) {
+        for (Player player : p) {
             this.out.log(Level.INFO, "Turn of {0} to play!\n", player.getName());
 
             ArrayList<Action> alreadyPlayedActions = new ArrayList<>();
@@ -169,15 +177,17 @@ public class Game {
         }
     }
 
+    public int getNumberOfNeededObjectiveToEndTheGame() {
+        return switch (players.size()) {
+            case 2 -> 9;
+            case 3 -> 8;
+            case 4 -> 7;
+            default -> throw new IllegalStateException("Unexpected value: " + players.size());
+        };
+    }
+
     public boolean endOfGame() {
-        int objectivesToUnveil =
-                switch (players.size()) {
-                    case 2 -> 9;
-                    case 3 -> 8;
-                    case 4 -> 7;
-                    default -> throw new IllegalStateException(
-                            "Unexpected value: " + players.size());
-                };
+        int objectivesToUnveil = getNumberOfNeededObjectiveToEndTheGame();
         for (Player p : players) {
             VisibleInventory vi = p.getVisibleInventory();
             if (objectivesToUnveil == vi.getFinishedObjectives().size()) {
