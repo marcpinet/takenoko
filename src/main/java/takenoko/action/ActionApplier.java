@@ -1,5 +1,6 @@
 package takenoko.action;
 
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -82,7 +83,9 @@ public class ActionApplier {
                                                             player.getVisibleInventory())))
                             .collect(Collectors.toMap(Pair::first, Pair::second));
 
-            simulateActions.outObjectiveStatus().put(action, newObjectiveStatuses);
+            simulateActions
+                    .outObjectiveStatus()
+                    .put(action, new LinkedHashMap<>(newObjectiveStatuses));
 
             apply(undoStack, Action.END_SIMULATION);
         }

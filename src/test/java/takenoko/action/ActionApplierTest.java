@@ -5,10 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -265,7 +262,8 @@ class ActionApplierTest {
     @Test
     void simulateActions() {
         var originalStatus = objective.status();
-        HashMap<Action, Map<Objective, Objective.Status>> outStatuses = new HashMap<>();
+        LinkedHashMap<Action, LinkedHashMap<Objective, Objective.Status>> outStatuses =
+                new LinkedHashMap<>();
 
         var innerAction = new Action.PlaceTile(new Coord(0, 1), TileDeck.DEFAULT_DRAW_PREDICATE);
 
