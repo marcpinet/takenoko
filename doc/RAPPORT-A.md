@@ -14,7 +14,7 @@ Nous disposons d'un `RandomBot` qui, comme son nom l'indique, effectuera des act
 
 Ensuite, le `PlotRushBot` fait en sorte d'avoir toujours un maximum d'objectifs dans sa main (de type `TilePattern`) et choisira l'action qui lui sera la plus bénéfique pour l'avancement de ses objectifs.
 
-Pour cela, il effectue des simulations : il teste toutes les actions de placement de tuile possibles, et sélectionne celle qui lui sera le plus bénéfique.
+Pour cela, il effectue des simulations : il teste toutes les actions de placement de tuile possibles et sélectionne celle qui lui sera le plus bénéfique.
 Dans le cas où aucune action n'est utile, il prendra une irrigation et, si cela est utile, la placera.
 Si plus aucune irrigation n'est disponible, l'algorithme se rabattra sur une action aléatoire.
 
@@ -46,8 +46,8 @@ Puisque le travail demandé pour cette fonctionnalité était conséquent, nous 
 Le `SaboteurBot` respecte les contraintes que nous avions :
 - il récupère un maximum de bambous, même s’il n’a pas de cartes avec la couleur correspondante.
 - Il essaie d’avoir 5 cartes d'objectifs en main tout le temps.
-- Les deux premiers mouvements du bot sont donc de prendre une carte d'objectif et un canal d’irrigation
-- Quand il tire la météo « ? » dans les premiers tours, il prend un aménagement d'irrigation
+- Les deux premiers mouvements du bot sont donc de prendre une carte d'objectif et un canal d’irrigation.
+- Quand il tire la météo « ? » dans les premiers tours, il prend un aménagement d'irrigation.
 - Il essaie de se focaliser sur deux cartes à la fois, celles qui lui rapporteront le plus de points.
 
 Quant à la partie sabotage, voici comment nous comptions procéder :
@@ -78,7 +78,7 @@ En effet, bien qu'un joueur possède les deux types d'inventaire, seul le privé
 En simplifiant, voici comment une partie se déroule :
 - Le jeu est initialisé avec une liste de joueurs
 - À chaque tour, chaque joueur sélectionne une action jusqu'à ne plus avoir de *crédit d'action*.
-- Les joueurs ne peuvent pas influencer directement sur le jeu. À la place, ils peuvent uniquement regarder le plateau, et choisir une action parmi celle qui leur est proposée
+- Les joueurs ne peuvent pas influencer directement sur le jeu. À la place, ils peuvent uniquement regarder le plateau et choisir une action parmi celle qui leur est proposée
 - Cette action sera appliquée par une classe dédiée
 
 Ce système permet une certaine robustesse. Nous sommes certains que les actions respecteront les règles du jeu, et que chaque bot ne les implémentera pas à sa matière.
@@ -101,50 +101,76 @@ Nous avons également brièvement documenté toutes les `interface`s en JavaDoc.
 
 Le code est globalement très propre. Les responsabilités sont bien définies et séparées, les principes SOLID semblent être respectés. Nous pensons notamment à la `Dependency Injection` : tous les `Random` que nous utilisons sont injectés, permettant des tests reproductibles.
 
-Nous avons utilisé de nombreux outils automatisés pour vérifier la qualité de notre code, et pouvoir nous concentrer sur la réflexion :
+Nous avons utilisé de nombreux outils automatisés pour vérifier la qualité de notre code et pouvoir nous concentrer sur la réflexion :
 - `git hooks` pour vérifier le *formatting*, la bonne utilisation des mails universitaires et le respect des *conventional commits*
 - `github actions` pour ne jamais intégrer sur la branche principale du code qui ne passe pas les tests
 - `pitest` pour le *mutation testing*, permettant d'identifier les zones mal testées
 - `sonarqube` pour afficher les métriques de notre code
 
 La sortie SonarQube de notre projet est d'ailleurs très positive : à l'exception d'une méthode trop complexe (dans un bot), tout est parfait.
-Notre couverture de test est au dessus de 85%. Cette métrique n'est pas suffisante pour affirmer que nos tests sont bons, mais indique tout de même qu'une grande partie du code est testé.
+Notre couverture de test est au-dessus de 85%. Cette métrique n'est pas suffisante pour affirmer que nos tests sont bons, mais indique tout de même qu'une grande partie du code est testé.
 
 Ainsi, nous pouvons dire que nous avons une confiance assez forte dans notre code.
 
 Notre seul regret est la classe `Board` : elle est trop complexe et a trop de responsabilités. Nous aimerions la décomposer, mais n'avons pas eu le temps.
 
-Nous avons donc une dette technique, faible mais existante. Sonar n'a pas su la détecter : nous voyons ici les limites de cet outil.
+Nous avons donc une dette technique, faible, mais existante. Sonar n'a pas su la détecter : nous voyons ici les limites de cet outil.
 
 ## 3. Processus
 
 ### Répartition des tâches
 
-Régulièrement, l'équipe dressait ensemble une liste des objectifs à atteindre, puis chacun avait le choix de l'issue qui lui convenait le mieux. Cela aura eu comme résultat global de faire travailler l'ensemble du groupe sur beaucoup de points différents. Par exemple, Edgar a tout d'abord mis en place maven au sein de notre projet, puis Loïc a commencé à travailler sur le code en implémentant un système de coordonnées et les tuiles correspondantes.
+Régulièrement, l'équipe dressait ensemble une liste des objectifs à atteindre, puis chacun avait le choix de l'issue qui lui convenait le mieux. Cela aura eu comme résultat global de faire travailler l'ensemble du groupe sur beaucoup de points différents.
 
-Edgar et Clément ont utilisé ce travail pour implémenter les premiers objectifs de modèle de tuile, tandis que Marc travaillait sur le bot facile. Bien entendu, il est arrivé que plusieurs membres du groupe travaillent sur le même problème ou la même issue en cas de besoin.
+Sur la première semaine par exemple, Edgar a tout d'abord mis en place maven au sein de notre projet, puis Loïc a commencé à travailler sur le code en implémentant un système de coordonnées et les tuiles correspondantes. Edgar et Clément ont utilisé ce travail pour implémenter les premiers objectifs de *TilePattern*, tandis que Marc travaillait sur le bot facile. Bien entendu, il est arrivé que plusieurs membres du groupe travaillent sur le même problème ou la même issue en cas de besoin : l'entraide a été de rigueur tout au long du projet.
 
-### Notre utilisation de git
+Plus globalement, nous n'avions donc pas de périmètre défini individuellement. On peut toutefois noter une certaine tendance :
+- Edgar s'est occupé du système d'actions et des outils automatisés (CI)
+- Marc a beaucoup travaillé sur l'intelligence des bots
+- Loïc a veillé au respect des règles du jeu
+- Clément a participé à tout type de tâche
 
-Lorsque l'un d'entre nous travaillait sur une issue, il effectuait d'abord un premier commit (représentant le début de son travail). Suite à cela, il créait une Pull Request correspondant à son issue, puis il continuait à faire des commits jusqu'à ce que le travail de l'issue soit complètement fini. Cependant, rien n'était définitif, car il fallait que l'un des autres membres du groupe passe en revue les changements et, si des problèmes étaient détectés alors ils étaient remontés au responsable de la PR, qui effectuait les modifications. Lorsqu'une telle situation se produisait, une autre revue était nécessaire avant de pouvoir merge.
+### Notre *branching strategy*
 
-### Notre branching strategy
+Nous avons choisi d'adopter la stratégie *Github Flow*, et ce depuis le début du projet, pour différentes raisons :
+- Tout d'abord, nous avons constaté que la stratégie "Git Flow" demandait de créer un nombre important de branches. Cette stratégie semblait plus adaptée à des projets très importants, avec plusieurs dizaines de développeurs.
+- De plus, nous souhaitions que la version fonctionnelle de notre code soit sur la branche `main`, ce qui éliminait la stratégie *Gitlab Flow*.
+Nous en sommes donc arrivés à la conclusion que *GitHub Flow* était la stratégie qui nous convenait le plus.
 
-Nous avons choisi d'adopter la stratégie "Github Flow" et ce depuis le début du projet, pour différentes raisons :
-Tout d'abord, nous avons constaté que la stratégie "Git Flow" demandait de créer trop de branches, ce qui ne nous convenait pas
-De plus, nous souhaitions que la version fonctionnelle de notre code soit sur la branche main, ce qui éliminait la stratégie "Gitlab Flow".
-Nous en sommes donc arrivés à la conclusion que "Github Flow" était la stratégie qui nous convenait le plus.
+### Notre utilisation de GitHub
+
+Lorsque l'un d'entre nous travaillait sur une issue, il commençait par s'assigner la responsabilité de l'issue.
+
+Dès qu'il effectuait son premier commit, il créait une Pull Request correspondant à son issue, en *draft*. Il continuait à faire des commits jusqu'à ce que la tâche soit complètement finie.
+
+Cependant, rien n'était définitif, car il fallait qu'au moins l'un des autres membres du groupe passe en revue les changements. Si des problèmes étaient détectés, ils étaient remontés au responsable de la PR, qui effectuait les modifications requises. Lorsqu'une telle situation se produisait, une autre revue était nécessaire avant de pouvoir merge.
+
+Avec cette procédure, nous étions certains que le code avait été relu : beaucoup de bugs ont pu être évités ainsi.
 
 ## 4. Scénario Industriel
 
 ### Rétrospective globale
 
-D'une manière générale, le projet s'est très bien déroulé pour chacun des membres du groupe. L'organisation a été correcte et globalement respectée et nous a permis d'être assez efficace. Certains ont appris plein de concepts assimilés directement à Java ou à Git, d'autres ont pu partager leur savoir et ajouter le takenoko à leur liste de projets réalisés. Ce projet nous a également rappelé l'importance de la communication pour réussir, mais aussi l'importance de fixer des deadlines progressives pour chaque étape (et, bien sûr, de les respecter !)
+D'une manière générale, le projet s'est très bien déroulé pour chacun des membres du groupe. L'organisation a été correcte et globalement respectée et nous a permis d'être assez efficace.
+
+Nous avons tous progressé, que ce soit dans les méthodes de travail de groupe, ou sur des concepts directement liés à Java ou à Git.
+
+Ce projet nous a également rappelé l'importance de la communication pour réussir, mais aussi l'importance de fixer des deadlines progressives pour chaque étape (et, bien sûr, de les respecter !)
+
+Nous pouvons tous affirmer que nous comprenons mieux les méthodes de découpage vertical d'un projet, et nous voyons les avantages de cette façon de procéder.
 
 ### Points à conserver pour nos futurs projets
 
-Notre définition régulière des tâches et la communication autour du projet (avancement de chacun, difficultés, ...) ont été deux points très importants dans le bon déroulement de notre projet. De même, il est important de continuer à respecter au maximum les principes de bonne conception(GRASP et SOLID) afin de non seulement garder une architecture et une conception propre et cohérente, mais aussi de pouvoir implémenter de nouvelles fonctionnalités sans avoir à refactor le code actuel.
+Notre définition régulière des tâches et la communication autour du projet (avancement de chacun, difficultés, ...) ont été deux points très importants dans le bon déroulement de notre projet.
+
+De même, il est important de continuer à respecter au maximum les principes de bonne conception(GRASP et SOLID) afin de non seulement garder une architecture et une conception propre et cohérente, mais aussi de pouvoir implémenter de nouvelles fonctionnalités sans avoir à refactor le code actuel.
+
+Nous sommes très satisfaits de notre façon d'écrire les tests : chaque *feature* devait obligatoirement venir avec un ensemble de tests, sous peine de rejet.
 
 ### Erreurs à éviter pour nos futurs projets
 
-Notre plus grosse erreur a été probablement la gestion du bot intelligent, qui a été non seulement bien trop tardive, mais en plus assez mal supervisée. En effet, nous avons découvert un problème lié à ce bot (qui, jusqu'ici, jouait parfaitement son rôle de bot intelligent), et lorsque nous l'avons corrigé il s'est avéré que ce bot s'est mis à perdre toute sa capacité de réflexion, et perdait largement contre un bot aléatoire. Nous avons sûrement sous-estimé la complexité de cette tâche, ce qui fut une erreur importante.
+Notre plus grosse erreur a été probablement la gestion du bot intelligent. Nous avons voulu commencer par un bot bien trop intelligent, utilisant la stratégie dite *min-max*.
+
+À cause de difficultés imprévues, ce bot a fini par être abandonné, ce qui nous a laissé sans bot intelligent jusqu'à une date dangereusement proche du rendu.
+
+Nous aurions dû anticiper davantage et commencer par une tâche plus simple : ici, le découpage a été mal fait.
