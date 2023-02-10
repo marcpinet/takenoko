@@ -11,7 +11,8 @@ import takenoko.utils.Utils;
 
 public class PlotRushBot extends PlayerBase<PlotRushBot> implements PlayerBase.PlayerBaseInterface {
     private final Random randomSource;
-    HashMap<Action, Map<Objective, Objective.Status>> outStatuses = new HashMap<>();
+    LinkedHashMap<Action, LinkedHashMap<Objective, Objective.Status>> outStatuses =
+            new LinkedHashMap<>();
 
     public PlotRushBot(Random randomSource, String name) {
         super(name);

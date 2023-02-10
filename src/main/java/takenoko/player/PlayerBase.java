@@ -1,6 +1,6 @@
 package takenoko.player;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import takenoko.action.Action;
@@ -91,10 +91,10 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     }
 
     protected Map<Action, Map<Objective, Double>> getObjectiveProgressFromSimulation(
-            Map<Action, Map<Objective, Objective.Status>> simulationResults) {
-        var actionToObjectiveProgress = new HashMap<Action, Map<Objective, Double>>();
+            LinkedHashMap<Action, LinkedHashMap<Objective, Objective.Status>> simulationResults) {
+        var actionToObjectiveProgress = new LinkedHashMap<Action, Map<Objective, Double>>();
         for (var actionToResults : simulationResults.entrySet()) {
-            actionToObjectiveProgress.put(actionToResults.getKey(), new HashMap<>());
+            actionToObjectiveProgress.put(actionToResults.getKey(), new LinkedHashMap<>());
             for (var objectiveToStatus : actionToResults.getValue().entrySet()) {
                 double progress =
                         objectiveToStatus.getValue().progressFraction()
@@ -110,14 +110,14 @@ public abstract class PlayerBase<SELF extends PlayerBase<SELF> & PlayerBase.Play
     /// given a list of actions, return the action that will make the most progress on the focused
     /// objectives
     protected Map<Action, Double> bestActionsFromSimulation(
-            Map<Action, Map<Objective, Objective.Status>> simulationResults,
+            LinkedHashMap<Action, LinkedHashMap<Objective, Objective.Status>> simulationResults,
             List<Objective> focusedObjectives) {
         // let's first flatten the simulation results
         Map<Action, Map<Objective, Double>> actionToObjectiveProgress =
                 getObjectiveProgressFromSimulation(simulationResults);
 
         // now we sum the progress for each action
-        Map<Action, Double> simplifiedActions = new HashMap<>();
+        Map<Action, Double> simplifiedActions = new LinkedHashMap<>();
         for (var actionToResults : actionToObjectiveProgress.entrySet()) {
             double sum = 0;
             for (var objectiveProgress : actionToResults.getValue().entrySet()) {
