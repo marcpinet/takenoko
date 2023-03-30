@@ -12,10 +12,12 @@
 [//]: # ([![MIT License][license-shield]][license-url])
 [//]: # ([![LinkedIn][linkedin-shield]][linkedin-url]-->
 
+[![Java CI with Maven](https://github.com/marcpinet/takenoko/actions/workflows/autotest.yml/badge.svg)](https://github.com/marcpinet/takenoko/actions)
+
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-<a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a">
+<a href="https://github.com/marcpinet/takenoko">
 <img src="./readme-data/takenoko.png" alt="Logo" width="100" height="100"-->
 
 </a>
@@ -26,11 +28,15 @@
     <br />
     <br />
     <br />
-    <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/issues">Report Bug</a>
+    <a href="https://github.com/marcpinet/takenoko">View Demo</a>
     ·
-    <a href="https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/issues">Request Feature</a>
+    <a href="https://github.com/marcpinet/takenoko/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/marcpinet/takenoko/issues">Request Feature</a>
   </p>
 </div>
+
+NOTE: As we can't fully import issues, projects and pull requests from one repo to another, the projet will be published as is, including some changes we might think of in the future.
 
 <!-- ABOUT THE PROJECT -->
 
@@ -79,7 +85,7 @@ Here are the basic rules for playing Takenoko:
 ### Prerequisites
 
 * Maven
-* Java 17 (and not above, as we have enabled previews)
+* Java 17 with preview enabled (--enable-preview VM option)
 * Git
 
 ### Installation
@@ -87,7 +93,7 @@ Here are the basic rules for playing Takenoko:
 1. Clone the repo
 
    ```sh
-   git clone https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.git
+   git clone https://github.com/marcpinet/takenoko.git
    ```
 2. Install the required dependencies
 
@@ -142,15 +148,15 @@ Distributed under the Mozilla Public License Version 2.0. See `LICENSE` for more
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links
-[contributors-shield]: https://img.shields.io/github/contributors/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.svg?style=for-the-badge
-[contributors-url]: https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.svg?style=for-the-badge
-[forks-url]: https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/network/members
-[stars-shield]: https://img.shields.io/github/stars/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.svg?style=for-the-badge
-[stars-url]: https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/stargazers
-[issues-shield]: https://img.shields.io/github/issues/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.svg?style=for-the-badge
-[issues-url]: https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/issues
-[license-shield]: https://img.shields.io/github/license/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a.svg?style=for-the-badge
-[license-url]: https://github.com/pns-si3-projects/projet2-ps5-22-23-takenoko-2023-a/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/marcpinet/takenoko.svg?style=for-the-badge
+[contributors-url]: https://github.com/marcpinet/takenoko/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/marcpinet/takenoko.svg?style=for-the-badge
+[forks-url]: https://github.com/marcpinet/takenoko/network/members
+[stars-shield]: https://img.shields.io/github/stars/marcpinet/takenoko.svg?style=for-the-badge
+[stars-url]: https://github.com/marcpinet/takenoko/stargazers
+[issues-shield]: https://img.shields.io/github/issues/marcpinet/takenoko.svg?style=for-the-badge
+[issues-url]: https://github.com/marcpinet/takenoko/issues
+[license-shield]: https://img.shields.io/github/license/marcpinet/takenoko.svg?style=for-the-badge
+[license-url]: https://github.com/marcpinet/takenoko/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_usern-->

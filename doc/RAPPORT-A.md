@@ -1,6 +1,6 @@
 # Rapport / Knowledge Exchange - Takenoko, team A
 
-Edgar BIZEL, Loïc PALAYER, Marc PINET, Clément REMY
+E, L, M, C (privacy concerns, they asked.)
 
 ## 1. Point d'avancement
 
@@ -122,13 +122,13 @@ Nous avons donc une dette technique, faible, mais existante. Sonar n'a pas su la
 
 Régulièrement, l'équipe dressait ensemble une liste des objectifs à atteindre, puis chacun avait le choix de l'issue qui lui convenait le mieux. Cela aura eu comme résultat global de faire travailler l'ensemble du groupe sur beaucoup de points différents.
 
-Sur la première semaine par exemple, Edgar a tout d'abord mis en place maven au sein de notre projet, puis Loïc a commencé à travailler sur le code en implémentant un système de coordonnées et les tuiles correspondantes. Edgar et Clément ont utilisé ce travail pour implémenter les premiers objectifs de *TilePattern*, tandis que Marc travaillait sur le bot facile. Bien entendu, il est arrivé que plusieurs membres du groupe travaillent sur le même problème ou la même issue en cas de besoin : l'entraide a été de rigueur tout au long du projet.
+Sur la première semaine par exemple, E a tout d'abord mis en place maven au sein de notre projet, puis L a commencé à travailler sur le code en implémentant un système de coordonnées et les tuiles correspondantes. E et C ont utilisé ce travail pour implémenter les premiers objectifs de *TilePattern*, tandis que M travaillait sur le bot facile. Bien entendu, il est arrivé que plusieurs membres du groupe travaillent sur le même problème ou la même issue en cas de besoin : l'entraide a été de rigueur tout au long du projet.
 
 Plus globalement, nous n'avions donc pas de périmètre défini individuellement. On peut toutefois noter une certaine tendance :
-- Edgar s'est occupé du système d'actions et des outils automatisés (CI)
-- Marc a beaucoup travaillé sur l'intelligence des bots
-- Loïc a veillé au respect des règles du jeu
-- Clément a participé à tout type de tâche
+- E s'est occupé du système d'actions et des outils automatisés (CI)
+- M a beaucoup travaillé sur l'intelligence des bots
+- L a veillé au respect des règles du jeu
+- C a participé à tout type de tâche
 
 ### Notre *branching strategy*
 
